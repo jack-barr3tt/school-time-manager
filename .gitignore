@@ -1,0 +1,26 @@
+# GLOBAL IGNORES
+
+*.log
+.npmrc
+.yarnrc
+.env
+node_modules
+
+# IGNORE FOR SERVER
+dist
+
+# IGNORES FOR APP
+
+# dependencies
+/.pnp
+.pnp.js
+
+# production
+/build
+
+# misc
+.DS_Store
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
