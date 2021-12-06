@@ -10,6 +10,14 @@ server.use((req: Request, _res, next: NextFunction) => {
     next()
 })
 
+// Error imports
+import sql from './errors/sql';
+import api from './errors/api';
+
+// Error routes
+server.use(sql)
+server.use(api)
+
 server.listen(3000, () => {
     console.log("Listening on port 3000")
 })
