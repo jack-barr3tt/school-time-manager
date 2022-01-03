@@ -10,7 +10,12 @@ server.use((req: Request, _res, next: NextFunction) => {
     next()
 })
 
+// Route imports
+import users from "./routes/users"
+import blocks from './routes/blocks';
+
 const user_router = Router({ mergeParams: true })
+user_router.use('/blocks', blocks)
 
 // Routes
 const router = Router({ mergeParams: true })
