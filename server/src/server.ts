@@ -13,8 +13,10 @@ server.use((req: Request, _res, next: NextFunction) => {
 // Route imports
 import users from "./routes/users"
 import blocks from './routes/blocks';
+import locations from './routes/locations';
 
 const user_router = Router({ mergeParams: true })
+user_router.use('/locations', locations)
 user_router.use('/blocks', blocks)
 
 // Routes
