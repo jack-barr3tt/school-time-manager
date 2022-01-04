@@ -15,11 +15,13 @@ import users from "./routes/users"
 import blocks from './routes/blocks';
 import locations from './routes/locations';
 import repeats from './routes/repeats';
+import subjects from './routes/subjects';
 
 const user_router = Router({ mergeParams: true })
 user_router.use('/repeats', repeats)
 user_router.use('/locations', locations)
 user_router.use('/blocks', blocks)
+user_router.use('/subjects', subjects)
 
 // Routes
 const router = Router({ mergeParams: true })
