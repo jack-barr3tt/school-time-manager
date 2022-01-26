@@ -43,6 +43,11 @@ import api from './errors/api';
 // Error routes
 server.use(sql)
 server.use(api)
+server.use((_req, res: Response, _next) => {
+    res.status(404).json({
+        message: "Not found"
+    })
+})
 
 server.listen(3000, () => {
     console.log("Listening on port 3000")
