@@ -14,6 +14,7 @@ server.use((req: Request, _res, next: NextFunction) => {
 import users from "./routes/users"
 import blocks from './routes/blocks';
 import days from './routes/days';
+import homework from './routes/homework';
 import lessons from './routes/lessons';
 import locations from './routes/locations';
 import repeats from './routes/repeats';
@@ -21,6 +22,7 @@ import subjects from './routes/subjects';
 import teachers from './routes/teachers';
 
 const user_router = Router({ mergeParams: true })
+user_router.use('/homework', homework)
 user_router.use('/lessons', lessons)
 user_router.use('/days', days)
 user_router.use('/repeats', repeats)
