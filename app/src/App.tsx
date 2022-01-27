@@ -7,7 +7,7 @@ const theme = createTheme({
   breakpoints: {
     values: {
       xs: 0,
-      sm: 360,
+      sm: 425,
       md: 960,
       lg: 1280,
       xl: 1920
@@ -16,7 +16,7 @@ const theme = createTheme({
 })
 
 export default function App() {
-  const isMobile = useMediaQuery("(max-width: 360px)");
+  const isMobile = useMediaQuery("(max-width: 425px)");
   return (
     <ScopedCssBaseline>
       <ThemeProvider theme={theme}>{
