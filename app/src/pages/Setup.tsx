@@ -1,5 +1,4 @@
-import { Settings } from '@mui/icons-material';
-import { Button, ButtonBase, Stack, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 import React from 'react';
 import { NavBar } from '../components/NavBar';
 import { SettingsButton } from '../components/SettingsButton';

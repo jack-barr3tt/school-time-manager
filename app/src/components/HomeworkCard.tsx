@@ -1,5 +1,5 @@
 import { AccessTime, Circle } from '@mui/icons-material';
-import { Grid, Paper, Stack, Typography } from '@mui/material';
+import { Paper, Stack, Typography } from '@mui/material';
 import { grey, red } from '@mui/material/colors';
 import React, { FC } from 'react';
 import { Homework } from '../types';
