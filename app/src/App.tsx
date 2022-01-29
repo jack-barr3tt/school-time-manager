@@ -30,8 +30,8 @@ export default function App() {
             <Router/>
           </MainGrid>
         </Container> : 
-        <Container maxWidth="sm" disableGutters>
-            <Paper sx={{ p: 2 }}>
+        <Container maxWidth="sm" disableGutters sx={{ height: "100%", py: 2 }}>
+            <Paper sx={{ p: 2, position: "relative", height: "100%" }}>
               <MainGrid>
                 <Router/>
               </MainGrid>
