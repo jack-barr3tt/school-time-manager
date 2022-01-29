@@ -67,7 +67,7 @@ export default class Homework implements BaseHomework {
 
     static async findById(id: string) {
         const { rows } = await Database.query(
-            'SELECT * FROM homework WHERE id = $1',
+            'SELECT * FROM homeworks WHERE id = $1',
             [id]
         );
         if(rows.length === 0) return null
@@ -80,12 +80,14 @@ export default class Homework implements BaseHomework {
 
     static async getByUser(userId: string) {
         const { rows } = await Database.query(
-            'SELECT * FROM homework WHERE user_id = $1',
+            'SELECT * FROM homeworks WHERE user_id = $1',
             [userId]
         );
 
         return rows.map(row => {
-            
+            let homework = new Homework(row)
+            homework.id = row.id
+            return homework
         })
     }
 
