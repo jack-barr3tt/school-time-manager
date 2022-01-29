@@ -1,4 +1,4 @@
-import { Container, createTheme, Grid, Paper, ScopedCssBaseline, ThemeProvider, useMediaQuery } from '@mui/material';
+import { Container, createTheme, Grid, Paper, ScopedCssBaseline, Stack, ThemeProvider, useMediaQuery } from '@mui/material';
 import React from 'react';
 import './App.css';
 import Router from './Router';
@@ -16,7 +16,7 @@ const theme = createTheme({
 })
 
 const MainGrid : React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  return <Grid container direction="column" spacing={2}>{children}</Grid>
+  return <Stack spacing={2} sx={{ width: "100%", positon: "absolute", top: 0, left: 0, m: 0, px: 2 }}>{children}</Stack>
 }
 
 export default function App() {
@@ -25,13 +25,11 @@ export default function App() {
     <ScopedCssBaseline>
       <ThemeProvider theme={theme}>{
         isMobile ? 
-        <Container sx={{ p: 2 }}>
           <MainGrid>
             <Router/>
-          </MainGrid>
-        </Container> : 
+          </MainGrid> :
         <Container maxWidth="sm" disableGutters sx={{ height: "100%", py: 2 }}>
-            <Paper sx={{ p: 2, position: "relative", height: "100%" }}>
+            <Paper sx={{ position: "relative", height: "100%" }}>
               <MainGrid>
                 <Router/>
               </MainGrid>
