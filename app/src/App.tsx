@@ -1,5 +1,5 @@
 import { Container, createTheme, Grid, Paper, ScopedCssBaseline, ThemeProvider, useMediaQuery } from '@mui/material';
-import React, { ReactElement } from 'react';
+import React from 'react';
 import './App.css';
 import Router from './Router';
 
@@ -16,7 +16,7 @@ const theme = createTheme({
 })
 
 const MainGrid : React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  return <Grid container direction="column" spacing={2} alignItems="center">{children}</Grid>
+  return <Grid container direction="column" spacing={2}>{children}</Grid>
 }
 
 export default function App() {
