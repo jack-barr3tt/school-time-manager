@@ -1,7 +1,10 @@
 console.log("Starting up...")
 
 import express, { json, NextFunction, Request, Response, Router, urlencoded } from 'express';
+import cors from 'cors';
+
 const server = express()
+server.use(cors())  
 server.use(urlencoded({ extended: false }));
 server.use(json());
 
