@@ -6,6 +6,7 @@ import Timetable from './pages/Timetable';
 import NewHomework from './pages/utility/NewHomework';
 import NewTime from './pages/utility/NewTime';
 import NewTimetable from './pages/utility/NewTimetable';
+import PreWarning from './pages/utility/PreWarning';
 import SetDays from './pages/utility/SetDays';
 import SetTimes from './pages/utility/SetTimes';
 
@@ -25,6 +26,7 @@ export default function Router() {
         <Route path="setup">
             <Route index element={<Setup/>}/>
             <Route path="days" element={<SetDays/>}/>
+            <Route path="prewarning" element={<PreWarning/>}/>
             <Route path="times">
                 <Route index element={<SetTimes/>}/>
                 <Route path="new" element={<NewTime/>}/>
