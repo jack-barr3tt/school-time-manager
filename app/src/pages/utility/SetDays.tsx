@@ -1,7 +1,8 @@
 import React from 'react';
+import { NavBar } from '../../components/NavBar';
 
 export default function SetDays() {
-  return <div>
-      <h2>Set School Days</h2>
-  </div>;
+    return <>
+        <NavBar name="Set School Days"/>
+    </>
 }

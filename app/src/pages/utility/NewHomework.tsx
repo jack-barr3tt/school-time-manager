@@ -1,7 +1,8 @@
 import React from 'react';
+import { NavBar } from '../../components/NavBar';
 
 export default function NewHomework() {
-  return <div>
-      <h2>New Homework Task</h2>
-  </div>;
+    return <>
+        <NavBar name="New Homework Task"/>
+    </>
 }

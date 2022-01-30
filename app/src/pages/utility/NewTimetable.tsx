@@ -1,7 +1,8 @@
 import React from 'react';
+import { NavBar } from '../../components/NavBar';
 
 export default function NewTimetable() {
-  return <div>
-      <h2>New Timetable Entry</h2>
-  </div>;
+    return <>
+        <NavBar name="New Timetable Entry"/>
+    </>
 }

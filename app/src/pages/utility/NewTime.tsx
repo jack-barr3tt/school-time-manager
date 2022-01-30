@@ -1,7 +1,8 @@
 import React from 'react';
+import { NavBar } from '../../components/NavBar';
 
 export default function NewTime() {
-  return <div>
-      <h2>New Lesson</h2>
-  </div>;
+    return <>
+        <NavBar name="New Lesson"/>
+    </>
 }

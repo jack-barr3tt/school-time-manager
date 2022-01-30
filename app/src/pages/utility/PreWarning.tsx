@@ -1,7 +1,8 @@
 import React from 'react';
+import { NavBar } from '../../components/NavBar';
 
 export default function PreWarning() {
-  return <div>
-      <h2>Set Notification Pre-warning</h2>
-  </div>;
+    return <>
+        <NavBar name="Set Notification Pre-warning"/>
+    </>
 }
