@@ -1,15 +1,13 @@
 import Database from "../connections";
+import Subject from "./subjects";
 
-export type BaseHomework = {
-    id?: number;
-    user_id: number;
-    task: string;
-    subject_id: number;
-    due?: Date;
-    difficulty?: number;
+type HomeworkArgs = Homework & {
+    subject_id: number,
+    subject_name: string, 
+    subject_color: number,
 }
 
-export default class Homework implements BaseHomework {
+export default class Homework {
     private _id?: number;
     public get id() {
         return this._id
@@ -17,17 +15,29 @@ export default class Homework implements BaseHomework {
     private set id(newId: number|undefined) {
         this._id = newId
     }
+
+    public get subject_id() {
+        return this.subject.id
+    }
+    public set subject_id(newId: number|undefined) {
+        this.subject = { id: newId } as Subject
+    }
     
     readonly user_id: number;
     public task: string;
-    public subject_id: number;
+    public subject: Subject;
     public due?: Date;
     public difficulty?: number;
 
-    constructor(data: BaseHomework) {  
+    constructor(data: HomeworkArgs) {  
         this.user_id = data.user_id;
         this.task = data.task;
-        this.subject_id = data.subject_id;
+        this.subject = new Subject({ 
+            id: data.subject_id,
+            user_id: data.user_id,
+            name: data.subject_name, 
+            color: data.subject_color
+        } as Subject);
         this.due = data.due;
         this.difficulty = data.difficulty;
     }
@@ -41,7 +51,7 @@ export default class Homework implements BaseHomework {
                 [
                     this.id, 
                     this.task, 
-                    this.subject_id, 
+                    this.subject.id, 
                     this.due, 
                     this.difficulty
                 ]
@@ -50,12 +60,12 @@ export default class Homework implements BaseHomework {
         } else {
             const { rows } = await Database.query(
                 `INSERT INTO homeworks (user_id, task, subject_id, due, difficulty)
-                VALUES ($1, $2, $3, $4, $5)
+                VALUES ($1, $2, $3, to_timestamp($4), $5)
                 RETURNING id`, 
                 [
                     this.user_id, 
                     this.task, 
-                    this.subject_id, 
+                    this.subject.id, 
                     this.due, 
                     this.difficulty
                 ]
@@ -80,7 +90,10 @@ export default class Homework implements BaseHomework {
 
     static async getByUser(userId: string) {
         const { rows } = await Database.query(
-            'SELECT * FROM homeworks WHERE user_id = $1',
+            `SELECT h.id, h.user_id, h.task, h.subject_id, h.due, h.difficulty, s.name subject_name, s.color subject_color 
+            FROM homeworks h 
+            INNER JOIN subjects s ON h.subject_id = s.id 
+            WHERE h.user_id = $1`,
             [userId]
         );
 

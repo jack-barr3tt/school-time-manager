@@ -1,13 +1,6 @@
 import Database from "../connections";
 
-export type BaseSubject = {
-    id?: number;
-    user_id: number;
-    name: string;
-    color: number;
-}
-
-export default class Subject implements BaseSubject {
+export default class Subject {
     private _id?: number;
     public get id() {
         return this._id;
@@ -19,7 +12,7 @@ export default class Subject implements BaseSubject {
     public name: string;
     public color: number;
 
-    constructor(data: BaseSubject) {
+    constructor(data: Subject) {
         this.id = data.id;
         this.user_id = data.user_id;
         this.name = data.name;
