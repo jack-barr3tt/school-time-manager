@@ -2,7 +2,7 @@ import { AccessTime, Circle } from '@mui/icons-material';
 import { Paper, Stack, Typography } from '@mui/material';
 import { grey, red } from '@mui/material/colors';
 import React, { FC } from 'react';
-import { Homework } from '../types';
+import Homework from '../api/Homework';
 
 export const HomeworkCard : FC<{ homework: Homework }> = ({ homework }) => {
     const { id, task, subject, due, difficulty } = homework;
@@ -31,7 +31,8 @@ export const HomeworkCard : FC<{ homework: Homework }> = ({ homework }) => {
         return ["Easy", "Medium", "Hard"][difficulty];
     }
 
-    const getColor = (color: number) => {
+    const getColor = (color?: number) => {
+        if(!color) return grey[500];
         let base = color.toString(16);
         if(base.length < 6) {
             const fill = new Array(6 - base.length).fill("0").join("");
