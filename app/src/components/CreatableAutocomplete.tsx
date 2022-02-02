@@ -1,11 +1,12 @@
 import { Autocomplete, createFilterOptions, TextField } from "@mui/material";
-import { Dispatch, FC, SetStateAction } from "react";
+import { Dispatch, SetStateAction, SyntheticEvent } from "react";
 
 type Props<A> = {
     label: string;
     options: A[];
     chosenSetter: Dispatch<SetStateAction<A>>;
     chosen: A;
+    onOpen?: (event: React.SyntheticEvent) => void;
 }
 
 type InputProps<B> = B & {
@@ -14,7 +15,7 @@ type InputProps<B> = B & {
 }
 
 export default function CreateableAutocomplete<T>(props: Props<InputProps<T>>) {
-    const { label, options, chosenSetter, chosen } = props
+    const { label, options, chosenSetter, chosen, onOpen } = props
     const filter = createFilterOptions<InputProps<T>>()
     return <Autocomplete
         value={chosen || ""}
@@ -23,6 +24,7 @@ export default function CreateableAutocomplete<T>(props: Props<InputProps<T>>) {
         handleHomeEndKeys
         freeSolo
         options={options}
+        onOpen={onOpen}
         onChange={(_e, value) => {
             if(typeof value === 'string') {
                 chosenSetter({
