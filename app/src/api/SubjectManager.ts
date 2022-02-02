@@ -1,6 +1,11 @@
 import axios, { AxiosResponse } from "axios";
 import Subject from "./Subjects";
 
+type SubjectCreate = {
+    name: string,
+    color?: number
+}
+
 export default class SubjectManager {
     private userId: number;
 
@@ -13,7 +18,8 @@ export default class SubjectManager {
         return data.map(s => new Subject(s))
     }
 
-    async create(subject: Subject) {
-        await axios.post(`http://localhost:3000/users/${this.userId}/subjects`, subject)
+    async create(subject: SubjectCreate) {
+        const { data } = await axios.post(`http://localhost:3000/users/${this.userId}/subjects`, subject)
+        return data as Subject
     }
 }

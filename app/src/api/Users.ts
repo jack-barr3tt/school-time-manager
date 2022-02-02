@@ -3,23 +3,23 @@ import HomeworkManager from "./HomeworkManager";
 import SubjectManager from "./SubjectManager";
 
 export class User {
-    readonly id: number;
+    readonly _id: number;
     readonly email : string;
     readonly username : string;
     readonly subjects : SubjectManager;
     readonly homework : HomeworkManager;
 
     constructor(data: User) {
-        this.id = data.id
+        this._id = data._id
         this.email = data.email
         this.username = data.username
-        this.subjects = new SubjectManager(this.id)
-        this.homework = new HomeworkManager(this.id)
+        this.subjects = new SubjectManager(this._id)
+        this.homework = new HomeworkManager(this._id)
     }
 
     static forge(id: number) {
         return { 
-            id, 
+            _id: id, 
             subjects: new SubjectManager(id),
             homework: new HomeworkManager(id)
         } as Partial<User>

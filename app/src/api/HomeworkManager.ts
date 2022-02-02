@@ -1,6 +1,13 @@
 import axios, { AxiosResponse } from "axios";
 import Homework from "./Homework";
 
+type HomeworkCreate = {
+    task: string;
+    subject_id: number;
+    due?: number;
+    difficulty?: number;
+}
+
 export default class HomeworkManager {
     private userId: number;
 
@@ -13,7 +20,8 @@ export default class HomeworkManager {
         return data.map(s => new Homework(s))
     }
 
-    async create(homework: Homework) {
-        await axios.post(`http://localhost:3000/users/${this.userId}/homework`, homework)
+    async create(homework: HomeworkCreate) {
+        const { data } = await axios.post(`http://localhost:3000/users/${this.userId}/homework`, homework)
+        return data as Homework
     }
 }
