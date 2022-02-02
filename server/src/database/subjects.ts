@@ -1,4 +1,5 @@
 import Database from "../connections";
+import { APIError } from "../errors/types";
 
 export default class Subject {
     private _id?: number;
@@ -31,14 +32,21 @@ export default class Subject {
             )
             return this
         }else {
-            const { rows } = await Database.query(
+            const check = await Database.query(
+                'SELECT * FROM subjects WHERE user_id = $1 AND name = $2',
+                [this.user_id, this.name]
+            );
+            
+            if(check.rows.length > 0) throw new APIError("Subject already exists", 400)
+
+            const { rows } = (await Database.query(
                 'INSERT INTO subjects (user_id, name, color) VALUES ($1, $2, $3) RETURNING id',
                 [
                     this.user_id, 
                     this.name, 
                     this.color
                 ]
-            );
+            ))
             this.id = rows[0].id;
             return this
         }
