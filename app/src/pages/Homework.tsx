@@ -30,6 +30,11 @@ export default function HomeworkPage() {
             </Stack>
         } 
         <Stack direction="column" spacing={3} alignItems="center" sx={{ pt: 2 }}>
+            {homework.sort((a,b) => {
+                if(!a.due) return 0
+                if(!b.due) return 0
+                return a.due.getTime() - b.due.getTime()
+            }).map(hw => <HomeworkCard key={hw.task} homework={hw} />)}
         </Stack>
         <Fab color="primary" sx={{ position: "absolute", right: "24px", bottom: "24px" }} onClick={() => navigate("new")}>
             <Add/>
