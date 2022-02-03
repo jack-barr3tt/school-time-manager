@@ -60,7 +60,7 @@ export default class Homework {
         } else {
             const { rows } = await Database.query(
                 `INSERT INTO homeworks (user_id, task, subject_id, due, difficulty)
-                VALUES ($1, $2, $3, to_timestamp($4), $5)
+                VALUES ($1, $2, $3, to_timestamp($4 / 1000.0), $5)
                 RETURNING id`, 
                 [
                     this.user_id, 
