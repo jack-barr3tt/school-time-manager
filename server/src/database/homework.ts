@@ -77,7 +77,10 @@ export default class Homework {
 
     static async findById(id: string) {
         const { rows } = await Database.query(
-            'SELECT * FROM homeworks WHERE id = $1',
+            `SELECT h.id, h.user_id, h.task, h.subject_id, h.due, h.difficulty, s.name subject_name, s.color subject_color 
+            FROM homeworks h 
+            INNER JOIN subjects s ON h.subject_id = s.id 
+            WHERE h.id = $1`,
             [id]
         );
         if(rows.length === 0) return null
