@@ -44,26 +44,32 @@ export const HomeworkCard : FC<{ homework: Homework }> = ({ homework }) => {
         return base; 
     }
 
-    return <ButtonBase onClick={() => navigate(""+_id)} sx={{ borderRadius: 6 }}>
-        <Paper elevation={4} sx={{ p: 2, borderRadius: 6, width: "361px" }}>
-            <Stack direction="row" alignItems="center" justifyContent="space-between">
-                <Stack direction="column">
-                    <Typography variant="h5" sx={{ my: 2 }}>{task}</Typography>
-                    <Stack direction="row" alignItems="center">
-                        <Circle sx={{ color: `#${getColor(color)}`, mr: 1 }} />
-                        <Typography variant="body1">{name}</Typography>
-                        { difficulty != null && <>
-                            <AccessTime sx={{ ml: 3, mr: 1 }}/>
-                            <Typography variant="body1">{getDifficulty(difficulty)}</Typography>
-                        </>}
-                    </Stack>
+    const truncateText = (text: string) => {
+        const limit = 55
+        if(text.length < limit) return text
+        return text.substring(0, limit).split(" ").slice(0, -1).join(" ") + "..."
+    }
+
+    return <ButtonBase onClick={() => navigate(""+_id)} sx={{ borderRadius: 6, boxSizing: "border-box", width: "100%" }}>
+        <Paper elevation={4} sx={{ p: 2, borderRadius: 6, width: "100%" }}>
+            <Stack direction="column">
+                <Stack direction="row" alignItems="center" justifyContent="space-between">
+                    <Typography variant="h5" sx={{ my: 2, pr: 2, textAlign: "left" }}>{truncateText(task)}</Typography>
+                    {due && <Paper elevation={0} sx={{ height: "96px", aspectRatio: "1", backgroundColor: grey[200], borderRadius: 3 }}>
+                        <Paper sx={{ width: "100%", height: "24px", borderRadius: "12px 12px 0 0", backgroundColor: red[500] }} elevation={0}>
+                            <Typography variant="body1" sx={{ textAlign: "center", height: "100%" }} color="white">{getMonth(due)}</Typography>
+                        </Paper>
+                        <Typography variant="body1" sx={{ textAlign: "center", fontSize: "2.5rem", my: "6px" }}>{due.getDate()}</Typography>
+                    </Paper>}
                 </Stack>
-                {due && <Paper elevation={0} sx={{ width: "96px", height: "96px", backgroundColor: grey[200], borderRadius: 3 }}>
-                    <Paper sx={{ width: "100%", height: "24px", borderRadius: "12px 12px 0 0", backgroundColor: red[500] }} elevation={0}>
-                        <Typography variant="body1" sx={{ textAlign: "center", height: "100%" }} color="white">{getMonth(due)}</Typography>
-                    </Paper>
-                    <Typography variant="body1" sx={{ textAlign: "center", fontSize: "2.5rem", my: "6px" }}>{due.getDate()}</Typography>
-                </Paper>}
+                <Stack direction="row" alignItems="center">
+                    <Circle sx={{ color: `#${getColor(color)}`, mr: 1 }} />
+                    <Typography variant="body1">{name}</Typography>
+                    { difficulty != null && <>
+                        <AccessTime sx={{ ml: 3, mr: 1 }}/>
+                        <Typography variant="body1">{getDifficulty(difficulty)}</Typography>
+                    </>}
+                </Stack>
             </Stack>
         </Paper>
     </ButtonBase>   
