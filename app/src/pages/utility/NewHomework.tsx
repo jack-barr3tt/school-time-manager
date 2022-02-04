@@ -60,7 +60,7 @@ export default function NewHomework() {
             task,
             subject_id: chosenSubject._id,
             due: due?.getTime(),
-            difficulty: difficulty
+            difficulty: difficultyGiven ? (difficulty ? difficulty : 1) : undefined
         })
 
         navigate('/homework')
