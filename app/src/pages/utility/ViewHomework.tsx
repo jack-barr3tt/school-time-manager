@@ -3,7 +3,7 @@ import { CircularProgress, Stack, Typography } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import { addDays, format, formatDistanceToNow, isAfter, startOfDay } from 'date-fns';
 import React, { useContext, useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import Homework from '../../api/Homework';
 import { User } from '../../api/Users';
 import { userContext } from '../../App';
@@ -14,12 +14,15 @@ export default function ViewHomework() {
     const [loading, setLoading] = useState<boolean>(true)
     const { id } = useParams()
     const user = useContext(userContext)
+    const navigate = useNavigate()
 
     useEffect(() => {
         User.forge(user.id).homework?.get(parseInt(id || "0")).then(h => {
             setHomework(h as Homework)
             setLoading(false)
-        })
+        }).catch(() => 
+            navigate("/homework")
+        )
     }, [user.id, id])
 
     const getColor = (color?: number) => {
