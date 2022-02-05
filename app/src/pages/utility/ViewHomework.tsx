@@ -36,10 +36,7 @@ export default function ViewHomework() {
     }
 
     const getDueColor = (due: Date) => {
-        if(isAfter(addDays(Date.now(), 1),startOfDay(due))) {
-            console.log("due tomorrow")
-            return { color: "error.main" }
-        }
+        if(isAfter(addDays(Date.now(), 1),startOfDay(due))) return { color: "error.main" }
         return {}
     }
 
