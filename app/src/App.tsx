@@ -1,4 +1,5 @@
 import { Container, createTheme, Paper, ScopedCssBaseline, Stack, ThemeProvider, useMediaQuery } from '@mui/material';
+import React, { createContext } from 'react';
 import './App.css';
 import Router from './Router';
 
@@ -17,6 +18,11 @@ const theme = createTheme({
 const MainGrid : React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return <Stack spacing={2} sx={{ width: "100%", positon: "absolute", top: 0, left: 0, m: 0, px: 2, height: "100%", overflowY: "scroll" }}>{children}</Stack>
 }
+
+export const userContext = createContext({
+    id: 10,
+    username: "Jack"
+})
 
 export default function App() {
   const isMobile = useMediaQuery("(max-width: 441px)");
