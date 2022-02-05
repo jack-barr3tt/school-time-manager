@@ -3,12 +3,13 @@ import { DatePicker, LocalizationProvider } from '@mui/lab';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import { Checkbox, Fab, Slider, Stack, TextField, Typography } from '@mui/material';
 import { startOfDay } from 'date-fns';
-import React, { useCallback, useContext, useEffect, useState } from 'react';
+import React, { FormEvent, useCallback, useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Subject from '../../api/Subjects';
 import { User } from '../../api/Users';
 import { userContext } from '../../App';
 import CreateableAutocomplete from '../../components/CreatableAutocomplete';
+import CreateSubject from '../../components/CreateSubject';
 import { NavBar } from '../../components/NavBar';
 
 export default function NewHomework() {
@@ -39,7 +40,7 @@ export default function NewHomework() {
         fetchSubjects()
     }, [fetchSubjects])
 
-    const saveHomework = async (event: React.FormEvent<HTMLFormElement>) => {
+    const saveHomework = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault()
 
         if(!task) return
@@ -72,7 +73,14 @@ export default function NewHomework() {
         <form onSubmit={saveHomework}>
             <Stack direction="column" spacing={2}>
                 <TextField label="Task" fullWidth autoFocus onChange={(e) => setTask(e.target.value)} autoComplete='off'/>
-                <CreateableAutocomplete<SubjectInput> label="Subject" options={subjects} chosenSetter={setSubject} chosen={subject!} onOpen={(e) => {fetchSubjects()}}/>
+                <CreateableAutocomplete<SubjectInput> 
+                    label="Subject" 
+                    options={subjects} 
+                    chosenSetter={setSubject} 
+                    chosen={subject!} 
+                    onOpen={(e) => {fetchSubjects()}}
+                    CreateDialog={CreateSubject}
+                />
                 <LocalizationProvider dateAdapter={AdapterDateFns}>
                     <DatePicker 
                         label="Due" 
