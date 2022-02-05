@@ -23,7 +23,7 @@ export default function ViewHomework() {
         }).catch(() => 
             navigate("/homework")
         )
-    }, [user.id, id])
+    }, [user.id, id, navigate])
 
     const getColor = (color?: number) => {
         if(!color) return grey[500];

@@ -2,6 +2,7 @@ import { Save } from '@mui/icons-material';
 import { DatePicker, LocalizationProvider } from '@mui/lab';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import { Checkbox, Fab, Slider, Stack, TextField, Typography } from '@mui/material';
+import { startOfDay } from 'date-fns';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Subject from '../../api/Subjects';
@@ -59,7 +60,7 @@ export default function NewHomework() {
         await User.forge(user.id).homework?.create({
             task,
             subject_id: chosenSubject._id,
-            due: due?.getTime(),
+            due: due == null ? undefined : startOfDay(due).getTime(),
             difficulty: difficultyGiven ? (difficulty ? difficulty : 1) : undefined
         })
 
