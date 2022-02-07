@@ -1,5 +1,5 @@
 import { Autocomplete, createFilterOptions, TextField } from "@mui/material";
-import { Dispatch, FC, ReactElement, SetStateAction, useState } from "react";
+import { Dispatch, ReactElement, SetStateAction, useState } from "react";
 
 type DialogProps<B> = {
     open: boolean, 

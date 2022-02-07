@@ -2,8 +2,7 @@ import { Check } from '@mui/icons-material';
 import { Button, ButtonBase, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Paper, Stack, TextField } from '@mui/material';
 import { orange, red, yellow, green, blue, purple } from '@mui/material/colors';
 import { AxiosError } from 'axios';
-import React, { Dispatch, FormEvent, SetStateAction, useContext, useEffect, useState } from 'react';
-import Subject from '../api/Subjects';
+import React, { Dispatch, FormEvent, SetStateAction, useContext, useEffect, useMemo, useState } from 'react';
 import { User } from '../api/Users';
 import { userContext } from '../App';
 
@@ -17,7 +16,7 @@ type Props<A> = {
 export default function CreateSubject<T>(props: Props<T>) {
     const { open, setOpen, defaultValue, setFinal } = props;
 
-    const colors = [ red, orange, yellow, green, blue, purple ];
+    const colors = useMemo(() => [ red, orange, yellow, green, blue, purple ], []);
 
     const toArray = (color: object) => {
         const keys = Object.keys(color);
@@ -38,7 +37,7 @@ export default function CreateSubject<T>(props: Props<T>) {
                 toArray(color).filter(s => s[0].toString().length > 3).map(s => s[1])
             )
         )
-    , [])
+    , [colors])
 
     useEffect(() => 
         setSubject(defaultValue)
