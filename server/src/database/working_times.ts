@@ -22,7 +22,7 @@ export class WorkingTime {
         if(this.id) {
             const { rows } = await Database.query(
                 `UPDATE working_times
-                SET start_time = to_timestamp($2 / 1000), end_time = to_timestamp($3 / 1000) 
+                SET start_time = to_timestamp($2/ 1000.0), end_time = to_timestamp($3/ 1000.0) 
                 WHERE id = $1
                 RETURNING start_time, end_time`, 
                 [
@@ -37,7 +37,7 @@ export class WorkingTime {
         } else {
             const { rows } = await Database.query(
                 `INSERT INTO working_times (user_id, start_time, end_time)
-                VALUES ($1, to_timestamp($2 / 1000)::TIME, to_timestamp($3 / 1000)::TIME)
+                VALUES ($1, to_timestamp($2/ 1000.0)::TIME, to_timestamp($3/ 1000.0)::TIME)
                 RETURNING id`, 
                 [
                     this.user_id, 
