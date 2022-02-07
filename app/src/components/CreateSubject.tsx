@@ -71,7 +71,7 @@ export default function CreateSubject<T>(props: Props<T>) {
                     { row.map((s, y) => 
                         <ButtonBase sx={{ borderRadius: "50%" }} onClick={() => setChecked({ x, y })} key={`${x}-${y}`}>
                             <Paper sx={{ backgroundColor: s, borderRadius: "50%", width: "2rem", aspectRatio: "1" }} >
-                                { (checked && (x == checked.x && y == checked.y)) &&
+                                { (checked && (x === checked.x && y === checked.y)) &&
                                     <Stack direction="column" justifyContent="center" alignItems="center" sx={{ height: "100%" }}>
                                         <Check/> 
                                     </Stack>

@@ -1,11 +1,9 @@
-import { Save } from '@mui/icons-material';
-import { TimePicker } from '@mui/lab';
-import { Fab, Stack, TextField } from '@mui/material';
 import React, { FormEvent, useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { User } from '../../api/Users';
 import { userContext } from '../../App';
 import { NavBar } from '../../components/NavBar';
+import TimeRangePicker from '../../components/TimeRangePicker';
 
 export default function NewWorkingTime() {
     const [startTime, setStartTime] = useState<Date|null>()
@@ -30,31 +28,12 @@ export default function NewWorkingTime() {
 
     return <>
         <NavBar name="New Working Time"/>
-        <form onSubmit={saveWorkingTime}>
-            <Stack direction="column" spacing={2}>
-                <TimePicker
-                    label="Start"
-                    renderInput={(params) => <TextField {...params} />}
-                    onChange={(e) => setStartTime(e)}
-                    value={startTime}
-                />
-                <TimePicker
-                    label="End"
-                    renderInput={(params) => <TextField {...params} />}
-                    onChange={(e) => setEndTime(e)}
-                    value={endTime}
-                    minTime={startTime}
-                    disabled={startTime == null}
-                />
-                <Fab 
-                    color="primary" 
-                    sx={{ position: "absolute", right: "24px", bottom: "24px" }} 
-                    type="submit" 
-                    disabled={startTime == null || endTime == null}
-                >
-                    <Save/>
-                </Fab>
-            </Stack>
-        </form>
+        <TimeRangePicker
+            startTime={startTime}
+            setStartTime={setStartTime}
+            endTime={endTime}
+            setEndTime={setEndTime}
+            onSubmit={saveWorkingTime}
+        />
     </>;
 }
