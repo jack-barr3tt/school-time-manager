@@ -1,6 +1,5 @@
 import { Save } from '@mui/icons-material';
-import { DatePicker, LocalizationProvider } from '@mui/lab';
-import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import { DatePicker } from '@mui/lab';
 import { Checkbox, Fab, Slider, Stack, TextField, Typography } from '@mui/material';
 import { startOfDay } from 'date-fns';
 import React, { FormEvent, useCallback, useContext, useEffect, useState } from 'react';
@@ -81,14 +80,12 @@ export default function NewHomework() {
                     onOpen={(e) => {fetchSubjects()}}
                     CreateDialog={CreateSubject}
                 />
-                <LocalizationProvider dateAdapter={AdapterDateFns}>
-                    <DatePicker 
-                        label="Due" 
-                        value={due} 
-                        onChange={(newValue) => setDue(newValue)}
-                        renderInput={(props) => <TextField {...props} label="Due" fullWidth/>}
-                    />
-                </LocalizationProvider>
+                <DatePicker 
+                    label="Due" 
+                    value={due} 
+                    onChange={(newValue) => setDue(newValue)}
+                    renderInput={(props) => <TextField {...props} label="Due" fullWidth/>}
+                />
                 <Typography variant="h6" id="difficulty-label">Difficulty</Typography>
                 <Stack direction="row" alignItems="center">
                     <Checkbox 

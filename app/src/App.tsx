@@ -1,3 +1,5 @@
+import { LocalizationProvider } from '@mui/lab';
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import { Container, createTheme, Paper, ScopedCssBaseline, Stack, ThemeProvider, useMediaQuery } from '@mui/material';
 import React, { createContext } from 'react';
 import './App.css';
@@ -27,20 +29,22 @@ export const userContext = createContext({
 export default function App() {
   const isMobile = useMediaQuery("(max-width: 441px)");
   return (
-    <ScopedCssBaseline>
-      <ThemeProvider theme={theme}>{
-        isMobile ? 
-          <MainGrid>
-            <Router/>
-          </MainGrid> :
-        <Container maxWidth="sm" disableGutters sx={{ height: "100%", py: 2 }}>
-            <Paper sx={{ position: "relative", height: "100%" }}>
-              <MainGrid>
+    <LocalizationProvider dateAdapter={AdapterDateFns}>
+        <ScopedCssBaseline>
+        <ThemeProvider theme={theme}>{
+            isMobile ? 
+            <MainGrid>
                 <Router/>
-              </MainGrid>
-            </Paper>
-        </Container>
-      }</ThemeProvider>
-    </ScopedCssBaseline>
+            </MainGrid> :
+            <Container maxWidth="sm" disableGutters sx={{ height: "100%", py: 2 }}>
+                <Paper sx={{ position: "relative", height: "100%" }}>
+                <MainGrid>
+                    <Router/>
+                </MainGrid>
+                </Paper>
+            </Container>
+        }</ThemeProvider>
+        </ScopedCssBaseline>
+    </LocalizationProvider>
   )
 }
