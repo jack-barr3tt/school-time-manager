@@ -3,13 +3,13 @@ import { WorkingTime } from "../../database/working_times";
 
 export default async (req: Request, res: Response, next: NextFunction) => {
     try{
-        const lesson_block = new WorkingTime({
+        const time = new WorkingTime({
             ...req.body,
             user_id: req.params.userId,
         })
-        await lesson_block.save()
+        await time.save()
 
-        res.json(lesson_block)
+        res.json(time)
     }catch(err){
         res.locals.error = err
         next()
