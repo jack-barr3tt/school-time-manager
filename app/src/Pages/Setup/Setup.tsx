@@ -1,8 +1,7 @@
 import { Typography } from '@mui/material';
-import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { NavBar } from '../components/NavBar';
-import { SettingsButton } from '../components/SettingsButton';
+import NavBar from '../../Components/NavBar';
+import SettingsButton from '../../Components/SettingsButton';
 
 export default function Setup() {
     const navigate = useNavigate()

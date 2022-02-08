@@ -2,12 +2,12 @@ import { AccessTime, Assignment, Circle, Event } from '@mui/icons-material';
 import { CircularProgress, Stack, Typography } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import { addDays, format, formatDistanceToNow, isAfter, startOfDay } from 'date-fns';
-import React, { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import Homework from '../../api/Homework';
-import { User } from '../../api/Users';
+import Homework from '../../API/Homework';
+import { User } from '../../API/Users';
 import { userContext } from '../../App';
-import { NavBar } from '../../components/NavBar';
+import NavBar from '../../Components/NavBar';
 
 export default function ViewHomework() {
     const [homework, setHomework] = useState<Homework>()

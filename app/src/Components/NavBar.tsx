@@ -1,10 +1,10 @@
-import React, { FC } from 'react';
 import { IconButton, Paper, Stack, Typography } from '@mui/material';
 import { ArrowBack } from '@mui/icons-material';
 import { grey } from '@mui/material/colors';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-export const NavBar : FC<{ name: string }> = ({ name }) => {
+export default function NavBar (props: { name: string }) {
+    const { name } = props
     const navigate = useNavigate()
     const location = useLocation()
 

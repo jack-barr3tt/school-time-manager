@@ -1,5 +1,5 @@
 import { Autocomplete, createFilterOptions, TextField } from "@mui/material";
-import { Dispatch, ReactElement, SetStateAction, useState } from "react";
+import { Dispatch, ReactElement, SetStateAction, useState, SyntheticEvent } from "react";
 
 type DialogProps<B> = {
     open: boolean, 
@@ -13,7 +13,7 @@ type Props<A> = {
     options: A[];
     chosenSetter: Dispatch<SetStateAction<A|undefined>>;
     chosen: A;
-    onOpen?: (event: React.SyntheticEvent) => void;
+    onOpen?: (event: SyntheticEvent) => void;
     CreateDialog?: <A>(props: DialogProps<A>) => ReactElement<DialogProps<A>>;
 }
 

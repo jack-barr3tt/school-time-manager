@@ -1,12 +1,12 @@
 import { Add } from '@mui/icons-material';
 import { CircularProgress, Fab, Stack } from '@mui/material';
-import React, { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Homework from '../api/Homework';
-import { User } from '../api/Users';
-import { userContext } from '../App';
-import { HomeworkCard } from '../components/HomeworkCard';
-import { NavBar } from '../components/NavBar';
+import Homework from '../../API/Homework';
+import { User } from '../../API/Users';
+import { userContext } from '../../App';
+import HomeworkCard from '../../Components/HomeworkCard';
+import NavBar from '../../Components/NavBar';
 
 export default function HomeworkPage() {
     const [homework, setHomework] = useState<Homework[]>([])

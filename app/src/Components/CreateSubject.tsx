@@ -2,8 +2,8 @@ import { Check } from '@mui/icons-material';
 import { Button, ButtonBase, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Paper, Stack, TextField } from '@mui/material';
 import { orange, red, yellow, green, blue, purple } from '@mui/material/colors';
 import { AxiosError } from 'axios';
-import React, { Dispatch, FormEvent, SetStateAction, useContext, useEffect, useMemo, useState } from 'react';
-import { User } from '../api/Users';
+import { Dispatch, FormEvent, SetStateAction, useContext, useEffect, useMemo, useState } from 'react';
+import { User } from '../API/Users';
 import { userContext } from '../App';
 
 type Props<A> = {

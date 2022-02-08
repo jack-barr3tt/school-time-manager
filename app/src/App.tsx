@@ -1,7 +1,7 @@
 import { LocalizationProvider } from '@mui/lab';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import { Container, createTheme, Paper, ScopedCssBaseline, Stack, ThemeProvider, useMediaQuery } from '@mui/material';
-import React, { createContext } from 'react';
+import { createContext, ReactNode } from 'react';
 import './App.css';
 import Router from './Router';
 
@@ -17,8 +17,8 @@ const theme = createTheme({
   }
 })
 
-const MainGrid : React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  return <Stack spacing={2} sx={{ width: "100%", positon: "absolute", top: 0, left: 0, m: 0, px: 2, height: "100%", overflowY: "scroll" }}>{children}</Stack>
+function MainGrid (props: { children: ReactNode }) {
+  return <Stack spacing={2} sx={{ width: "100%", positon: "absolute", top: 0, left: 0, m: 0, px: 2, height: "100%", overflowY: "scroll" }}>{props.children}</Stack>
 }
 
 export const userContext = createContext({
@@ -27,7 +27,7 @@ export const userContext = createContext({
 })
 
 export default function App() {
-  const isMobile = useMediaQuery("(max-width: 441px)");
+  const isMobile = useMediaQuery(`(max-width: ${theme.breakpoints.values.sm}px)`);
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
         <ScopedCssBaseline>

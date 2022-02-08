@@ -1,9 +1,9 @@
-import React, { FormEvent, useContext, useState } from 'react';
+import { FormEvent, useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { User } from '../../api/Users';
-import { userContext } from '../../App';
-import { NavBar } from '../../components/NavBar';
-import TimeRangePicker from '../../components/TimeRangePicker';
+import { User } from '../../../API/Users';
+import { userContext } from '../../../App';
+import NavBar from '../../../Components/NavBar';
+import TimeRangePicker from '../../../Components/TimeRangePicker';
 
 export default function NewWorkingTime() {
     const [startTime, setStartTime] = useState<Date|null>()

@@ -1,12 +1,11 @@
 import { AccessTime, Circle } from '@mui/icons-material';
 import { ButtonBase, Paper, Stack, Typography } from '@mui/material';
 import { grey, red } from '@mui/material/colors';
-import React, { FC } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Homework from '../api/Homework';
+import Homework from '../API/Homework';
 
-export const HomeworkCard : FC<{ homework: Homework }> = ({ homework }) => {
-    const { _id, task, subject, due, difficulty } = homework;
+export default function HomeworkCard (props: { homework: Homework }) {
+    const { _id, task, subject, due, difficulty } = props.homework;
     const { name, color } = subject;
     
     const navigate = useNavigate()

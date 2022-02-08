@@ -2,14 +2,14 @@ import { Save } from '@mui/icons-material';
 import { DatePicker } from '@mui/lab';
 import { Checkbox, Fab, Slider, Stack, TextField, Typography } from '@mui/material';
 import { startOfDay } from 'date-fns';
-import React, { FormEvent, useCallback, useContext, useEffect, useState } from 'react';
+import { FormEvent, useCallback, useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Subject from '../../api/Subjects';
-import { User } from '../../api/Users';
+import Subject from '../../API/Subjects';
+import { User } from '../../API/Users';
 import { userContext } from '../../App';
-import CreateableAutocomplete from '../../components/CreatableAutocomplete';
-import CreateSubject from '../../components/CreateSubject';
-import { NavBar } from '../../components/NavBar';
+import CreateableAutocomplete from '../../Components/CreatableAutocomplete';
+import CreateSubject from '../../Components/CreateSubject';
+import NavBar from '../../Components/NavBar';
 
 export default function NewHomework() {
     interface SubjectInput {
@@ -77,7 +77,7 @@ export default function NewHomework() {
                     options={subjects} 
                     chosenSetter={setSubject} 
                     chosen={subject!} 
-                    onOpen={(e) => {fetchSubjects()}}
+                    onOpen={() => {fetchSubjects()}}
                     CreateDialog={CreateSubject}
                 />
                 <DatePicker 

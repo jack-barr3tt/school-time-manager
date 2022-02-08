@@ -1,17 +1,17 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import Home from './pages/Home';
-import Homework from './pages/Homework';
-import Setup from './pages/Setup';
-import Timetable from './pages/Timetable';
-import NewHomework from './pages/utility/NewHomework';
-import NewTime from './pages/utility/NewTime';
-import NewTimetable from './pages/utility/NewTimetable';
-import NewWorkingTime from './pages/utility/NewWorkingTime';
-import PreWarning from './pages/utility/PreWarning';
-import SetDays from './pages/utility/SetDays';
-import SetTimes from './pages/utility/SetTimes';
-import SetWorkingTimes from './pages/utility/SetWorkingTimes';
-import ViewHomework from './pages/utility/ViewHomework';
+import Home from './Pages/Home';
+import Homework from './Pages/Homework/Homework';
+import SetWorkingTimes from './Pages/Setup/WorkingTimes/ViewWorkingTimes';
+import ViewHomework from './Pages/Homework/ViewHomework';
+import NewHomework from './Pages/Homework/NewHomework';
+import NewTime from './Pages/Setup/LessonTimes/NewTime';
+import SetTimes from './Pages/Setup/LessonTimes/SetTimes';
+import PreWarning from './Pages/Setup/PreWarning';
+import SetDays from './Pages/Setup/SetSchoolDays';
+import Setup from './Pages/Setup/Setup';
+import NewWorkingTime from './Pages/Setup/WorkingTimes/NewWorkingTime';
+import NewTimetable from './Pages/Timetable/NewTimetable';
+import Timetable from './Pages/Timetable/Timetable';
 
 export default function Router() {
     return <BrowserRouter>
