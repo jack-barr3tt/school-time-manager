@@ -22,7 +22,7 @@ export class WorkingTime {
         if(this.id) {
             const { rows } = await Database.query(
                 `UPDATE working_times
-                SET start_time = to_timestamp($2/ 1000.0), end_time = to_timestamp($3/ 1000.0) 
+                SET start_time = to_timestamp($2 / 1000.0)::TIME, end_time = to_timestamp($3 / 1000.0)::TIME 
                 WHERE id = $1
                 RETURNING start_time, end_time`, 
                 [
