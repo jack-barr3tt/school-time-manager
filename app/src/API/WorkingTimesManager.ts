@@ -27,7 +27,7 @@ export default class WorkingTimesManager {
     }
 
     async create(time: WorkingTimeCreate) {
-        const { data } = await axios.post(`http://localhost:3000/users/${this.userId}/times`, time)
-        return data as WorkingTime
+        const { data } = await axios.post<WorkingTime>(`http://localhost:3000/users/${this.userId}/times`, time)
+        return data
     }
 }

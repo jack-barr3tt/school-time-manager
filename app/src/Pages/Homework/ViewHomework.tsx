@@ -2,7 +2,7 @@ import { AccessTime, Assignment, Circle, Event } from '@mui/icons-material';
 import { CircularProgress, Stack, Typography } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import { addDays, format, formatDistanceToNow, isAfter, startOfDay } from 'date-fns';
-import { useContext, useEffect, useState } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import Homework from '../../API/Homework';
 import { User } from '../../API/Users';
@@ -16,14 +16,22 @@ export default function ViewHomework() {
     const user = useContext(userContext)
     const navigate = useNavigate()
 
+    const fetchHomework = useCallback(async () => {
+        if(id) {
+            try{
+                setHomework(
+                    await User.forge(user.id).homework?.get(parseInt(id || "0"))
+                )
+                setLoading(false)
+            }catch(err){
+                navigate("/homework")
+            }
+        }
+    }, [user.id, navigate, id])
+
     useEffect(() => {
-        User.forge(user.id).homework?.get(parseInt(id || "0")).then(h => {
-            setHomework(h as Homework)
-            setLoading(false)
-        }).catch(() => 
-            navigate("/homework")
-        )
-    }, [user.id, id, navigate])
+        fetchHomework()
+    }, [fetchHomework])
 
     const getColor = (color?: number) => {
         if(!color) return grey[500];

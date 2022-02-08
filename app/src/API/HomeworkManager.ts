@@ -15,6 +15,8 @@ export default class HomeworkManager {
         this.userId = userId
     }
 
+    async get() : Promise<Homework[]>
+    async get(id: number) : Promise<Homework>
     async get(id?: number) {
         if(id) {
             const { data } = await axios.get(`http://localhost:3000/users/${this.userId}/homework/${id}`) as AxiosResponse<Homework>
@@ -26,7 +28,7 @@ export default class HomeworkManager {
     }
     
     async create(homework: HomeworkCreate) {
-        const { data } = await axios.post(`http://localhost:3000/users/${this.userId}/homework`, homework)
-        return data as Homework
+        const { data } = await axios.post<Homework>(`http://localhost:3000/users/${this.userId}/homework`, homework)
+        return data
     }
 }

@@ -18,7 +18,7 @@ export default function HomeworkPage() {
     
     useEffect(() => {
         User.forge(user.id).homework?.get().then(h => {
-            setHomework(h as Homework[])
+            setHomework(h)
             setLoading(false)
         })
     }, [user.id])
