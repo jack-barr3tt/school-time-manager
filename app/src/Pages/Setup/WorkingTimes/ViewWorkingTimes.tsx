@@ -1,39 +1,27 @@
 import { Add, Delete, Edit } from '@mui/icons-material';
 import { ButtonGroup, Fab, IconButton, Paper, Stack, Typography } from '@mui/material';
 import { format } from 'date-fns';
-import { FormEvent, useCallback, useContext, useEffect, useState } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { User } from '../../../API/Users';
 import WorkingTime from '../../../API/WorkingTimes';
 import { userContext } from '../../../App';
 import NavBar from '../../../Components/NavBar';
-import TimeRangePicker from '../../../Components/TimeRangePicker';
+import EditWorkingTime from './EditWorkingTime';
 
 export default function SetWorkingTimes() {
     const navigate = useNavigate()
 
     const [times, setTimes] = useState<WorkingTime[]>()
-    const [showDialog, setShowDialog] = useState(false)
-
-    const [newStartTime, setNewStartTime] = useState<Date|null>()
-    const [newEndTime, setNewEndTime] = useState<Date|null>()
+    const [editing, setEditing] = useState(false)
+    const [editingId, setEditingId] = useState<number>()
 
     const user = useContext(userContext)
 
     const fetchWorkingTimes = useCallback(async () => {
         const times = await User.forge(user.id).workingTimes?.get()
         setTimes(times)
-        console.log(times)
     }, [user.id])
-
-    const editTime = async (id: number) => {
-        console.log(id)
-        setShowDialog(true)
-    }
-
-    const updateWorkingTime = (e: FormEvent<HTMLFormElement>) => {
-        e.preventDefault()
-    }
 
     const deleteTime = async (id: number) => {
         if(times) {
@@ -49,25 +37,20 @@ export default function SetWorkingTimes() {
 
     useEffect(() => {
         fetchWorkingTimes()
-    }, [fetchWorkingTimes])
+    }, [fetchWorkingTimes, editing])
     
     return <>
-        <NavBar name="Set Working Times"/>
-        { showDialog ? <TimeRangePicker 
-            startTime={newStartTime}
-            setStartTime={setNewStartTime}
-            endTime={newEndTime}
-            setEndTime={setNewEndTime}
-            onSubmit={updateWorkingTime}
-        />
-        : <>
-            <Stack>
+        {
+            !editing ?
+            <>
+                <NavBar name="Set Working Times"/>
+                <Stack>
                 {
                     times && times.map(t => <Paper key={t._id}>
                         <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ width: "100%", p: 2 }}>
                             <Typography variant="subtitle1">{`${format(t.start_time, "kk:mm")} to ${format(t.end_time, "kk:mm")}`}</Typography>
                             <ButtonGroup>
-                                <IconButton onClick={(_e) => editTime(t._id)} id={""+t._id}>
+                                <IconButton onClick={(_e) => { setEditingId(t._id); setEditing(true); }} id={""+t._id}>
                                     <Edit/>
                                 </IconButton>
                                 <IconButton onClick={(_e) => deleteTime(t._id)} id={""+t._id}>
@@ -77,10 +60,11 @@ export default function SetWorkingTimes() {
                         </Stack>
                     </Paper>)
                 }
-            </Stack>
-            <Fab color="primary" sx={{ position: "absolute", right: "24px", bottom: "24px" }} onClick={() => navigate("new")}>
-                <Add/>
-            </Fab>
-        </> }
+                </Stack>
+                <Fab color="primary" sx={{ position: "absolute", right: "24px", bottom: "24px" }} onClick={() => navigate("new")}>
+                    <Add/>
+                </Fab>
+            </> : <EditWorkingTime back={() => setEditing(false)} id={editingId}/>
+        }
     </>;
 }
