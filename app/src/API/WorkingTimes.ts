@@ -24,7 +24,10 @@ export default class WorkingTime {
     }
 
     async edit(newData: Partial<WorkingTime>) {
-        const { data } = await axios.patch(`http://localhost:3000/users/${this.user_id}/times/${this._id}`, newData)
+        const { data } = await axios.patch(`http://localhost:3000/users/${this.user_id}/times/${this._id}`, {
+            start_time: newData.start_time?.getTime(),
+            end_time: newData.end_time?.getTime()
+        })
         return data as WorkingTime
     }
 }
