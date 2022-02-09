@@ -1,9 +1,9 @@
 import { NextFunction, Request, Response } from "express";
-import { WorkingTime } from "../../database/working_times";
+import { LessonBlock } from "../../database/lesson_block";
 
 export default async (req: Request, res: Response, next: NextFunction) => {
     try{
-        const lesson_block = new WorkingTime({
+        const lesson_block = new LessonBlock({
             ...req.body,
             user_id: req.params.userId,
         })

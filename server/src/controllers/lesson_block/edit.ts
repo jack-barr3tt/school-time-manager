@@ -8,7 +8,8 @@ export default async (req: Request, res: Response, next: NextFunction) => {
         const block = await LessonBlock.findById(id, userId);
         if(!block) throw new APIError("Block not found", 404);
 
-        let { start_time, end_time } = req.body
+        let { name, start_time, end_time } = req.body
+        if(name) block.name = name
         if(start_time) block.start_time = start_time;
         if(end_time) block.end_time = end_time;
 
