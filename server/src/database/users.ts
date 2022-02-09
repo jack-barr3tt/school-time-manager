@@ -2,13 +2,7 @@ import { hash } from "bcrypt"
 import Database from "../connections";
 import { APIError } from "../errors/types";
 
-export type BaseUser = {
-    id?: number;
-    username: string;
-    email: string;
-}
-
-export class User implements BaseUser {
+export class User {
     private _id? : number;
     public get id() {
         return this._id
@@ -18,35 +12,39 @@ export class User implements BaseUser {
     }
     readonly email : string;
     readonly username : string;
+    public prewarning? : number;
     private hash? : string;
 
-    constructor(data: BaseUser) {
+    constructor(data: User) {
         let emailValidationRegex = /.+@.+\..+/g
         if(emailValidationRegex.test(data.email))
             this.email = data.email;
         else
             throw new APIError("Invalid email", 400)
         this.username = data.username;
+        this.prewarning = data.prewarning;
     }
 
     async save() {
         if(this.id) {
             await Database.query(
-                'UPDATE users SET username = $1, email = $2 WHERE id = $3',
+                'UPDATE users SET username = $1, email = $2, prewarning = $3 WHERE id = $4',
                 [
                     this.username, 
-                    this.email, 
+                    this.email,
+                    this.prewarning,
                     this.id
                 ]
             )
             return this
         } else {
             const { rows } = await Database.query(
-                'INSERT INTO users (email, username, hash) VALUES ($1, $2, $3) RETURNING id',
+                'INSERT INTO users (email, username, hash, prewarning) VALUES ($1, $2, $3, $4) RETURNING id',
                 [
                     this.email,
                     this.username,
-                    this.hash
+                    this.hash,
+                    this.prewarning
                 ]
             )
             this.id = rows[0].id
@@ -62,7 +60,7 @@ export class User implements BaseUser {
 
     static async findById(id: string|number) {
         const { rows } = await Database.query(
-            'SELECT id, username, email FROM users WHERE id = $1',
+            'SELECT id, username, email, prewarning FROM users WHERE id = $1',
             [id]
         )
 

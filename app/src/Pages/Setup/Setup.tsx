@@ -17,15 +17,18 @@ export default function Setup() {
     // const [schoolDays, setSchoolDays] = useState()
     const [lessonBlocks, setLessonBlocks] = useState<LessonBlock[]>()
     const [workingTimes, setWorkingTimes] = useState<WorkingTime[]>()
-    // const [notification, setNotification] = useState()
+    const [notification, setNotification] = useState<number>()
 
     const fetchData = useCallback(async () => {
-        const [tempTimes, tempBlocks] = await Promise.all([
+        const [tempTimes, tempBlocks, fetchedUser] = await Promise.all([
             await User.forge(user.id).workingTimes?.get(),
-            await User.forge(user.id).lessonBlocks?.get()
+            await User.forge(user.id).lessonBlocks?.get(),
+            await User.get(user.id)
         ])
+        console.log(fetchedUser)
         setWorkingTimes(tempTimes)
         setLessonBlocks(tempBlocks)
+        setNotification(fetchedUser.prewarning || -1)
     }, [user.id])
 
     useEffect(() => {
@@ -58,10 +61,10 @@ export default function Setup() {
         
         <Typography variant="h6">Notifications</Typography>
 
-        <SettingsButton 
+        { notification ? <SettingsButton 
             mainText="Pre-warning" 
-            lowerText="10 minutes before" 
+            lowerText={notification === -1 ? "Not set" : `${notification} minutes before`} 
             onClick={() => navigate("prewarning")}
-        />
+        /> : <Skeleton variant="rectangular" width="100%" height="82px" animation="wave">{skeletonFiller}</Skeleton> }
     </>
 }

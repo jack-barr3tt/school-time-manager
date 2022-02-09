@@ -8,6 +8,7 @@ export class User {
     readonly _id: number;
     readonly email : string;
     readonly username : string;
+    readonly prewarning? : number;
     readonly subjects : SubjectManager;
     readonly homework : HomeworkManager;
     readonly workingTimes: WorkingTimesManager;
@@ -17,6 +18,7 @@ export class User {
         this._id = data._id
         this.email = data.email
         this.username = data.username
+        this.prewarning = data.prewarning
         this.subjects = new SubjectManager(this._id)
         this.homework = new HomeworkManager(this._id)
         this.workingTimes = new WorkingTimesManager(this._id)
@@ -36,5 +38,9 @@ export class User {
     static async get(id: number) {
         const { data } = await axios.get(`http://localhost:3000/users/${id}`) as AxiosResponse<User>
         return new User(data)
+    }
+
+    async setPreWarning(prewarning: number) {
+        await axios.patch(`http://localhost:3000/users/${this._id}`, { prewarning })
     }
 }
