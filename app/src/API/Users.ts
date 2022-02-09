@@ -1,5 +1,6 @@
 import axios, { AxiosResponse } from "axios";
 import HomeworkManager from "./HomeworkManager";
+import LessonBlockManager from "./LessonBlockManager";
 import SubjectManager from "./SubjectManager";
 import WorkingTimesManager from "./WorkingTimesManager";
 
@@ -10,6 +11,7 @@ export class User {
     readonly subjects : SubjectManager;
     readonly homework : HomeworkManager;
     readonly workingTimes: WorkingTimesManager;
+    readonly lessonBlocks: LessonBlockManager;
 
     constructor(data: User) {
         this._id = data._id
@@ -18,6 +20,7 @@ export class User {
         this.subjects = new SubjectManager(this._id)
         this.homework = new HomeworkManager(this._id)
         this.workingTimes = new WorkingTimesManager(this._id)
+        this.lessonBlocks = new LessonBlockManager(this._id)
     }
 
     static forge(id: number) {
@@ -25,7 +28,8 @@ export class User {
             _id: id, 
             subjects: new SubjectManager(id),
             homework: new HomeworkManager(id),
-            workingTimes: new WorkingTimesManager(id)
+            workingTimes: new WorkingTimesManager(id),
+            lessonBlocks: new LessonBlockManager(id)
         } as Partial<User>
     }
 
