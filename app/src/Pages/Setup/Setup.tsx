@@ -2,6 +2,7 @@ import { Skeleton, Typography } from '@mui/material';
 import { differenceInHours } from 'date-fns';
 import { useContext, useCallback, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import LessonBlock from '../../API/LessonBlock';
 import { User } from '../../API/Users';
 import WorkingTime from '../../API/WorkingTimes';
 import { userContext } from '../../App';
@@ -14,15 +15,17 @@ export default function Setup() {
     const user = useContext(userContext)
 
     // const [schoolDays, setSchoolDays] = useState()
-    // const [schoolTimes, setSchoolTimes] = useState()
+    const [lessonBlocks, setLessonBlocks] = useState<LessonBlock[]>()
     const [workingTimes, setWorkingTimes] = useState<WorkingTime[]>()
     // const [notification, setNotification] = useState()
 
     const fetchData = useCallback(async () => {
-        const [tempTimes] = await Promise.all([
-            await User.forge(user.id).workingTimes?.get()
+        const [tempTimes, tempBlocks] = await Promise.all([
+            await User.forge(user.id).workingTimes?.get(),
+            await User.forge(user.id).lessonBlocks?.get()
         ])
         setWorkingTimes(tempTimes)
+        setLessonBlocks(tempBlocks)
     }, [user.id])
 
     useEffect(() => {
@@ -41,11 +44,11 @@ export default function Setup() {
             onClick={() => navigate("days")}
         />
 
-        <SettingsButton 
+        { lessonBlocks ? <SettingsButton 
             mainText="Lesson Times" 
-            lowerText="6 lessons per day" 
+            lowerText={`${lessonBlocks.length} lessons per day`}
             onClick={() => navigate("times")}
-        />
+        /> : <Skeleton variant="rectangular" width="100%" height="82px" animation="wave">{skeletonFiller}</Skeleton> }
 
         { workingTimes ? <SettingsButton 
             mainText="Working Times" 
