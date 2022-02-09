@@ -28,12 +28,13 @@ export default function NewWorkingTime() {
 
     return <>
         <NavBar name="New Working Time"/>
-        <TimeRangePicker
-            startTime={startTime}
-            setStartTime={setStartTime}
-            endTime={endTime}
-            setEndTime={setEndTime}
-            onSubmit={saveWorkingTime}
-        />
+        <form onSubmit={saveWorkingTime}>
+            <TimeRangePicker
+                startTime={startTime}
+                setStartTime={setStartTime}
+                endTime={endTime}
+                setEndTime={setEndTime}
+            />
+        </form>
     </>;
 }

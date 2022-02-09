@@ -42,12 +42,13 @@ export default function EditWorkingTime(props: { back: () => void, id?: number }
 
     return <>
         <NavBar name="Edit Working Time" onBack={back}/>
-        <TimeRangePicker
-            startTime={newStartTime}
-            setStartTime={setNewStartTime}
-            endTime={newEndTime}
-            setEndTime={setNewEndTime}
-            onSubmit={saveWorkingTime}
-        />
+        <form onSubmit={saveWorkingTime}>
+            <TimeRangePicker
+                startTime={newStartTime}
+                setStartTime={setNewStartTime}
+                endTime={newEndTime}
+                setEndTime={setNewEndTime}
+            />
+        </form>
     </>
 }

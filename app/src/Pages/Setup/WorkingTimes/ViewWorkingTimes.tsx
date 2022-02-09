@@ -44,23 +44,21 @@ export default function SetWorkingTimes() {
             !editing ?
             <>
                 <NavBar name="Set Working Times"/>
-                <Stack>
                 {
                     times && times.map(t => <Paper key={t._id}>
                         <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ width: "100%", p: 2 }}>
                             <Typography variant="subtitle1">{`${format(t.start_time, "kk:mm")} to ${format(t.end_time, "kk:mm")}`}</Typography>
                             <ButtonGroup>
-                                <IconButton onClick={(_e) => { setEditingId(t._id); setEditing(true); }} id={""+t._id}>
+                                <IconButton onClick={() => { setEditingId(t._id); setEditing(true); }} id={""+t._id}>
                                     <Edit/>
                                 </IconButton>
-                                <IconButton onClick={(_e) => deleteTime(t._id)} id={""+t._id}>
+                                <IconButton onClick={() => deleteTime(t._id)} id={""+t._id}>
                                     <Delete/>
                                 </IconButton>
                             </ButtonGroup>
                         </Stack>
                     </Paper>)
                 }
-                </Stack>
                 <Fab color="primary" sx={{ position: "absolute", right: "24px", bottom: "24px" }} onClick={() => navigate("new")}>
                     <Add/>
                 </Fab>
