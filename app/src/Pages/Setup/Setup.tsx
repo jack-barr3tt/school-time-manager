@@ -3,6 +3,7 @@ import { differenceInHours } from 'date-fns';
 import { useContext, useCallback, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import LessonBlock from '../../API/LessonBlock';
+import Repeat from '../../API/Repeat';
 import { User } from '../../API/Users';
 import WorkingTime from '../../API/WorkingTimes';
 import { userContext } from '../../App';
@@ -14,18 +15,19 @@ export default function Setup() {
 
     const user = useContext(userContext)
 
-    // const [schoolDays, setSchoolDays] = useState()
+    const [repeats, setRepeats] = useState<Repeat[]>()
     const [lessonBlocks, setLessonBlocks] = useState<LessonBlock[]>()
     const [workingTimes, setWorkingTimes] = useState<WorkingTime[]>()
     const [notification, setNotification] = useState<number>()
 
     const fetchData = useCallback(async () => {
-        const [tempTimes, tempBlocks, fetchedUser] = await Promise.all([
+        const [tempRepeats, tempTimes, tempBlocks, fetchedUser] = await Promise.all([
+            await User.forge(user.id).repeats?.get(),
             await User.forge(user.id).workingTimes?.get(),
             await User.forge(user.id).lessonBlocks?.get(),
             await User.get(user.id)
         ])
-        console.log(fetchedUser)
+        setRepeats(tempRepeats)
         setWorkingTimes(tempTimes)
         setLessonBlocks(tempBlocks)
         setNotification(fetchedUser.prewarning || -1)
@@ -41,11 +43,11 @@ export default function Setup() {
         <NavBar name="Setup"/>
         
         <Typography variant="h6">Timetable</Typography>
-        <SettingsButton 
-            mainText="School Days" 
-            lowerText="5 days perk week" 
-            onClick={() => navigate("days")}
-        />
+        { repeats ? <SettingsButton 
+            mainText="Repeats" 
+            lowerText="2 timetables, repeats every 2 weeks" 
+            onClick={() => navigate("repeats")}
+        /> : <Skeleton variant="rectangular" width="100%" height="82px" animation="wave">{skeletonFiller}</Skeleton> }
 
         { lessonBlocks ? <SettingsButton 
             mainText="Lesson Times" 

@@ -65,8 +65,8 @@ export default function ViewBlocks() {
                                 </Stack>
                             </Paper> )
                         :
-                            (new Array(5)).fill(
-                                <Skeleton variant="rectangular" height={92} animation="wave" sx={{ borderRadius: 1 }}/>
+                            (new Array(5)).fill(0).map((_a, i) =>
+                                <Skeleton id={""+i} variant="rectangular" height={92} animation="wave" sx={{ borderRadius: 1 }}/>
                             )
                     }
                     <Fab color="primary" sx={{ position: "absolute", right: "24px", bottom: "24px" }} onClick={() => navigate("new")}>

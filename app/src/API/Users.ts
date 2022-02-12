@@ -1,6 +1,7 @@
 import axios, { AxiosResponse } from "axios";
 import HomeworkManager from "./HomeworkManager";
 import LessonBlockManager from "./LessonBlockManager";
+import RepeatManager from "./RepeatManager";
 import SubjectManager from "./SubjectManager";
 import WorkingTimesManager from "./WorkingTimesManager";
 
@@ -11,6 +12,7 @@ export class User {
     readonly prewarning? : number;
     readonly subjects : SubjectManager;
     readonly homework : HomeworkManager;
+    readonly repeats : RepeatManager;
     readonly workingTimes: WorkingTimesManager;
     readonly lessonBlocks: LessonBlockManager;
 
@@ -21,6 +23,7 @@ export class User {
         this.prewarning = data.prewarning
         this.subjects = new SubjectManager(this._id)
         this.homework = new HomeworkManager(this._id)
+        this.repeats = new RepeatManager(this._id)
         this.workingTimes = new WorkingTimesManager(this._id)
         this.lessonBlocks = new LessonBlockManager(this._id)
     }
@@ -30,8 +33,9 @@ export class User {
             _id: id, 
             subjects: new SubjectManager(id),
             homework: new HomeworkManager(id),
+            repeats: new RepeatManager(id),
             workingTimes: new WorkingTimesManager(id),
-            lessonBlocks: new LessonBlockManager(id)
+            lessonBlocks: new LessonBlockManager(id),
         } as Partial<User>
     }
 

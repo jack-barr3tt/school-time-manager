@@ -5,13 +5,14 @@ import SetWorkingTimes from './Pages/Setup/WorkingTimes/ViewWorkingTimes';
 import ViewHomework from './Pages/Homework/ViewHomework';
 import NewHomework from './Pages/Homework/NewHomework';
 import PreWarning from './Pages/Setup/PreWarning';
-import SetDays from './Pages/Setup/SetSchoolDays';
 import Setup from './Pages/Setup/Setup';
 import NewWorkingTime from './Pages/Setup/WorkingTimes/NewWorkingTime';
 import NewTimetable from './Pages/Timetable/NewTimetable';
 import Timetable from './Pages/Timetable/Timetable';
 import ViewBlocks from './Pages/Setup/LessonBlocks/ViewBlocks';
 import NewBlock from './Pages/Setup/LessonBlocks/NewBlock';
+import ViewRepeats from './Pages/Setup/Repeats/ViewRepeats';
+import NewRepeat from './Pages/Setup/Repeats/NewRepeat';
 
 export default function Router() {
     return <BrowserRouter>
@@ -29,8 +30,10 @@ export default function Router() {
                 </Route>
                 <Route path="setup">
                     <Route index element={<Setup/>}/>
-                    <Route path="days" element={<SetDays/>}/>
-                    <Route path="prewarning" element={<PreWarning/>}/>
+                    <Route path="repeats">
+                        <Route index element={<ViewRepeats/>}/>
+                        <Route path="new" element={<NewRepeat/>}/>
+                    </Route>
                     <Route path="times">
                         <Route index element={<ViewBlocks/>}/>
                         <Route path="new" element={<NewBlock/>}/>
@@ -39,6 +42,7 @@ export default function Router() {
                         <Route index element={<SetWorkingTimes/>}/>
                         <Route path="new" element={<NewWorkingTime/>}/>
                     </Route>
+                    <Route path="prewarning" element={<PreWarning/>}/>
                 </Route>
             </Route>
         </Routes>
