@@ -1,26 +1,37 @@
 import { Edit, Delete } from '@mui/icons-material'
-import { ButtonBase, IconButton, Paper, Stack, Typography } from '@mui/material'
+import { ButtonBase, Container, IconButton, Paper, Stack, Typography } from '@mui/material'
 
 type Props = {
     id: number;
-    topText: string;
-    bottomText: string;
+    topText?: string;
+    bottomText?: string;
+    clickable?: boolean;
     deleteItem: (id: number) => void;
     setEditingId: (id: number) => void;
     setEditing: (editing: boolean) => void;
 }
 
 export default function SetupCard(props: Props) {
-    const { id, topText, bottomText, deleteItem, setEditingId, setEditing } = props
+    const { id, topText, bottomText, clickable, deleteItem, setEditingId, setEditing } = props
+
+    const infoReadout = <Stack direction="column" alignItems="left" sx={{ width: 1 }}>
+        { topText && <Typography variant="h6" sx={{ textAlign: "left" }}>{topText}</Typography> }
+        { bottomText && <Typography variant="body1" sx={{ textAlign: "left" }}>{bottomText}</Typography> }
+    </Stack>
+
+    const infoContainerStyle = { width: 1, height: 1, p: 2 }
 
     return <Paper sx={{ width: 1 }}>
         <Stack direction="row">
-            <ButtonBase sx={{ width: 1, height: 1, p: 2 }}>
-                <Stack direction="column" alignItems="left" sx={{ width: 1 }}>
-                    <Typography variant="h6" sx={{ textAlign: "left" }}>{topText}</Typography>
-                    <Typography variant="body1" sx={{ textAlign: "left" }}>{bottomText}</Typography>
-                </Stack>
-            </ButtonBase>
+            { clickable ? 
+                <ButtonBase sx={infoContainerStyle} >
+                    {infoReadout}
+                </ButtonBase>
+                : 
+                <Container sx={infoContainerStyle}>
+                    {infoReadout}
+                </Container>
+            }
             <Stack direction="row" alignItems="center" spacing={1} sx={{ px: 2 }}>
                 <IconButton onClick={() => { setEditingId(id); setEditing(true); }} id={""+id}>
                     <Edit/>
