@@ -22,10 +22,10 @@ export default function Setup() {
 
     const fetchData = useCallback(async () => {
         const [tempRepeats, tempTimes, tempBlocks, fetchedUser] = await Promise.all([
-            await User.forge(user.id).repeats?.get(),
-            await User.forge(user.id).workingTimes?.get(),
-            await User.forge(user.id).lessonBlocks?.get(),
-            await User.get(user.id)
+            User.forge(user.id).repeats?.get(),
+            User.forge(user.id).workingTimes?.get(),
+            User.forge(user.id).lessonBlocks?.get(),
+            User.get(user.id)
         ])
         setRepeats(tempRepeats)
         setWorkingTimes(tempTimes)
@@ -45,7 +45,7 @@ export default function Setup() {
         <Typography variant="h6">Timetable</Typography>
         { repeats ? <SettingsButton 
             mainText="Repeats" 
-            lowerText="2 timetables, repeats every 2 weeks" 
+            lowerText={`${repeats.length} timetables, repeats every 2 weeks`} 
             onClick={() => navigate("repeats")}
         /> : <Skeleton variant="rectangular" width="100%" height="82px" animation="wave">{skeletonFiller}</Skeleton> }
 
