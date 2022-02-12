@@ -1,5 +1,5 @@
-import { Add, Delete, Edit } from '@mui/icons-material';
-import { ButtonGroup, Fab, IconButton, Paper, Skeleton, Stack, Typography } from '@mui/material';
+import { Add, } from '@mui/icons-material';
+import { Fab, Skeleton } from '@mui/material';
 import { compareAsc, format } from 'date-fns';
 import { useCallback, useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -7,6 +7,7 @@ import LessonBlock from '../../../API/LessonBlock';
 import { User } from '../../../API/Users';
 import { userContext } from '../../../App';
 import NavBar from '../../../Components/NavBar';
+import SetupCard from '../../../Components/SetupCard';
 import EditBlock from './EditBlock';
 
 export default function ViewBlocks() {
@@ -48,22 +49,15 @@ export default function ViewBlocks() {
                     {
                         blocks ? blocks
                             .sort((a, b) => compareAsc(a.start_time, b.start_time))
-                            .map(b => <Paper key={b._id}>
-                                <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ width: "100%", p: 2 }}>
-                                    <Stack direction="column">
-                                        <Typography variant="h6">{b.name}</Typography>
-                                        <Typography variant="subtitle1">{`${format(b.start_time, "kk:mm")} to ${format(b.end_time, "kk:mm")}`}</Typography>
-                                    </Stack>
-                                    <ButtonGroup>
-                                        <IconButton onClick={() => { setEditingId(b._id); setEditing(true); }} id={""+b._id}>
-                                            <Edit/>
-                                        </IconButton>
-                                        <IconButton onClick={() => deleteBlock(b._id)} id={""+b._id}>
-                                            <Delete/>
-                                        </IconButton>
-                                    </ButtonGroup>
-                                </Stack>
-                            </Paper> )
+                            .map(b => <SetupCard
+                                key={b._id}
+                                id={b._id}
+                                topText={b.name}
+                                bottomText={`${format(b.start_time, "kk:mm")} to ${format(b.end_time, "kk:mm")}`}
+                                setEditing={setEditing}
+                                setEditingId={setEditingId}
+                                deleteItem={() => deleteBlock(b._id)}
+                            /> )
                         :
                             (new Array(5)).fill(0).map((_a, i) =>
                                 <Skeleton key={""+i} variant="rectangular" height={92} animation="wave" sx={{ borderRadius: 1 }}/>
