@@ -46,7 +46,7 @@ export default class Homework {
         if(this.id) {
             await Database.query(
                 `UPDATE homeworks
-                SET task = $2, subject_id = $3, due = $4, difficulty = $5 
+                SET task = $2, subject_id = $3, due = to_timestamp($4 / 1000.0), difficulty = $5 
                 WHERE id = $1`, 
                 [
                     this.id, 
