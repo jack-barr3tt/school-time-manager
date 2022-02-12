@@ -31,7 +31,7 @@ export default function NewRepeat() {
         <form onSubmit={saveRepeat}>
             <Stack direction="column" spacing={2}>
                 <TextField 
-                autoFocus
+                    autoFocus
                     label="Name"
                     onChange={(e) => setName(e.target.value)}
                 />

@@ -1,5 +1,4 @@
-import { Save } from '@mui/icons-material';
-import { Fab, Stack, TextField } from '@mui/material';
+import { Stack, TextField } from '@mui/material';
 import { addHours } from 'date-fns';
 import { FormEvent, useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -9,9 +8,10 @@ import NavBar from '../../../Components/NavBar';
 import TimeRangePicker, { OptionalDate } from '../../../Components/TimeRangePicker';
 
 export default function NewBlock() {
+    const defaultEnd = addHours(new Date(), 1)
     const [name, setName] = useState("")
     const [start, setStart] = useState<OptionalDate>(new Date())
-    const [end, setEnd] = useState<OptionalDate>(addHours (new Date(), 1))
+    const [end, setEnd] = useState<OptionalDate>(defaultEnd)
 
     const user = useContext(userContext)
 
@@ -37,8 +37,9 @@ export default function NewBlock() {
                 <TextField
                     label="Name"
                     fullWidth
+                    autoFocus
                     value={name}
-                    onChange={(e) => setName(e.target.value)}
+                    onChange={(e) => setName(e.target.value) }
                 />
                 <TimeRangePicker
                     startTime={start}
@@ -48,9 +49,6 @@ export default function NewBlock() {
                     autoDifference={{ hours: 1 }}
                 />
             </Stack>
-            <Fab color="primary" sx={{ position: "absolute", right: "24px", bottom: "24px" }} type="submit">
-                <Save/>
-            </Fab>
         </form>
     </>
 }

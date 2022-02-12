@@ -1,14 +1,15 @@
+import { Stack } from '@mui/material';
 import { FormEvent, useCallback, useContext, useEffect, useState } from 'react';
 import { User } from '../../../API/Users';
 import WorkingTime from '../../../API/WorkingTimes';
 import { userContext } from '../../../App';
 import NavBar from '../../../Components/NavBar';
-import TimeRangePicker from '../../../Components/TimeRangePicker';
+import TimeRangePicker, { OptionalDate } from '../../../Components/TimeRangePicker';
 
 export default function EditWorkingTime(props: { back: () => void, id?: number }) {
     const { back, id } = props
-    const [newStartTime, setNewStartTime] = useState<Date|null>()
-    const [newEndTime, setNewEndTime] = useState<Date|null>()
+    const [newStartTime, setNewStartTime] = useState<OptionalDate>()
+    const [newEndTime, setNewEndTime] = useState<OptionalDate>()
     const [time, setTime] = useState<WorkingTime>()
 
     const user = useContext(userContext)
@@ -34,21 +35,21 @@ export default function EditWorkingTime(props: { back: () => void, id?: number }
                     end_time: newEndTime
                 })
                 back()
-            }catch(err){
-                console.log(err)
-            }
+            }catch{}
         }
     }
 
     return <>
         <NavBar name="Edit Working Time" onBack={back}/>
         <form onSubmit={saveWorkingTime}>
-            <TimeRangePicker
-                startTime={newStartTime}
-                setStartTime={setNewStartTime}
-                endTime={newEndTime}
-                setEndTime={setNewEndTime}
-            />
+            <Stack direction="column" spacing={2}>
+                <TimeRangePicker
+                    startTime={newStartTime}
+                    setStartTime={setNewStartTime}
+                    endTime={newEndTime}
+                    setEndTime={setNewEndTime}
+                />
+            </Stack>
         </form>
     </>
 }

@@ -1,13 +1,15 @@
+import { Stack } from '@mui/material';
+import { add } from 'date-fns';
 import { FormEvent, useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { User } from '../../../API/Users';
 import { userContext } from '../../../App';
 import NavBar from '../../../Components/NavBar';
-import TimeRangePicker from '../../../Components/TimeRangePicker';
+import TimeRangePicker, { OptionalDate } from '../../../Components/TimeRangePicker';
 
 export default function NewWorkingTime() {
-    const [startTime, setStartTime] = useState<Date|null>()
-    const [endTime, setEndTime] = useState<Date|null>()
+    const [startTime, setStartTime] = useState<OptionalDate>(new Date())
+    const [endTime, setEndTime] = useState<OptionalDate>(add(new Date(), { hours: 2 }))
 
     const user = useContext(userContext)
     const navigate = useNavigate()
@@ -29,12 +31,15 @@ export default function NewWorkingTime() {
     return <>
         <NavBar name="New Working Time"/>
         <form onSubmit={saveWorkingTime}>
-            <TimeRangePicker
-                startTime={startTime}
-                setStartTime={setStartTime}
-                endTime={endTime}
-                setEndTime={setEndTime}
-            />
+            <Stack direction="column" spacing={2}>
+                <TimeRangePicker
+                    startTime={startTime}
+                    setStartTime={setStartTime}
+                    endTime={endTime}
+                    setEndTime={setEndTime}
+                    autoDifference={{ hours: 2 }}
+                />
+            </Stack>
         </form>
     </>;
 }

@@ -19,17 +19,13 @@ export default function TimeRangePicker(props: Props) {
 
     useEffect(() => {
         setStartTime(new Date())
-        if(autoDifference)
-            setEndTime(add(new Date(), autoDifference))
-        else
-            setEndTime(add(new Date(), { hours: 1 }))
-    }, [setStartTime, setEndTime, autoDifference])
+    }, [setStartTime])
 
     return <>
         <TimePicker
             label="Start"
             renderInput={(params) => <TextField {...params} />}
-            onChange={(e) => { setStartTime(e); if(autoDifference && e) setEndTime(add(e, autoDifference)) } }
+            onChange={(e) => { setStartTime(e); if(autoDifference && startTime) setEndTime(add(startTime, autoDifference)) } }
             value={startTime}
         />
         <TimePicker

@@ -42,6 +42,7 @@ export default function ViewRepeats() {
             {
                 repeats ? 
                     repeats.map(r => <SetupCard 
+                        key={r._id}
                         id={r._id}
                         topText={r.name}
                         bottomText={`${getDay(r.start_day)} to ${getDay(r.end_day)}`}
