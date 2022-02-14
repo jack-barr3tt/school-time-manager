@@ -69,7 +69,8 @@ export default function HomeworkCard (props: Props) {
 
     const StyledSwiper = styled(SwipeableViews)({
         borderRadius: +theme.shape.borderRadius * 6,
-        boxShadow: theme.shadows[4]
+        boxShadow: theme.shadows[4],
+        width: "100%"
     })
 
     return <StyledSwiper

@@ -17,7 +17,6 @@ export default function HomeworkPage() {
     const [loading, setLoading] = useState<boolean>(true)
 
     const loadHomework = useCallback(async () => {
-        console.log("loading homework")
         let tempHomework = await User.forge(user.id).homework?.get()
         if(tempHomework) {
             setHomework(tempHomework)

@@ -1,5 +1,5 @@
-import { AccessTime, Assignment, Circle, Delete, Edit, Event } from '@mui/icons-material';
-import { CircularProgress, IconButton, Stack, Typography } from '@mui/material';
+import { AccessTime, Assignment, Check, Circle, Delete, Edit, Event } from '@mui/icons-material';
+import { Button, CircularProgress, IconButton, Stack, Typography } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import { addDays, format, formatDistanceToNow, isAfter, startOfDay } from 'date-fns';
 import { useCallback, useContext, useEffect, useState } from 'react';
@@ -107,6 +107,19 @@ export default function ViewHomework() {
                 </Stack>
                 <Typography variant="body1">{["Easy","Medium","Hard"][homework?.difficulty || 0]}</Typography>
             </> }
+            <Button
+                fullWidth
+                variant="outlined"
+                onClick={async () => {
+                    if(homework) {
+                        await homework.markComplete()
+                        navigate("/homework")
+                    }
+                }}
+            >
+                <Check/>
+                Complete
+            </Button>
         </>
         :
         <EditHomework back={() => setEditing(false)} id={editingId}/>
