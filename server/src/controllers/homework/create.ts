@@ -5,7 +5,8 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     try{
         const homeworkItem = new Homework({
             ...req.body,
-            user_id: req.params.userId
+            user_id: req.params.userId,
+            complete: false
         })
 
         await homeworkItem.save();

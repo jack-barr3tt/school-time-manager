@@ -28,6 +28,7 @@ export default class Homework {
     public subject: Subject;
     public due?: Date;
     public difficulty?: number;
+    public complete: boolean;
 
     constructor(data: HomeworkArgs) {  
         this.user_id = data.user_id;
@@ -40,34 +41,37 @@ export default class Homework {
         } as Subject);
         this.due = data.due;
         this.difficulty = data.difficulty;
+        this.complete = data.complete;
     }
 
     async save() {
         if(this.id) {
             await Database.query(
                 `UPDATE homeworks
-                SET task = $2, subject_id = $3, due = to_timestamp($4 / 1000.0), difficulty = $5 
+                SET task = $2, subject_id = $3, due = to_timestamp($4 / 1000.0), difficulty = $5, complete = $6
                 WHERE id = $1`, 
                 [
                     this.id, 
                     this.task, 
                     this.subject.id, 
                     this.due, 
-                    this.difficulty
+                    this.difficulty,
+                    this.complete
                 ]
             )
             return this
         } else {
             const { rows } = await Database.query(
-                `INSERT INTO homeworks (user_id, task, subject_id, due, difficulty)
-                VALUES ($1, $2, $3, to_timestamp($4 / 1000.0), $5)
+                `INSERT INTO homeworks (user_id, task, subject_id, due, difficulty, complete)
+                VALUES ($1, $2, $3, to_timestamp($4 / 1000.0), $5, $6)
                 RETURNING id`, 
                 [
                     this.user_id, 
                     this.task, 
                     this.subject.id, 
                     this.due, 
-                    this.difficulty
+                    this.difficulty,
+                    this.complete
                 ]
             )
             this.id = rows[0].id
@@ -77,7 +81,7 @@ export default class Homework {
 
     static async findById(id: string) {
         const { rows } = await Database.query(
-            `SELECT h.id, h.user_id, h.task, h.subject_id, h.due, h.difficulty, s.name subject_name, s.color subject_color 
+            `SELECT h.id, h.user_id, h.task, h.subject_id, h.due, h.difficulty, h.complete, s.name subject_name, s.color subject_color 
             FROM homeworks h 
             INNER JOIN subjects s ON h.subject_id = s.id 
             WHERE h.id = $1`,
@@ -93,7 +97,7 @@ export default class Homework {
 
     static async getByUser(userId: string) {
         const { rows } = await Database.query(
-            `SELECT h.id, h.user_id, h.task, h.subject_id, h.due, h.difficulty, s.name subject_name, s.color subject_color 
+            `SELECT h.id, h.user_id, h.task, h.subject_id, h.due, h.difficulty, h.complete, s.name subject_name, s.color subject_color 
             FROM homeworks h 
             INNER JOIN subjects s ON h.subject_id = s.id 
             WHERE h.user_id = $1`,

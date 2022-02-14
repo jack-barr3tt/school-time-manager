@@ -8,12 +8,13 @@ export default async (req: Request, res: Response, next: NextFunction) => {
         const homework = await Homework.findById(id)
         if (!homework) throw new APIError("Homework not found", 404);
 
-        let { task, subject_id, due, difficulty } = req.body
+        let { task, subject_id, due, difficulty, complete } = req.body
 
         if(task) homework.task = task
         if(subject_id) homework.subject_id = subject_id
         if(due) homework.due = due
         if(difficulty) homework.difficulty = difficulty
+        if(complete) homework.complete = complete
 
         await homework.save()
 

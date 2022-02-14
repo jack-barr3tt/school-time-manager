@@ -8,6 +8,7 @@ export default class Homework {
     readonly subject: Subject;
     readonly due?: Date;
     readonly difficulty: number;
+    readonly complete: boolean;
 
     constructor(data: Homework) {
         this._id = data._id
@@ -16,6 +17,7 @@ export default class Homework {
         this.subject = new Subject(data.subject)
         this.due = data.due == null ? undefined : new Date(data.due)
         this.difficulty = data.difficulty
+        this.complete = data.complete
     }
 
     async delete() {
@@ -29,6 +31,13 @@ export default class Homework {
             subject_id: newData.subject?._id,
             due: newData.due?.getTime(),
             difficulty: newData.difficulty
+        })
+        return data
+    }
+
+    async markComplete() {
+        const { data } = await axios.patch<Homework>(`http://localhost:3000/users/${this.user_id}/homework/${this._id}`, {
+            complete: true
         })
         return data
     }
