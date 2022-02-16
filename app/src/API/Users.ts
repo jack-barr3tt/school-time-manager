@@ -1,6 +1,7 @@
 import axios, { AxiosResponse } from "axios";
 import HomeworkManager from "./HomeworkManager";
 import LessonBlockManager from "./LessonBlockManager";
+import LocationManager from "./LocationManager";
 import RepeatManager from "./RepeatManager";
 import SubjectManager from "./SubjectManager";
 import WorkingTimesManager from "./WorkingTimesManager";
@@ -15,6 +16,7 @@ export class User {
     readonly repeats : RepeatManager;
     readonly workingTimes: WorkingTimesManager;
     readonly lessonBlocks: LessonBlockManager;
+    readonly locations: LocationManager;
 
     constructor(data: User) {
         this._id = data._id
@@ -26,6 +28,7 @@ export class User {
         this.repeats = new RepeatManager(this._id)
         this.workingTimes = new WorkingTimesManager(this._id)
         this.lessonBlocks = new LessonBlockManager(this._id)
+        this.locations = new LocationManager(this._id)
     }
 
     static forge(id: number) {
