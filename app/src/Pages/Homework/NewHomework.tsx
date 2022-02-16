@@ -4,21 +4,14 @@ import { Checkbox, Fab, Slider, Stack, TextField, Typography } from '@mui/materi
 import { startOfDay } from 'date-fns';
 import { FormEvent, useCallback, useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Subject from '../../API/Subjects';
+import Subject, { SubjectInput } from '../../API/Subjects';
 import { User } from '../../API/Users';
 import { userContext } from '../../App';
 import CreateableAutocomplete from '../../Components/CreatableAutocomplete';
 import CreateSubject from '../../Components/CreateSubject';
 import NavBar from '../../Components/NavBar';
 
-export default function NewHomework() {
-    interface SubjectInput {
-        _id?: number;
-        name: string;
-        color?: number;
-        inputValue?: string;
-    }
-    
+export default function NewHomework() {    
     const [task, setTask] = useState<string>();
     const [subject, setSubject] = useState<SubjectInput>();
     const [due, setDue] = useState<Date|null>();

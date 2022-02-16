@@ -1,3 +1,10 @@
+export type SubjectInput = {
+    _id?: number;
+    name: string;
+    color?: number;
+    inputValue?: string;
+}
+
 export default class Subject {
     readonly _id: number;
     readonly name: string;
