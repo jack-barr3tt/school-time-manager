@@ -4,6 +4,7 @@ import LessonBlockManager from "./LessonBlockManager";
 import LocationManager from "./LocationManager";
 import RepeatManager from "./RepeatManager";
 import SubjectManager from "./SubjectManager";
+import TeacherManager from "./TeacherManager";
 import WorkingTimesManager from "./WorkingTimesManager";
 
 export class User {
@@ -17,6 +18,7 @@ export class User {
     readonly workingTimes: WorkingTimesManager;
     readonly lessonBlocks: LessonBlockManager;
     readonly locations: LocationManager;
+    readonly teachers: TeacherManager;
 
     constructor(data: User) {
         this._id = data._id
@@ -29,6 +31,7 @@ export class User {
         this.workingTimes = new WorkingTimesManager(this._id)
         this.lessonBlocks = new LessonBlockManager(this._id)
         this.locations = new LocationManager(this._id)
+        this.teachers = new TeacherManager(this._id)
     }
 
     static forge(id: number) {
@@ -39,6 +42,8 @@ export class User {
             repeats: new RepeatManager(id),
             workingTimes: new WorkingTimesManager(id),
             lessonBlocks: new LessonBlockManager(id),
+            locations: new LocationManager(id),
+            teachers: new TeacherManager(id)
         } as Partial<User>
     }
 
