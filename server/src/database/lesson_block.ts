@@ -14,6 +14,7 @@ export class LessonBlock {
     public end_time: Date;
 
     constructor(data: LessonBlock) {
+        this.id = data.id
         this.user_id = data.user_id
         this.name = data.name
         this.start_time = data.start_time

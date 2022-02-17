@@ -14,7 +14,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
         if(block_id) lesson.block_id = block_id
         if(location_id) lesson.location_id = location_id
         if(teacher_id) lesson.teacher_id = teacher_id
-        if(timetabled_day_id) lesson.timetabled_day_id = timetabled_day_id
+        if(timetabled_day_id) lesson.day = timetabled_day_id
 
         await lesson.save()
         res.json(lesson)

@@ -9,10 +9,11 @@ export class Teacher {
         this._id = newId
     }
     readonly user_id: number;
-    public name: number;
+    public name: string;
 
     constructor(data: Teacher) {
-        this.user_id = data.user_id
+        this.id = data.id
+        this.user_id = +data.user_id
         this.name = data.name
     }
 

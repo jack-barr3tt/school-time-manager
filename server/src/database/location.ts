@@ -12,6 +12,7 @@ export class Location {
     public name: string;
 
     constructor(data: Location) {
+        this.id = data.id
         this.user_id = data.user_id
         this.name = data.name
     }

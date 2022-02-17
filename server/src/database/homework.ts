@@ -15,7 +15,7 @@ export default class Homework {
     private set id(newId: number|undefined) {
         this._id = newId
     }
-
+    
     public get subject_id() {
         return this.subject.id
     }
