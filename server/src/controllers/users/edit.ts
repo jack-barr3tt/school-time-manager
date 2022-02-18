@@ -8,9 +8,10 @@ export default async (req: Request, res: Response, next: NextFunction) => {
         const user = await User.findById(id)
         if(!user) throw new APIError("User not found", 404);
 
-        let { prewarning } = req.body
+        let { prewarning, repeat_ref } = req.body
 
         if(prewarning) user.prewarning = prewarning;
+        if(repeat_ref) user.repeat_ref = repeat_ref
 
         await user.save();
 

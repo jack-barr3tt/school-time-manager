@@ -59,9 +59,30 @@ export class Repeat {
                 ]
             )
 
+            await this.setRepeatReference()
+
             this.id = rows[0].id
             return this
         }
+    }
+
+    async setRepeatReference() {
+        const { rows } = await Database.query(
+            `SELECT id FROM repeats WHERE user_id = $1`,
+            [this.user_id]
+        )
+        if(rows.length > 1) return
+
+        const repeatId = rows[0].id
+
+        await Database.query(
+            `UPDATE users SET repeat_id = $2, repeat_ref = to_timestamp($3 / 1000.0) WHERE id = $1`,
+            [
+                this.user_id,
+                repeatId,
+                Date.now()
+            ]
+        )
     }
 
     static async findById(id: string) {

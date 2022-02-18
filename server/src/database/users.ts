@@ -1,6 +1,13 @@
 import { hash } from "bcrypt"
 import Database from "../connections";
 import { APIError } from "../errors/types";
+import { Repeat } from "./repeats";
+
+type UserArgs = User & {
+    repeat_name: string;
+    repeat_start_day: number;
+    repeat_end_day: number;
+}
 
 export class User {
     private _id? : number;
@@ -10,12 +17,21 @@ export class User {
     private set id(newId : number|undefined) {
         this._id = newId
     }
+
+    public get repeat_id() {
+        return this.repeat && this.repeat.id
+    }
+    public set repeat_id(newId: number|undefined) {
+        this.repeat = { id: newId } as Repeat
+    }
     readonly email : string;
     readonly username : string;
     public prewarning? : number;
+    public repeat?: Repeat;
+    public repeat_ref?: Date;
     private hash? : string;
 
-    constructor(data: User) {
+    constructor(data: UserArgs) {
         let emailValidationRegex = /.+@.+\..+/g
         if(emailValidationRegex.test(data.email))
             this.email = data.email;
@@ -23,16 +39,23 @@ export class User {
             throw new APIError("Invalid email", 400)
         this.username = data.username;
         this.prewarning = data.prewarning;
+        if(data.repeat_name) this.repeat = new Repeat({
+            name: data.repeat_name,
+            start_day: data.repeat_start_day,
+            end_day: data.repeat_end_day
+        } as Repeat)
+        this.repeat_ref = data.repeat_ref ? new Date(data.repeat_ref) : new Date()
     }
 
     async save() {
         if(this.id) {
             await Database.query(
-                'UPDATE users SET username = $1, email = $2, prewarning = $3 WHERE id = $4',
+                'UPDATE users SET username = $1, email = $2, prewarning = $3, repeat_ref = to_timestamp($4 / 1000.0) WHERE id = $5',
                 [
                     this.username, 
                     this.email,
                     this.prewarning,
+                    this.repeat_ref,
                     this.id
                 ]
             )
@@ -60,7 +83,10 @@ export class User {
 
     static async findById(id: string|number) {
         const { rows } = await Database.query(
-            'SELECT id, username, email, prewarning FROM users WHERE id = $1',
+            `SELECT u.id, u.username, u.email, u.prewarning, u.repeat_id, u.repeat_ref, r.name repeat_name, r.start_day repeat_start_day, r.end_day repeat_end_day
+            FROM users u
+            LEFT JOIN repeats r ON u.repeat_id = r.id
+            WHERE u.id = $1`,
             [id]
         )
 

@@ -3,6 +3,7 @@ import HomeworkManager from "./HomeworkManager";
 import LessonBlockManager from "./LessonBlockManager";
 import LessonManager from "./LessonManager";
 import LocationManager from "./LocationManager";
+import Repeat from "./Repeat";
 import RepeatManager from "./RepeatManager";
 import SubjectManager from "./SubjectManager";
 import TeacherManager from "./TeacherManager";
@@ -13,6 +14,8 @@ export class User {
     readonly email : string;
     readonly username : string;
     readonly prewarning? : number;
+    readonly repeat?: Repeat;
+    readonly repeat_ref?: Date;
     readonly subjects : SubjectManager;
     readonly homework : HomeworkManager;
     readonly repeats : RepeatManager;
@@ -27,6 +30,8 @@ export class User {
         this.email = data.email
         this.username = data.username
         this.prewarning = data.prewarning
+        this.repeat = data.repeat && new Repeat(data.repeat)
+        this.repeat_ref = data.repeat_ref ? new Date(data.repeat_ref) : new Date()
         this.subjects = new SubjectManager(this._id)
         this.homework = new HomeworkManager(this._id)
         this.repeats = new RepeatManager(this._id)
