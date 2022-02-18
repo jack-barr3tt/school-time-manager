@@ -1,6 +1,7 @@
 import Database from "../connections";
 import { LessonBlock } from "./lesson_block";
 import { Location } from "./location";
+import { Repeat } from "./repeats";
 import Subject from "./subjects";
 import { Teacher } from "./teacher";
 
@@ -12,6 +13,9 @@ type LessonArgs = Lesson & {
     block_end_time: Date;
     location_name: string;
     teacher_name: string;
+    repeat_name: string;
+    repeat_start_day: number;
+    repeat_end_day: number;
 }
 
 export class Lesson {
@@ -51,11 +55,19 @@ export class Lesson {
         this.teacher = { id: newId } as Teacher
     }
 
+    public get repeat_id() {
+        return this.repeat.id
+    }
+    public set repeat_id(newId: number|undefined) {
+        this.repeat = { id: newId } as Repeat
+    }
+
     readonly user_id: number;
     public subject: Subject;
     public block: LessonBlock;
     public location: Location;
     public teacher: Teacher;
+    public repeat: Repeat;
     public day: number;
 
     constructor (data: LessonArgs) {
@@ -86,6 +98,14 @@ export class Lesson {
             user_id: data.user_id,
             name: data.location_name
         } as Teacher)
+
+        this.repeat = new Repeat({
+            id: data.repeat_id,
+            user_id: data.user_id,
+            name: data.repeat_name,
+            start_day: data.repeat_start_day,
+            end_day: data.repeat_end_day
+        } as Repeat)
 
         this.day = data.day
     }

@@ -1,6 +1,7 @@
 import axios from "axios";
 import LessonBlock from "./LessonBlock";
 import Location from "./Location";
+import Repeat from "./Repeat";
 import Subject from "./Subjects";
 import Teacher from "./Teacher";
 
@@ -11,6 +12,7 @@ export default class Lesson {
     readonly block: LessonBlock;
     readonly location: Location;
     readonly teacher: Teacher;
+    readonly repeat: Repeat;
     readonly day: number;
 
     constructor(data: Lesson) {
@@ -20,6 +22,7 @@ export default class Lesson {
         this.block = new LessonBlock(data.block)
         this.location = new Location(data.location)
         this.teacher = new Teacher(data.teacher)
+        this.repeat = new Repeat(data.repeat)
         this.day = data.day
     }
 
