@@ -7,6 +7,7 @@ import { User } from "../../../API/Users";
 import { userContext } from "../../../App";
 import NavBar from "../../../Components/NavBar";
 import SetupCard from "../../../Components/SetupCard";
+import { DayIndexToString } from "../../../functions";
 import EditRepeat from "./EditRepeat";
 
 export default function ViewRepeats() {
@@ -35,7 +36,6 @@ export default function ViewRepeats() {
         fetchRepeats()
     }, [fetchRepeats, editing])
 
-    const getDay = (day: number) => ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"][day]
     return <>
         { !editing ? <>
             <NavBar name="View Repeats"/>
@@ -45,7 +45,7 @@ export default function ViewRepeats() {
                         key={r._id}
                         id={r._id}
                         topText={r.name}
-                        bottomText={`${getDay(r.start_day)} to ${getDay(r.end_day)}`}
+                        bottomText={`${DayIndexToString(r.start_day, "long")} to ${DayIndexToString(r.end_day, "long")}`}
                         setEditing={setEditing}
                         setEditingId={setEditingId}
                         deleteItem={() => deleteRepeat(r)}

@@ -4,6 +4,7 @@ import { grey, red } from '@mui/material/colors';
 import { useNavigate } from 'react-router-dom';
 import SwipeableViews from "react-swipeable-views"
 import Homework from '../API/Homework';
+import { ColorIntToString } from '../functions';
 
 type Props = {
     homework: Homework;
@@ -40,16 +41,6 @@ export default function HomeworkCard (props: Props) {
     
     const getDifficulty = (difficulty: number) => {
         return ["Easy", "Medium", "Hard"][difficulty];
-    }
-
-    const getColor = (color?: number) => {
-        if(!color) return grey[500];
-        let base = color.toString(16);
-        if(base.length < 6) {
-            const fill = new Array(6 - base.length).fill("0").join("");
-            base = fill + base;
-        }
-        return base; 
     }
 
     const truncateText = (text: string) => {
@@ -99,7 +90,7 @@ export default function HomeworkCard (props: Props) {
                         </Paper>}
                     </Stack>
                     <Stack direction="row" alignItems="center">
-                        <Circle sx={{ color: `#${getColor(color)}`, mr: 1 }} />
+                        <Circle sx={{ color: ColorIntToString(color), mr: 1 }} />
                         <Typography variant="body1">{name}</Typography>
                         { difficulty != null && <>
                             <AccessTime sx={{ ml: 3, mr: 1 }}/>

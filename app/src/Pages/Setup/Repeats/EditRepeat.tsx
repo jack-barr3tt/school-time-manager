@@ -5,6 +5,7 @@ import Repeat from "../../../API/Repeat"
 import { User } from "../../../API/Users"
 import { userContext } from "../../../App"
 import NavBar from "../../../Components/NavBar"
+import { DayIndexToString } from "../../../functions"
 
 type Props = {
     back: () => void;
@@ -68,7 +69,7 @@ export default function EditRepeat(props: Props) {
                         max={6}
                         sx={{ alignSelf: "center" }}
                         valueLabelDisplay="auto"
-                        valueLabelFormat={value => ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"][value]}
+                        valueLabelFormat={value => DayIndexToString(value, "long")}
                         onChange={(_e: Event, value: number|number[], active: number) => {
                             if (!Array.isArray(value)) return
                         

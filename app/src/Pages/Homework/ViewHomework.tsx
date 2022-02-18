@@ -1,6 +1,5 @@
 import { AccessTime, Assignment, Check, Circle, Delete, Edit, Event } from '@mui/icons-material';
 import { Button, CircularProgress, IconButton, Stack, Typography } from '@mui/material';
-import { grey } from '@mui/material/colors';
 import { addDays, format, formatDistanceToNow, isAfter, startOfDay } from 'date-fns';
 import { useCallback, useContext, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -8,6 +7,7 @@ import Homework from '../../API/Homework';
 import { User } from '../../API/Users';
 import { userContext } from '../../App';
 import NavBar from '../../Components/NavBar';
+import { ColorIntToString } from '../../functions';
 import EditHomework from './EditHomework';
 
 export default function ViewHomework() {
@@ -35,16 +35,6 @@ export default function ViewHomework() {
     useEffect(() => {
         fetchHomework()
     }, [fetchHomework, editing])
-
-    const getColor = (color?: number) => {
-        if(!color) return grey[500];
-        let base = color.toString(16);
-        if(base.length < 6) {
-            const fill = new Array(6 - base.length).fill("0").join("");
-            base = fill + base;
-        }
-        return base; 
-    }
 
     const getDueColor = (due: Date) => {
         if(isAfter(addDays(Date.now(), 1),startOfDay(due))) return { color: "error.main" }
@@ -86,7 +76,7 @@ export default function ViewHomework() {
 
             { homework?.subject?.name && <>
                 <Stack direction="row" spacing={3} alignItems="center" sx={{ pt: 2 }}>
-                    <Circle sx={{ color: `#${getColor(homework?.subject?.color)}`, mr: 1 }} />
+                    <Circle sx={{ color: ColorIntToString(homework?.subject?.color), mr: 1 }} />
                     <Typography variant="h5">Subject</Typography>
                 </Stack>
                 <Typography variant="body1">{homework?.subject?.name}</Typography>
