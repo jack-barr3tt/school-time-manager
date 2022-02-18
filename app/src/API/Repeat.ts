@@ -6,6 +6,7 @@ export default class Repeat {
     public name: string;
     public start_day: number;
     public end_day: number;
+    public index: number;
 
     constructor(data: Repeat) {
         this._id = data._id
@@ -13,6 +14,7 @@ export default class Repeat {
         this.name = data.name
         this.start_day = data.start_day
         this.end_day = data.end_day
+        this.index = data.index
     }
 
     async delete() {

@@ -10,40 +10,52 @@ export class Repeat {
     }
     readonly user_id: number;
     public name: string;
-    public start_day: Date;
-    public end_day: Date;
+    public start_day: number;
+    public end_day: number;
+    public index: number;
 
     constructor(data: Repeat) {
         this.user_id = data.user_id
         this.name = data.name
         this.start_day = data.start_day
         this.end_day = data.end_day
+        this.index = data.index
     }
 
     async save() {
         if(this.id) {
             await Database.query(
                 `UPDATE repeats
-                SET name = $2, start_day = $3, end_day = $4
+                SET name = $2, start_day = $3, end_day = $4, index = $5
                 WHERE id = $1`,
                 [
                     this.id,
                     this.name,
                     this.start_day,
-                    this.end_day
+                    this.end_day,
+                    this.index
                 ]
             )
             return this
         }else{
-            const { rows } = await Database.query(
-                `INSERT INTO repeats (user_id, name, start_day, end_day)
-                VALUES ($1, $2, $3, $4)
+            let { rows: getRows } = await Database.query(
+                `SELECT * from repeats WHERE user_id = $1`,
+                [this.user_id]
+            )
+
+            const sortedRepeats = getRows.sort((a, b) => a.index - b.index)
+            const newIndex = sortedRepeats.length > 0 ? sortedRepeats[sortedRepeats.length - 1].index + 1 : 0
+
+            let { rows } = await Database.query(
+                `INSERT INTO repeats (user_id, name, start_day, end_day, index)
+                VALUES ($1, $2, $3, $4, $5)
                 RETURNING id`,
                 [
                     this.user_id,
                     this.name,
                     this.start_day,
-                    this.end_day
+                    this.end_day,
+                    newIndex
                 ]
             )
 
