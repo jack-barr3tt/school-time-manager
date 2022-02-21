@@ -7,7 +7,6 @@ import NewHomework from './Pages/Homework/NewHomework';
 import PreWarning from './Pages/Setup/PreWarning';
 import Setup from './Pages/Setup/Setup';
 import NewWorkingTime from './Pages/Setup/WorkingTimes/NewWorkingTime';
-import NewTimetable from './Pages/Timetable/NewTimetable';
 import Timetable from './Pages/Timetable/Timetable';
 import ViewBlocks from './Pages/Setup/LessonBlocks/ViewBlocks';
 import NewBlock from './Pages/Setup/LessonBlocks/NewBlock';
@@ -26,7 +25,6 @@ export default function Router() {
                 </Route>
                 <Route path="timetable">
                     <Route index element={<Timetable/>}/>
-                    <Route path="new" element={<NewTimetable/>}/>
                 </Route>
                 <Route path="setup">
                     <Route index element={<Setup/>}/>
