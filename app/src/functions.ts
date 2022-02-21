@@ -17,8 +17,7 @@ export const ColorIntToString = (color?: number) => {
     return "#"+base; 
 }
 
-export const RepeatsToWeeks = (repeats?: Repeat[]) => {
-    if(!repeats) return
+export const RepeatsToWeeks = (repeats: Repeat[]) => {
     let weeks : (Repeat[])[] = []
     let currentWeek = 0
 
