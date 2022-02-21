@@ -64,4 +64,11 @@ export class User {
     async setPreWarning(prewarning: number) {
         await axios.patch(`http://localhost:3000/users/${this._id}`, { prewarning })
     }
+
+    async setRepeat(repeat_id: number) {
+        await axios.patch(`http://localhost:3000/users/${this._id}`, { 
+            repeat_id,
+            repeat_ref: Date.now()
+        })
+    }
 }

@@ -40,6 +40,7 @@ export class User {
         this.username = data.username;
         this.prewarning = data.prewarning;
         if(data.repeat_name) this.repeat = new Repeat({
+            id: data.repeat_id,
             name: data.repeat_name,
             start_day: data.repeat_start_day,
             end_day: data.repeat_end_day
@@ -50,13 +51,14 @@ export class User {
     async save() {
         if(this.id) {
             await Database.query(
-                'UPDATE users SET username = $1, email = $2, prewarning = $3, repeat_ref = to_timestamp($4 / 1000.0) WHERE id = $5',
+                'UPDATE users SET username = $2, email = $3, prewarning = $4, repeat_ref = to_timestamp($5 / 1000.0), repeat_id = $6 WHERE id = $1',
                 [
+                    this.id,
                     this.username, 
                     this.email,
                     this.prewarning,
                     this.repeat_ref,
-                    this.id
+                    this.repeat_id
                 ]
             )
             return this
