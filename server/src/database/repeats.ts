@@ -15,6 +15,7 @@ export class Repeat {
     public index: number;
 
     constructor(data: Repeat) {
+        this.id = data.id
         this.user_id = data.user_id
         this.name = data.name
         this.start_day = data.start_day

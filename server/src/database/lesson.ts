@@ -114,7 +114,7 @@ export class Lesson {
         if(this.id) {
             await Database.query(`
                 UPDATE lessons
-                SET user_id = $2, subject_id = $3, block_id = $4, location_id = $5, teacher_id = $6, day = $7
+                SET user_id = $2, subject_id = $3, block_id = $4, location_id = $5, teacher_id = $6, day = $7, repeat_id = $8
                 WHERE id = $1
                 `, [
                     this.id,
@@ -123,14 +123,15 @@ export class Lesson {
                     this.block_id,
                     this.location_id,
                     this.teacher_id,
-                    this.day
+                    this.day,
+                    this.repeat_id
                 ]
             )
             return this
         }else{
             const { rows } = await Database.query(`
-                INSERT INTO lessons (user_id, subject_id, block_id, location_id, teacher_id, day)
-                VALUES ($1, $2, $3, $4, $5, $6)
+                INSERT INTO lessons (user_id, subject_id, block_id, location_id, teacher_id, day, repeat_id)
+                VALUES ($1, $2, $3, $4, $5, $6, $7)
                 RETURNING id
                 `, [
                     this.user_id,
@@ -138,7 +139,8 @@ export class Lesson {
                     this.block_id,
                     this.location_id,
                     this.teacher_id,
-                    this.day
+                    this.day,
+                    this.repeat_id
                 ]
             )
             this.id = rows[0].id
