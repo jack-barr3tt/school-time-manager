@@ -10,12 +10,12 @@ export class LessonBlock {
     }
     readonly user_id: number;
     public name: string;
-    public start_time: Date;
-    public end_time: Date;
+    public start_time: number;
+    public end_time: number;
 
     constructor(data: LessonBlock) {
         this.id = data.id
-        this.user_id = data.user_id
+        this.user_id = +data.user_id
         this.name = data.name
         this.start_time = data.start_time
         this.end_time = data.end_time

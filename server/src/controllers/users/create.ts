@@ -9,7 +9,12 @@ export default async (req: Request, res: Response, next: NextFunction) => {
 
         await user.save()
         
-        res.status(201).json(user)
+        res.status(201).json({
+            _id: user.id,
+            email: user.email,
+            username: user.username,
+            repeat_ref: user.repeat_ref
+        })
     }catch(err){
         res.locals.error = err
         next()

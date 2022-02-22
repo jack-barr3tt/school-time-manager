@@ -12,7 +12,7 @@ export default class Homework {
 
     constructor(data: Homework) {
         this._id = data._id
-        this.user_id = data.user_id
+        this.user_id = +data.user_id
         this.task = data.task
         this.subject = new Subject(data.subject)
         this.due = data.due == null ? undefined : new Date(data.due)

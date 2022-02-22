@@ -13,7 +13,7 @@ export default class WorkingTime {
 
     constructor(data: WorkingTime) {
         this._id = data._id
-        this.user_id = data.user_id
+        this.user_id = +data.user_id
         this.start_time = new Date(0,0,0, ...getComponents(data.start_time))
         this.end_time = new Date(new Date(0,0,0, ...getComponents(data.end_time)))
     }

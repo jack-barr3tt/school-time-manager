@@ -9,11 +9,11 @@ export class WorkingTime {
         this._id = newId
     }
     readonly user_id: number;
-    public start_time: Date;
-    public end_time: Date;
+    public start_time: number;
+    public end_time: number;
 
     constructor(data: WorkingTime) {
-        this.user_id = data.user_id
+        this.user_id = +data.user_id
         this.start_time = data.start_time
         this.end_time = data.end_time
     }

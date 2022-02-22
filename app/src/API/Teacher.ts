@@ -13,7 +13,7 @@ export default class Teacher {
 
     constructor(data: Teacher) {
         this._id = data._id
-        this.user_id = data.user_id
+        this.user_id = +data.user_id
         this.name = data.name
     }
 

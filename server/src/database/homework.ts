@@ -26,12 +26,12 @@ export default class Homework {
     readonly user_id: number;
     public task: string;
     public subject: Subject;
-    public due?: Date;
+    public due?: number;
     public difficulty?: number;
     public complete: boolean;
 
     constructor(data: HomeworkArgs) {  
-        this.user_id = data.user_id;
+        this.user_id = +data.user_id;
         this.task = data.task;
         this.subject = new Subject({ 
             id: data.subject_id,

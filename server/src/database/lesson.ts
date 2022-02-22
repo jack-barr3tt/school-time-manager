@@ -9,8 +9,8 @@ type LessonArgs = Lesson & {
     subject_name: string;
     subject_color: number;
     block_name: string;
-    block_start_time: Date;
-    block_end_time: Date;
+    block_start_time: number;
+    block_end_time: number;
     location_name: string;
     teacher_name: string;
     repeat_name: string;
@@ -71,7 +71,7 @@ export class Lesson {
     public day: number;
 
     constructor (data: LessonArgs) {
-        this.user_id = data.user_id
+        this.user_id = +data.user_id
         this.subject = new Subject({ 
             id: data.subject_id,
             user_id: data.user_id,
@@ -150,12 +150,13 @@ export class Lesson {
 
     static async findById(id: string, userId: string) {
         const { rows } = await Database.query(
-            `SELECT l.*, s.name subject_name, s.color subject_color, b.name block_name, b.start_time block_start_time, b.end_time block_end_time, lo.name location_name, t.name teacher_name
+            `SELECT l.*, s.name subject_name, s.color subject_color, b.name block_name, b.start_time block_start_time, b.end_time block_end_time, lo.name location_name, t.name teacher_name, r.name repeat_name, r.start_day repeat_start_day, r.end_day repeat_end_day
             FROM lessons l
             INNER JOIN subjects s ON l.subject_id = s.id
             INNER JOIN lesson_blocks b ON l.block_id = b.id
             INNER JOIN locations lo ON l.location_id = lo.id
             INNER JOIN teachers t ON l.teacher_id = t.id  
+            INNER JOIN repeats r ON l.repeat_id = r.id
             WHERE l.id = $1 AND l.user_id = $2`, 
             [id, userId]
         )
@@ -169,12 +170,13 @@ export class Lesson {
 
     static async findByUser(userId: string) {
         const { rows } = await Database.query(
-            `SELECT l.*, s.name subject_name, s.color subject_color, b.name block_name, b.start_time block_start_time, b.end_time block_end_time, lo.name location_name, t.name teacher_name
+            `SELECT l.*, s.name subject_name, s.color subject_color, b.name block_name, b.start_time block_start_time, b.end_time block_end_time, lo.name location_name, t.name teacher_name, r.name repeat_name, r.start_day repeat_start_day, r.end_day repeat_end_day
             FROM lessons l
             INNER JOIN subjects s ON l.subject_id = s.id
             INNER JOIN lesson_blocks b ON l.block_id = b.id
             INNER JOIN locations lo ON l.location_id = lo.id
-            INNER JOIN teachers t ON l.teacher_id = t.id  
+            INNER JOIN teachers t ON l.teacher_id = t.id 
+            INNER JOIN repeats r ON l.repeat_id = r.id 
             WHERE l.user_id = $1`,
             [userId]
         )

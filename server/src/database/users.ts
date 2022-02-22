@@ -28,7 +28,7 @@ export class User {
     readonly username : string;
     public prewarning? : number;
     public repeat?: Repeat;
-    public repeat_ref?: Date;
+    public repeat_ref?: number;
     private hash? : string;
 
     constructor(data: UserArgs) {
@@ -39,13 +39,15 @@ export class User {
             throw new APIError("Invalid email", 400)
         this.username = data.username;
         this.prewarning = data.prewarning;
-        if(data.repeat_name) this.repeat = new Repeat({
-            id: data.repeat_id,
-            name: data.repeat_name,
-            start_day: data.repeat_start_day,
-            end_day: data.repeat_end_day
-        } as Repeat)
-        this.repeat_ref = data.repeat_ref ? new Date(data.repeat_ref) : new Date()
+        if(data.repeat_name) 
+            this.repeat = new Repeat({
+                id: data.repeat_id,
+                user_id: data.id,
+                name: data.repeat_name,
+                start_day: data.repeat_start_day,
+                end_day: data.repeat_end_day
+            } as Repeat)
+        this.repeat_ref = data.repeat_ref
     }
 
     async save() {

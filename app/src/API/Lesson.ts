@@ -17,7 +17,7 @@ export default class Lesson {
 
     constructor(data: Lesson) {
         this._id = data._id
-        this.user_id = data.user_id
+        this.user_id = +data.user_id
         this.subject = new Subject(data.subject)
         this.block = new LessonBlock(data.block)
         this.location = new Location(data.location)

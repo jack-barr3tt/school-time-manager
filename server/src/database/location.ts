@@ -13,7 +13,7 @@ export class Location {
 
     constructor(data: Location) {
         this.id = data.id
-        this.user_id = data.user_id
+        this.user_id = +data.user_id
         this.name = data.name
     }
 
@@ -24,7 +24,8 @@ export class Location {
                 SET name = $2
                 WHERE id = $1`,
                 [
-
+                    this.id,
+                    this.name
                 ]
             )
         }else{

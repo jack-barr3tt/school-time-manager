@@ -13,7 +13,7 @@ export default class Location {
 
     constructor(data: Location) {
         this._id = data._id
-        this.user_id = data.user_id
+        this.user_id = +data.user_id
         this.name = data.name
     }
 

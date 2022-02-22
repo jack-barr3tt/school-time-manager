@@ -16,7 +16,7 @@ export class Repeat {
 
     constructor(data: Repeat) {
         this.id = data.id
-        this.user_id = data.user_id
+        this.user_id = +data.user_id
         this.name = data.name
         this.start_day = data.start_day
         this.end_day = data.end_day
@@ -45,7 +45,7 @@ export class Repeat {
             )
 
             const sortedRepeats = getRows.sort((a, b) => a.index - b.index)
-            const newIndex = sortedRepeats.length > 0 ? sortedRepeats[sortedRepeats.length - 1].index + 1 : 0
+            this.index = sortedRepeats.length > 0 ? sortedRepeats[sortedRepeats.length - 1].index + 1 : 0
 
             let { rows } = await Database.query(
                 `INSERT INTO repeats (user_id, name, start_day, end_day, index)
@@ -56,7 +56,7 @@ export class Repeat {
                     this.name,
                     this.start_day,
                     this.end_day,
-                    newIndex
+                    this.index
                 ]
             )
 

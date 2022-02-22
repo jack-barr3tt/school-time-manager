@@ -10,7 +10,7 @@ export default class Repeat {
 
     constructor(data: Repeat) {
         this._id = data._id
-        this.user_id = data.user_id
+        this.user_id = +data.user_id
         this.name = data.name
         this.start_day = data.start_day
         this.end_day = data.end_day

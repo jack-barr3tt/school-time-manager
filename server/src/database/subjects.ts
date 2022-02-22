@@ -15,7 +15,7 @@ export default class Subject {
 
     constructor(data: Subject) {
         this.id = data.id;
-        this.user_id = data.user_id;
+        this.user_id = +data.user_id;
         this.name = data.name;
         this.color = data.color;
     }
