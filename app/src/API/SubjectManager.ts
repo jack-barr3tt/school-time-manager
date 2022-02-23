@@ -13,9 +13,16 @@ export default class SubjectManager {
         this.userId = userId
     }
     
-    async get() {
-        const { data } = await axios.get<Subject[]>(`http://localhost:3000/users/${this.userId}/subjects`)
-        return data.map(s => new Subject(s))
+    async get() : Promise<Subject[]>
+    async get(id: number) : Promise<Subject>
+    async get(id?: number) {
+        if(id) {
+            const { data } = await axios.get<Subject>(`http://localhost:3000/users/${this.userId}/subjects/${id}`)
+            return new Subject(data)
+        }else{
+            const { data } = await axios.get<Subject[]>(`http://localhost:3000/users/${this.userId}/subjects`)
+            return data.map(s => new Subject(s))
+        }
     }
 
     async create(subject: SubjectCreate) {
