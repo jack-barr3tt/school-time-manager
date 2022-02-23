@@ -1,4 +1,5 @@
-import { Autocomplete, createFilterOptions, TextField } from "@mui/material";
+import { Edit, Delete } from "@mui/icons-material";
+import { Autocomplete, createFilterOptions, IconButton, Stack, TextField, Typography } from "@mui/material";
 import { Dispatch, ReactElement, SetStateAction, useState, SyntheticEvent } from "react";
 
 type DialogProps<B> = {
@@ -15,6 +16,8 @@ type Props<A> = {
     chosen: A;
     onOpen?: (event: SyntheticEvent) => void;
     CreateDialog?: <A>(props: DialogProps<A>) => ReactElement<DialogProps<A>>;
+    edit?: (item: A) => void;
+    _delete?: (item: A) => void;
 }
 
 type InputProps<B> = B & {
@@ -23,7 +26,7 @@ type InputProps<B> = B & {
 }
 
 export default function CreateableAutocomplete<T>(props: Props<InputProps<T>>) {
-    const { label, options, chosenSetter, chosen, onOpen, CreateDialog } = props
+    const { label, options, chosenSetter, chosen, onOpen, CreateDialog, edit, _delete } = props
     const filter = createFilterOptions<InputProps<T>>()
 
     const [dialogOpen, setDialogOpen] = useState(false)
@@ -80,6 +83,28 @@ export default function CreateableAutocomplete<T>(props: Props<InputProps<T>>) {
             renderInput={(params) => (
                 <TextField {...params} label={label} />
             )}
+            renderOption={(props, option) => {
+                if(edit || _delete) {
+                    return <li {...props}>
+                        <Stack direction="row" justifyContent="space-between" alignItems="center" key={props.id} sx={{ width: 1 }}>
+                            <Typography variant="body1">{option.name}</Typography>
+                            <Stack direction="row" spacing={2}>
+                                {edit && <IconButton onClick={() => edit(option)}>
+                                    <Edit/>
+                                </IconButton>}
+                                {_delete && <IconButton onClick={() => _delete(option)}>
+                                    <Delete/>
+                                </IconButton>}
+                            </Stack>
+                        </Stack>
+                    </li>
+                }else{
+                    return <li {...props}>
+                        {option.name}
+                    </li>
+                }
+            }}
+
         />
     </>
 }
