@@ -7,7 +7,7 @@ import Teacher, { TeacherInput } from "../../API/Teacher"
 import { User } from '../../API/Users';
 import { userContext } from '../../App';
 import CreateableAutocomplete from '../../Components/CreatableAutocomplete';
-import CreateSubject from '../../Components/CreateSubject';
+import CreateSubject from '../Subjects/CreateSubject';
 import NavBar from '../../Components/NavBar';
 import { Save } from '@mui/icons-material';
 import Repeat from '../../API/Repeat';

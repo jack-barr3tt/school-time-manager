@@ -7,7 +7,7 @@ import Subject from "../../API/Subjects";
 import { User } from "../../API/Users";
 import { userContext } from "../../App";
 import CreateableAutocomplete from "../../Components/CreatableAutocomplete";
-import CreateSubject from "../../Components/CreateSubject";
+import CreateSubject from "../Subjects/CreateSubject";
 import NavBar from "../../Components/NavBar";
 
 type SubjectInput = {
