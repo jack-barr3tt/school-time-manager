@@ -25,7 +25,7 @@ type InputProps<B> = B & {
     name: string;
 }
 
-export default function CreateableAutocomplete<T>(props: Props<InputProps<T>>) {
+export default function CreateableAutocomplete<T extends { _id?: number }>(props: Props<InputProps<T>>) {
     const { label, options, chosenSetter, chosen, onOpen, CreateDialog, edit, _delete } = props
     const filter = createFilterOptions<InputProps<T>>()
 
@@ -84,15 +84,19 @@ export default function CreateableAutocomplete<T>(props: Props<InputProps<T>>) {
                 <TextField {...params} label={label} />
             )}
             renderOption={(props, option) => {
-                if(edit || _delete) {
-                    return <li {...props}>
-                        <Stack direction="row" justifyContent="space-between" alignItems="center" key={props.id} sx={{ width: 1 }}>
-                            <Typography variant="body1">{option.name}</Typography>
+                if((edit || _delete) && option._id) {
+                    const listProps = (({ className, tabIndex }) => ({ className, tabIndex }))(props)
+                    return <li {...listProps} key={props.id}>
+                        <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ width: 1 }}>
+                            <Typography variant="body1" sx={{ width: 1 }} {...props}>{option.name}</Typography>
                             <Stack direction="row" spacing={2}>
                                 {edit && <IconButton onClick={() => edit(option)}>
                                     <Edit/>
                                 </IconButton>}
-                                {_delete && <IconButton onClick={() => _delete(option)}>
+                                {_delete && <IconButton onClick={() => { 
+                                    _delete(option)
+                                    chosenSetter(undefined)
+                                }}>
                                     <Delete/>
                                 </IconButton>}
                             </Stack>
