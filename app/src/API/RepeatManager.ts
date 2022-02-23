@@ -31,8 +31,4 @@ export default class RepeatManager {
         const { data } = await axios.post<Repeat>(`http://localhost:3000/users/${this.userId}/repeats`, repeat)
         return new Repeat(data)
     }
-
-    async delete(id: number) {
-        await axios.delete(`http://localhost:3000/users/${this.userId}/repeats/${id}`)
-    }
 }
