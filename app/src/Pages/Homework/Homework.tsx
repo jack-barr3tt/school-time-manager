@@ -55,7 +55,7 @@ export default function HomeworkPage() {
                 return a.due.getTime() - b.due.getTime()
             }).map(hw => <HomeworkCard key={hw._id} homework={hw} _delete={() => deleteHomework(hw)} complete={() => completeHomework(hw)} />)}
         </Stack>
-        <Fab color="primary" sx={{ position: "absolute", right: "24px", bottom: "24px" }} onClick={() => navigate("new")}>
+        <Fab sx={{ position: "absolute", right: "24px", bottom: "24px" }} onClick={() => navigate("new")}>
             <Add/>
         </Fab>
     </>

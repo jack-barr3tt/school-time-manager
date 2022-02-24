@@ -37,7 +37,6 @@ export default function TimeRangePicker(props: Props) {
             disabled={startTime == null}
         />
         <Fab 
-            color="primary" 
             sx={{ position: "absolute", right: "24px", bottom: "24px" }} 
             type="submit" 
         >

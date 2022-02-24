@@ -117,7 +117,7 @@ export default function NewHomework() {
                             />
                         </Stack>
                     </Stack>
-                    <Fab color="primary" sx={{ position: "absolute", right: "24px", bottom: "24px" }} type="submit">
+                    <Fab sx={{ position: "absolute", right: "24px", bottom: "24px" }} type="submit">
                         <Save/>
                     </Fab>
                 </form>

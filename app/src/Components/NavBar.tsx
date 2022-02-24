@@ -21,7 +21,7 @@ export default function NavBar (props: Props) {
     }
 
     return <>
-        <Paper sx={{ zIndex: 10, backgroundImage: `linear-gradient(${theme.palette.primary.main}, ${theme.palette.background.default})`, p: 3, width: "100%", position: "absolute", left: 0, top: 0 }} elevation={0}/>
+        <Paper sx={{ zIndex: 10, backgroundImage: `linear-gradient(${theme.palette.secondary.main}, ${theme.palette.background.default})`, p: 3, width: "100%", position: "absolute", left: 0, top: 0 }} elevation={0}/>
         <Paper elevation={0} sx={{ zIndex: 11, position: "absolute", top: 7, left: 0, width: "100%", p: 2, backgroundColor: grey[50], borderRadius: 4 }}>
             { controls ?
                 <Stack direction="row" alignItems="center" justifyContent="space-between">

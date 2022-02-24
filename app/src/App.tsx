@@ -6,15 +6,29 @@ import './App.css';
 import Router from './Router';
 
 const theme = createTheme({
-  breakpoints: {
-    values: {
-      xs: 0,
-      sm: 425,
-      md: 960,
-      lg: 1280,
-      xl: 1920
+    breakpoints: {
+        values: {
+            xs: 0,
+            sm: 425,
+            md: 960,
+            lg: 1280,
+            xl: 1920
+        }
+    },
+    palette: {
+        secondary: {
+            main: "#c2e7ff",
+            light: "#f5ffff",
+            dark: "#91b5cc"
+        }
+    },
+    components: {
+        MuiFab: {
+            defaultProps: {
+                color: "secondary"
+            }
+        }
     }
-  }
 })
 
 function MainGrid (props: { children: ReactNode }) {
@@ -22,7 +36,7 @@ function MainGrid (props: { children: ReactNode }) {
 }
 
 export const userContext = createContext({
-    id: 10,
+    id: 3,
     username: "Jack"
 })
 
