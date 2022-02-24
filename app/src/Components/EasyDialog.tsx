@@ -8,14 +8,17 @@ type Field = {
     defaultValue?: string|number;
 }
 
+export type FullEasyDialogProps = EasyDialogProps & {
+    done: (data: any[]) => void;
+}
+
 export type EasyDialogProps = {
     title: string;
     fields: Field[];
     open: boolean;
-    done: (data: any[]) => void;
 }
 
-export default function EasyDialog(props: EasyDialogProps) {
+export default function EasyDialog(props: FullEasyDialogProps) {
     const { title, fields, open, done } = props;
 
     const [setup, setSetup] = useState<boolean>(false);
@@ -35,7 +38,6 @@ export default function EasyDialog(props: EasyDialogProps) {
 
     useEffect(() => {
         if(open && !setup) {
-            console.log("setting defaults")
             states.forEach((s, i) => {
                 if(fields[i].type === "text") (s[1] as Dispatch<SetStateAction<string>>)((fields[i].defaultValue as string) || "")
                 else (s[1] as Dispatch<SetStateAction<number>>)((fields[i].defaultValue as number) || 0)
