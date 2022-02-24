@@ -7,7 +7,7 @@ import Subject from "../../API/Subjects";
 import { User } from "../../API/Users";
 import { userContext } from "../../App";
 import CreateableAutocomplete from "../../Components/CreatableAutocomplete";
-import CreateSubject from "../Subjects/CreateSubject";
+import EasyDialog from "../../Components/EasyDialog";
 import NavBar from "../../Components/NavBar";
 
 type SubjectInput = {
@@ -19,7 +19,7 @@ type SubjectInput = {
 
 type Props = {
     id?: number;
-    back: () => void;
+    back: (goHome: boolean) => void;
 }
 
 export default function EditHomework(props: Props) {
@@ -32,6 +32,11 @@ export default function EditHomework(props: Props) {
     const [difficulty, setDifficulty] = useState<number>();
     const [subjects, setSubjects] = useState<SubjectInput[]>([]);
     const [homework, setHomework] = useState<Homework>()
+
+    const [newSubjectText, setNewSubjectText] = useState<string>()
+    const [subjectDialogOpen, setSubjectDialogOpen] = useState<boolean>(false)
+
+    const [subjectEditing, setSubjectEditing] = useState<SubjectInput>()
 
     const user = useContext(userContext);
 
@@ -62,21 +67,60 @@ export default function EditHomework(props: Props) {
     const saveHomework = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
-        if(homework && task && subject && due && difficulty) {
+        if(homework && task && subject) {
             try{
                 await homework.edit({
                     task,
                     subject: { _id: subject._id} as Subject,
-                    due,
+                    due: due == null ? undefined : due,
                     difficulty
                 })
-                back()
+                back(false)
             }catch{}
         }
     }
 
+    const createSubject = async (name?: string, color?: number) => {
+        if(name && color) {
+            const createdSubject = await User.forge(user.id).subjects?.create({
+                name,
+                color
+            })
+            if(createdSubject) {
+                if(subjects) setSubjects(
+                    [...subjects, createdSubject]
+                )
+                setSubject(createdSubject as SubjectInput)
+            }
+        }
+        setSubjectDialogOpen(false)
+    }
+
+    const editSubject = async (name?: string, color?: number) => {
+        if(subjectEditing && subjectEditing._id && subjects && (name || color)) {
+            const subject = await User.forge(user.id).subjects?.get(subjectEditing._id)
+            if(subject) {
+                const editedSubject = await subject.edit({
+                    name,
+                    color
+                })
+                setSubjects(subjects.map(s => s._id === subjectEditing._id ? editedSubject : s))
+                setSubject(editedSubject as SubjectInput)
+            }
+        }
+        setSubjectEditing(undefined)
+    }
+    
+    const deleteSubject = async (id?: number) => {
+        if(id && subjects) {
+            const subject = await User.forge(user.id).subjects?.get(id)
+            if(subject) await subject.delete()
+            back(true)
+        }
+    }
+
     return <>
-        <NavBar name="Edit Homework" onBack={back}/>
+        <NavBar name="Edit Homework" onBack={() => back(false)}/>
         <form onSubmit={saveHomework}>
             <Stack direction="column" spacing={2}>
                 <TextField 
@@ -92,8 +136,22 @@ export default function EditHomework(props: Props) {
                     options={subjects} 
                     chosenSetter={setSubject} 
                     chosen={subject!} 
-                    onOpen={() => {fetchSubjects()}}
-                    CreateDialog={CreateSubject}
+                    onOpen={() => fetchSubjects()}
+                    dialog={{
+                        props: {
+                            title: "New Subject",
+                            fields: [
+                                { label: "Name", type: "text", defaultValue: newSubjectText },
+                                { label: "Color", type: "color" }
+                            ],
+                            open: subjectDialogOpen,
+                        },
+                        textValueSetter: setNewSubjectText,
+                        setOpen: setSubjectDialogOpen
+                    }}
+                    save={async ([name, color]) => createSubject(name, color)}
+                    edit={(item) => setSubjectEditing(item)}
+                    _delete={(item) => deleteSubject(item._id)}
                 />
                 <DatePicker 
                     label="Due" 
@@ -125,5 +183,14 @@ export default function EditHomework(props: Props) {
                 <Save/>
             </Fab>
         </form>
+        <EasyDialog
+            title="Edit Subject"
+            fields={[
+                { label: "Name", type: "text", defaultValue: subjectEditing?.name },
+                { label: "Color", type: "color", defaultValue: subjectEditing?.color }
+            ]}
+            open={!!subjectEditing}
+            done={([name, color]) => editSubject(name, color)}
+        />
     </>;
 }
