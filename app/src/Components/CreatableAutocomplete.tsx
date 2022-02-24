@@ -1,13 +1,7 @@
 import { Edit, Delete } from "@mui/icons-material";
 import { Autocomplete, createFilterOptions, IconButton, Stack, TextField, Typography } from "@mui/material";
-import { Dispatch, ReactElement, SetStateAction, useState, SyntheticEvent } from "react";
-
-type DialogProps<B> = {
-    open: boolean, 
-    setOpen: Dispatch<SetStateAction<boolean>>, 
-    defaultValue?: string, 
-    setFinal: Dispatch<SetStateAction<B|undefined>>
-}
+import { Dispatch, SetStateAction, SyntheticEvent } from "react";
+import EasyDialog, { EasyDialogProps } from "./EasyDialog";
 
 type Props<A> = {
     label: string;
@@ -15,7 +9,11 @@ type Props<A> = {
     chosenSetter: Dispatch<SetStateAction<A|undefined>>;
     chosen: A;
     onOpen?: (event: SyntheticEvent) => void;
-    CreateDialog?: <A>(props: DialogProps<A>) => ReactElement<DialogProps<A>>;
+    dialog?: {
+        props: EasyDialogProps
+        textValueSetter: Dispatch<SetStateAction<string|undefined>>;
+        setOpen: Dispatch<SetStateAction<boolean>>;
+    };
     edit?: (item: A) => void;
     _delete?: (item: A) => void;
 }
@@ -26,14 +24,12 @@ type InputProps<B> = B & {
 }
 
 export default function CreateableAutocomplete<T extends { _id?: number }>(props: Props<InputProps<T>>) {
-    const { label, options, chosenSetter, chosen, onOpen, CreateDialog, edit, _delete } = props
+    const { label, options, chosenSetter, chosen, onOpen, dialog, edit, _delete } = props
+
     const filter = createFilterOptions<InputProps<T>>()
 
-    const [dialogOpen, setDialogOpen] = useState(false)
-    const [dialogDefaultValue, setDialogDefaultValue] = useState<string>()
-
     return <>
-        { CreateDialog && <CreateDialog<InputProps<T>> open={dialogOpen} setOpen={setDialogOpen} defaultValue={dialogDefaultValue} setFinal={chosenSetter} /> }
+        { dialog && <EasyDialog {...dialog.props}/> }
         <Autocomplete
             value={chosen || ""}
             selectOnFocus
@@ -46,9 +42,9 @@ export default function CreateableAutocomplete<T extends { _id?: number }>(props
                 if(typeof value === 'string') {
                     chosenSetter(undefined)
                 }else if(value && value.inputValue) {
-                    if(CreateDialog) {
-                        setDialogDefaultValue(value.inputValue)
-                        setDialogOpen(true)
+                    if(dialog) {
+                        dialog.textValueSetter(value.inputValue)
+                        dialog.setOpen(true)
                     }else{
                         chosenSetter({
                             name: value.inputValue
@@ -87,7 +83,7 @@ export default function CreateableAutocomplete<T extends { _id?: number }>(props
                 if((edit || _delete) && option._id) {
                     const listProps = (({ className, tabIndex }) => ({ className, tabIndex }))(props)
                     return <li {...listProps} key={props.id}>
-                        <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ width: 1 }}>
+                        <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ width: 1 }} spacing={2}>
                             <Typography variant="body1" sx={{ width: 1 }} {...props}>{option.name}</Typography>
                             <Stack direction="row" spacing={2}>
                                 {edit && <IconButton onClick={() => edit(option)}>
