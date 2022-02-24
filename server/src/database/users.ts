@@ -47,13 +47,13 @@ export class User {
                 start_day: data.repeat_start_day,
                 end_day: data.repeat_end_day
             } as Repeat)
-        this.repeat_ref = data.repeat_ref
+        this.repeat_ref = data.repeat_ref && +data.repeat_ref
     }
 
     async save() {
         if(this.id) {
             await Database.query(
-                'UPDATE users SET username = $2, email = $3, prewarning = $4, repeat_ref = to_timestamp($5 / 1000.0), repeat_id = $6 WHERE id = $1',
+                'UPDATE users SET username = $2, email = $3, prewarning = $4, repeat_ref = $5, repeat_id = $6 WHERE id = $1',
                 [
                     this.id,
                     this.username, 

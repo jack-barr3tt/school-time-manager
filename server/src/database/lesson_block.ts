@@ -17,15 +17,15 @@ export class LessonBlock {
         this.id = data.id
         this.user_id = +data.user_id
         this.name = data.name
-        this.start_time = data.start_time
-        this.end_time = data.end_time
+        this.start_time = data.start_time && +data.start_time
+        this.end_time = data.end_time && +data.end_time
     }
 
     async save() {
         if(this.id) {
             const { rows } = await Database.query(
                 `UPDATE lesson_blocks
-                SET name = $2, start_time = to_timestamp($3 / 1000.0)::TIME, end_time = to_timestamp($4 / 1000.0)::TIME 
+                SET name = $2, start_time = $3, end_time = $4
                 WHERE id = $1
                 RETURNING start_time, end_time`, 
                 [
@@ -41,7 +41,7 @@ export class LessonBlock {
         } else {
             const { rows } = await Database.query(
                 `INSERT INTO lesson_blocks (user_id, name, start_time, end_time)
-                VALUES ($1, $2, to_timestamp($3 / 1000.0)::TIME, to_timestamp($4 / 1000.0)::TIME)
+                VALUES ($1, $2, $3, $4)
                 RETURNING id`, 
                 [
                     this.user_id, 

@@ -77,7 +77,7 @@ export class Repeat {
         const repeatId = rows[0].id
 
         await Database.query(
-            `UPDATE users SET repeat_id = $2, repeat_ref = to_timestamp($3 / 1000.0) WHERE id = $1`,
+            `UPDATE users SET repeat_id = $2, repeat_ref = $3 WHERE id = $1`,
             [
                 this.user_id,
                 repeatId,

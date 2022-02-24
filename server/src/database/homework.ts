@@ -39,7 +39,7 @@ export default class Homework {
             name: data.subject_name, 
             color: data.subject_color
         } as Subject);
-        this.due = data.due;
+        this.due = data.due && +data.due;
         this.difficulty = data.difficulty;
         this.complete = data.complete;
     }
@@ -48,7 +48,7 @@ export default class Homework {
         if(this.id) {
             await Database.query(
                 `UPDATE homeworks
-                SET task = $2, subject_id = $3, due = to_timestamp($4 / 1000.0), difficulty = $5, complete = $6
+                SET task = $2, subject_id = $3, due = $4, difficulty = $5, complete = $6
                 WHERE id = $1`, 
                 [
                     this.id, 
@@ -63,7 +63,7 @@ export default class Homework {
         } else {
             const { rows } = await Database.query(
                 `INSERT INTO homeworks (user_id, task, subject_id, due, difficulty, complete)
-                VALUES ($1, $2, $3, to_timestamp($4 / 1000.0), $5, $6)
+                VALUES ($1, $2, $3, $4, $5, $6)
                 RETURNING id`, 
                 [
                     this.user_id, 
