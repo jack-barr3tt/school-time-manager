@@ -1,10 +1,5 @@
 import axios from "axios";
 
-const getComponents = (date: Date) => {
-    const main = (""+date).split(".")[0]
-    return main.split(":").map(r => parseInt(r))    
-}
-
 export default class WorkingTime {
     readonly _id: number;
     private user_id: number;
@@ -14,8 +9,8 @@ export default class WorkingTime {
     constructor(data: WorkingTime) {
         this._id = data._id
         this.user_id = +data.user_id
-        this.start_time = new Date(0,0,0, ...getComponents(data.start_time))
-        this.end_time = new Date(new Date(0,0,0, ...getComponents(data.end_time)))
+        this.start_time = new Date(data.start_time)
+        this.end_time = new Date(data.end_time)
     }
 
     async delete() {
