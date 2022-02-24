@@ -18,11 +18,11 @@ export default class Location {
     }
 
     async delete() {
-        await axios.delete(`http://locahlost:3000/users/${this.user_id}/locations/${this._id}`)
+        await axios.delete(`http://localhost:3000/users/${this.user_id}/locations/${this._id}`)
     }
 
     async edit(changes: Partial<Location>) {
-        const { data } = await axios.patch<Location>(`http://locahlost:3000/users/${this.user_id}/locations/${this._id}`, changes)
+        const { data } = await axios.patch<Location>(`http://localhost:3000/users/${this.user_id}/locations/${this._id}`, changes)
         return new Location(data)
     }
 }
