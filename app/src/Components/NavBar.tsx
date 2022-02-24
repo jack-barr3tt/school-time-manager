@@ -17,7 +17,7 @@ export default function NavBar (props: Props) {
     const theme = useTheme()
 
     const navigateBack = () => {
-        navigate("/" + location.pathname.split("/").filter(x => x.length > 1).slice(0, -1).join("/"))
+        navigate("/" + location.pathname.split("/").filter(x => x.length > 0).slice(0, -1).join("/"))
     }
 
     return <>
