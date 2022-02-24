@@ -10,10 +10,11 @@ type Props<A> = {
     chosen: A;
     onOpen?: (event: SyntheticEvent) => void;
     dialog?: {
-        props: EasyDialogProps
+        props: EasyDialogProps;
         textValueSetter: Dispatch<SetStateAction<string|undefined>>;
         setOpen: Dispatch<SetStateAction<boolean>>;
     };
+    save: (item: any[]) => void;
     edit?: (item: A) => void;
     _delete?: (item: A) => void;
 }
@@ -24,12 +25,15 @@ type InputProps<B> = B & {
 }
 
 export default function CreateableAutocomplete<T extends { _id?: number }>(props: Props<InputProps<T>>) {
-    const { label, options, chosenSetter, chosen, onOpen, dialog, edit, _delete } = props
+    const { label, options, chosenSetter, chosen, onOpen, dialog, save, edit, _delete } = props
 
     const filter = createFilterOptions<InputProps<T>>()
 
     return <>
-        { dialog && <EasyDialog {...dialog.props}/> }
+        { dialog && <EasyDialog {...{
+            ...dialog.props,
+            done: save
+        }}/> }
         <Autocomplete
             value={chosen || ""}
             selectOnFocus
@@ -46,9 +50,7 @@ export default function CreateableAutocomplete<T extends { _id?: number }>(props
                         dialog.textValueSetter(value.inputValue)
                         dialog.setOpen(true)
                     }else{
-                        chosenSetter({
-                            name: value.inputValue
-                        }as InputProps<T>)
+                        save([value.inputValue])
                     }
                 }else{
                     chosenSetter(value as InputProps<T>)
