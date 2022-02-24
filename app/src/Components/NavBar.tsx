@@ -1,4 +1,4 @@
-import { IconButton, Paper, Stack, Typography } from '@mui/material';
+import { IconButton, Paper, Stack, Typography, useTheme } from '@mui/material';
 import { ArrowBack } from '@mui/icons-material';
 import { grey } from '@mui/material/colors';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -14,13 +14,14 @@ export default function NavBar (props: Props) {
     const { name, onBack, controls } = props
     const navigate = useNavigate()
     const location = useLocation()
+    const theme = useTheme()
 
     const navigateBack = () => {
         navigate("/" + location.pathname.split("/").filter(x => x.length > 1).slice(0, -1).join("/"))
     }
 
     return <>
-        <Paper sx={{ zIndex: 10, backgroundImage: "linear-gradient(#c2e7ff, white)", p: 3, width: "100%", position: "absolute", left: 0, top: 0 }} elevation={0}/>
+        <Paper sx={{ zIndex: 10, backgroundImage: `linear-gradient(${theme.palette.primary.main}, ${theme.palette.background.default})`, p: 3, width: "100%", position: "absolute", left: 0, top: 0 }} elevation={0}/>
         <Paper elevation={0} sx={{ zIndex: 11, position: "absolute", top: 7, left: 0, width: "100%", p: 2, backgroundColor: grey[50], borderRadius: 4 }}>
             { controls ?
                 <Stack direction="row" alignItems="center" justifyContent="space-between">
