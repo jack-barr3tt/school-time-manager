@@ -1,6 +1,7 @@
 import { Save } from "@mui/icons-material";
 import { DatePicker } from "@mui/lab";
 import { Stack, TextField, Typography, Slider, Fab } from "@mui/material";
+import { grey } from "@mui/material/colors";
 import { useState, useContext, useCallback, useEffect, FormEvent } from "react";
 import Homework from "../../API/Homework";
 import Subject from "../../API/Subjects";
@@ -164,6 +165,7 @@ export default function EditHomework(props: Props) {
                         aria-labelledby="duration-label"
                         valueLabelFormat={MinutesToHrsMins}
                         onChangeCommitted={(_e,v) => setDuration(v as number)}
+                        sx={{ color: duration ? "primary.main" : grey[500] }}
                         defaultValue={30}
                         valueLabelDisplay="auto"
                         step={10}
