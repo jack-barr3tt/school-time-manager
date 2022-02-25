@@ -39,3 +39,10 @@ export const RepeatsToWeeks = (repeats: Repeat[]) => {
 
     return weeks
 }
+
+export const MinutesToHrsMins = (minutes: number) => {
+    const mins = minutes % 60
+    const hrs = Math.floor(minutes / 60)
+    const display = (text: string, show: boolean) => show ? `${text}` : ""
+    return `${display(`${hrs} hour${display("s", hrs > 1)}`, hrs > 0)} ${display(`${mins} mins`,mins !== 0)}`
+}
