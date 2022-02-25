@@ -52,10 +52,10 @@ export default class Subject {
         }
     }
 
-    static async findById(id: string) {
+    static async findById(id: string, userId: string) {
         const { rows } = await Database.query(
-            'SELECT * FROM subjects WHERE id = $1',
-            [id]
+            'SELECT * FROM subjects WHERE id = $1 AND user_id = $2',
+            [id, userId]
         );
         if(rows.length === 0) return null
         

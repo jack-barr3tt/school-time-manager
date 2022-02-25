@@ -3,9 +3,9 @@ import Homework from "../../database/homework";
 import { APIError } from "../../errors/types";
 
 export default async (req: Request, res: Response, next: NextFunction) => {
-    const { id } = req.params
+    const { userId, id } = req.params
     try{
-        const homework = await Homework.findById(id)
+        const homework = await Homework.findById(id, userId)
         if (!homework) throw new APIError("Homework not found", 404);
 
         let { task, subject_id, due, difficulty, complete } = req.body

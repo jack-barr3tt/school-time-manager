@@ -3,9 +3,9 @@ import Subject from "../../database/subjects";
 import { APIError } from "../../errors/types";
 
 export default async (req: Request, res: Response, next: NextFunction) => {
-    const { id } = req.params
+    const { userId, id } = req.params
     try {
-        const subject = await Subject.findById(id);
+        const subject = await Subject.findById(id, userId);
         if (!subject) throw new APIError("Subject not found", 404);
 
         res.json(subject);

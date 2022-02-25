@@ -85,7 +85,7 @@ export class User {
         this.hash = hashedPassword
     }
 
-    static async findById(id: string|number) {
+    static async findById(id: string) {
         const { rows } = await Database.query(
             `SELECT u.id, u.username, u.email, u.prewarning, u.repeat_id, u.repeat_ref, r.name repeat_name, r.start_day repeat_start_day, r.end_day repeat_end_day
             FROM users u

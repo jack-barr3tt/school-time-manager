@@ -3,9 +3,9 @@ import { Repeat } from "../../database/repeats";
 import { APIError } from "../../errors/types";
 
 export default async (req: Request, res: Response, next: NextFunction) => {
-    const { id } = req.params;
+    const { userId, id } = req.params;
     try{
-        const repeat = await Repeat.findById(id);
+        const repeat = await Repeat.findById(id, userId);
         if(!repeat) throw new APIError("Repeat not found", 404);
 
         repeat.delete();

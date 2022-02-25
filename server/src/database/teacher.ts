@@ -44,10 +44,10 @@ export class Teacher {
         }
     }
 
-    static async findById(id: string) {
+    static async findById(id: string, userId: string) {
         const { rows } = await Database.query(
-            `SELECT * FROM teachers WHERE id = $1`,
-            [id]
+            `SELECT * FROM teachers WHERE id = $1 AND user_id = $2`,
+            [id, userId]
         )
         if(rows.length === 0) return null
         

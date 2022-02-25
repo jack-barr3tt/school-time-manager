@@ -3,7 +3,7 @@ import { WorkingTime } from "../../database/working_times";
 import { APIError } from "../../errors/types";
 
 export default async (req: Request, res: Response, next: NextFunction) => {
-    const { id, userId } = req.params;
+    const { userId, id } = req.params;
     try{
         const time = await WorkingTime.findById(id, userId);
         if(!time) throw new APIError("Working time not found", 404);
