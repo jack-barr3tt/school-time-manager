@@ -1,6 +1,7 @@
 import { Save } from '@mui/icons-material';
 import { DatePicker } from '@mui/lab';
 import { Fab, Slider, Stack, TextField, Typography } from '@mui/material';
+import { grey } from '@mui/material/colors';
 import { startOfDay } from 'date-fns';
 import { FormEvent, useCallback, useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -39,7 +40,7 @@ export default function NewHomework() {
     const saveHomework = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
 
-        if(task && subject && subject._id && duration != null) {
+        if(task && subject && subject._id) {
             await User.forge(user.id).homework?.create({
                 task,
                 subject_id: subject._id,
@@ -129,6 +130,7 @@ export default function NewHomework() {
                         aria-labelledby="duration-label"
                         valueLabelFormat={MinutesToHrsMins}
                         onChangeCommitted={(_e,v) => setDuration(v as number)}
+                        sx={{ color: duration ? "primary.main" : grey[500] }}
                         defaultValue={30}
                         valueLabelDisplay="auto"
                         step={10}
