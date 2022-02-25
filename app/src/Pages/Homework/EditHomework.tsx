@@ -1,6 +1,6 @@
 import { Save } from "@mui/icons-material";
 import { DatePicker } from "@mui/lab";
-import { Stack, TextField, Typography, Checkbox, Slider, Fab } from "@mui/material";
+import { Stack, TextField, Typography, Slider, Fab } from "@mui/material";
 import { useState, useContext, useCallback, useEffect, FormEvent } from "react";
 import Homework from "../../API/Homework";
 import Subject from "../../API/Subjects";
@@ -9,6 +9,7 @@ import { userContext } from "../../App";
 import CreateableAutocomplete from "../../Components/CreatableAutocomplete";
 import EasyDialog from "../../Components/EasyDialog";
 import NavBar from "../../Components/NavBar";
+import { MinutesToHrsMins } from "../../functions";
 
 type SubjectInput = {
     _id?: number;
@@ -28,8 +29,7 @@ export default function EditHomework(props: Props) {
     const [task, setTask] = useState<string>("");
     const [subject, setSubject] = useState<SubjectInput>();
     const [due, setDue] = useState<Date|null>();
-    const [difficultyGiven, setDifficultyGiven] = useState<boolean>(false);
-    const [difficulty, setDifficulty] = useState<number>();
+    const [duration, setDuration] = useState<number>();
     const [subjects, setSubjects] = useState<SubjectInput[]>([]);
     const [homework, setHomework] = useState<Homework>()
 
@@ -53,8 +53,7 @@ export default function EditHomework(props: Props) {
                 setTask(tempHomework.task);
                 setSubject(tempHomework.subject);
                 setDue(tempHomework.due);
-                setDifficultyGiven(tempHomework.difficulty != null);
-                setDifficulty(tempHomework.difficulty);
+                setDuration(tempHomework.duration);
             }
         }
     }, [user.id, id]);
@@ -73,7 +72,7 @@ export default function EditHomework(props: Props) {
                     task,
                     subject: { _id: subject._id} as Subject,
                     due: due == null ? undefined : due,
-                    difficulty
+                    duration
                 })
                 back(false)
             }catch{}
@@ -159,23 +158,17 @@ export default function EditHomework(props: Props) {
                     onChange={(newValue) => setDue(newValue)}
                     renderInput={(props) => <TextField {...props} label="Due" fullWidth/>}
                 />
-                <Typography variant="h6" id="difficulty-label">Difficulty</Typography>
-                <Stack direction="row" alignItems="center">
-                    <Checkbox 
-                        checked={difficultyGiven} 
-                        onChange={(event) => setDifficultyGiven(event.target.checked)}
-                        sx={{ mr: 2}}
-                    />
+                <Typography variant="h6" id="duration-label">Duration</Typography>
+                <Stack direction="row" sx={{ px: 4 }}>
                     <Slider
-                        aria-labelledby="difficulty-label"
-                        valueLabelFormat={(value) => ["Easy", "Medium", "Hard"][value]}
-                        onChangeCommitted={(_e,v) => setDifficulty(v as number)}
-                        disabled={!difficultyGiven}
-                        defaultValue={1}
+                        aria-labelledby="duration-label"
+                        valueLabelFormat={MinutesToHrsMins}
+                        onChangeCommitted={(_e,v) => setDuration(v as number)}
+                        defaultValue={30}
                         valueLabelDisplay="auto"
-                        step={1}
-                        min={0}
-                        max={2}
+                        step={10}
+                        min={10}
+                        max={180}
                     />
                 </Stack>
             </Stack>

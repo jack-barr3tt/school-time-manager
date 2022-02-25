@@ -1,6 +1,6 @@
 import { Save } from '@mui/icons-material';
 import { DatePicker } from '@mui/lab';
-import { Checkbox, Fab, Slider, Stack, TextField, Typography } from '@mui/material';
+import { Fab, Slider, Stack, TextField, Typography } from '@mui/material';
 import { startOfDay } from 'date-fns';
 import { FormEvent, useCallback, useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -10,13 +10,13 @@ import { userContext } from '../../App';
 import CreateableAutocomplete from '../../Components/CreatableAutocomplete';
 import EasyDialog from '../../Components/EasyDialog';
 import NavBar from '../../Components/NavBar';
+import { MinutesToHrsMins } from '../../functions';
 
 export default function NewHomework() {    
     const [task, setTask] = useState<string>();
     const [subject, setSubject] = useState<SubjectInput>();
     const [due, setDue] = useState<Date|null>();
-    const [difficultyGiven, setDifficultyGiven] = useState<boolean>(false);
-    const [difficulty, setDifficulty] = useState<number>();
+    const [duration, setDuration] = useState<number>();
     const [subjects, setSubjects] = useState<SubjectInput[]>();
     const [subjectEditing, setSubjectEditing] = useState<SubjectInput>();
 
@@ -36,15 +36,15 @@ export default function NewHomework() {
         fetchSubjects()
     }, [fetchSubjects])
 
-    const saveHomework = async (event: FormEvent<HTMLFormElement>) => {
-        event.preventDefault()
+    const saveHomework = async (e: FormEvent<HTMLFormElement>) => {
+        e.preventDefault()
 
-        if(task && subject && subject._id) {
+        if(task && subject && subject._id && duration != null) {
             await User.forge(user.id).homework?.create({
                 task,
                 subject_id: subject._id,
                 due: due == null ? undefined : startOfDay(due).getTime(),
-                difficulty: difficultyGiven ? (difficulty ? difficulty : 1) : undefined
+                duration
             })
 
             navigate('/homework')
@@ -123,23 +123,17 @@ export default function NewHomework() {
                     onChange={(newValue) => setDue(newValue)}
                     renderInput={(props) => <TextField {...props} label="Due" fullWidth/>}
                 />
-                <Typography variant="h6" id="difficulty-label">Difficulty</Typography>
-                <Stack direction="row" alignItems="center">
-                    <Checkbox 
-                        checked={difficultyGiven} 
-                        onChange={(event) => setDifficultyGiven(event.target.checked)}
-                        sx={{ mr: 2}}
-                    />
+                <Typography variant="h6" id="duration-label">Time to Complete</Typography>
+                <Stack direction="row" sx={{ px: 3 }}>
                     <Slider
-                        aria-labelledby="difficulty-label"
-                        valueLabelFormat={(value) => ["Easy", "Medium", "Hard"][value]}
-                        onChangeCommitted={(_e,v) => setDifficulty(v as number)}
-                        disabled={!difficultyGiven}
-                        defaultValue={1}
+                        aria-labelledby="duration-label"
+                        valueLabelFormat={MinutesToHrsMins}
+                        onChangeCommitted={(_e,v) => setDuration(v as number)}
+                        defaultValue={30}
                         valueLabelDisplay="auto"
-                        step={1}
-                        min={0}
-                        max={2}
+                        step={10}
+                        min={10}
+                        max={180}
                     />
                 </Stack>
             </Stack>

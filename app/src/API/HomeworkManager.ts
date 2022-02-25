@@ -5,7 +5,7 @@ type HomeworkCreate = {
     task: string;
     subject_id: number;
     due?: number;
-    difficulty?: number;
+    duration?: number;
 }
 
 export default class HomeworkManager {

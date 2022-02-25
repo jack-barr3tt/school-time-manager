@@ -7,7 +7,7 @@ import Homework from '../../API/Homework';
 import { User } from '../../API/Users';
 import { userContext } from '../../App';
 import NavBar from '../../Components/NavBar';
-import { ColorIntToString } from '../../functions';
+import { ColorIntToString, MinutesToHrsMins } from '../../functions';
 import EditHomework from './EditHomework';
 
 export default function ViewHomework() {
@@ -49,11 +49,11 @@ export default function ViewHomework() {
     }
 
     return <>
-        { !editing ? <>
+        { !editing ? homework && <>
             <NavBar name="View Homework" controls={[
                 <IconButton onClick={() => {
                     setEditing(true)
-                    setEditingId(homework?._id)
+                    setEditingId(homework._id)
                 }}>
                     <Edit/>
                 </IconButton>,
@@ -66,7 +66,7 @@ export default function ViewHomework() {
                 </Stack>
             }
 
-            { homework?.task && <>
+            { homework.task && <>
                 <Stack direction="row" spacing={3} alignItems="center" sx={{ pt: 2 }}>
                     <Assignment/>
                     <Typography variant="h5">Task</Typography>
@@ -74,28 +74,28 @@ export default function ViewHomework() {
                 <Typography variant="body1">{homework.task}</Typography>
             </> }
 
-            { homework?.subject?.name && <>
+            { homework.subject?.name && <>
                 <Stack direction="row" spacing={3} alignItems="center" sx={{ pt: 2 }}>
-                    <Circle sx={{ color: ColorIntToString(homework?.subject?.color), mr: 1 }} />
+                    <Circle sx={{ color: ColorIntToString(homework.subject?.color), mr: 1 }} />
                     <Typography variant="h5">Subject</Typography>
                 </Stack>
-                <Typography variant="body1">{homework?.subject?.name}</Typography>
+                <Typography variant="body1">{homework.subject?.name}</Typography>
             </> }
 
-            { homework?.due != null && <>
+            { homework.due != null && <>
                 <Stack direction="row" spacing={3} alignItems="center" sx={{ pt: 2 }}>
-                    <Event sx={getDueColor(homework?.due)}/>
-                    <Typography variant="h5" sx={getDueColor(homework?.due)}>Due</Typography>
+                    <Event sx={getDueColor(homework.due)}/>
+                    <Typography variant="h5" sx={getDueColor(homework.due)}>Due</Typography>
                 </Stack>
-                <Typography variant="body1" sx={getDueColor(homework?.due)}>{`${format(homework?.due, "dd/MM/yy")} (${formatDistanceToNow(homework?.due)})`}</Typography>
+                <Typography variant="body1" sx={getDueColor(homework.due)}>{`${format(homework.due, "dd/MM/yy")} (${formatDistanceToNow(homework.due)})`}</Typography>
             </> }
 
-            { homework?.difficulty && <>
+            { homework.duration && <>
                 <Stack direction="row" spacing={3} alignItems="center" sx={{ pt: 2 }}>
                     <AccessTime/>
-                    <Typography variant="h5">Difficulty</Typography>
+                    <Typography variant="h5">Duration</Typography>
                 </Stack>
-                <Typography variant="body1">{["Easy","Medium","Hard"][homework?.difficulty || 0]}</Typography>
+                <Typography variant="body1">{MinutesToHrsMins(homework.duration)}</Typography>
             </> }
             <Button
                 fullWidth

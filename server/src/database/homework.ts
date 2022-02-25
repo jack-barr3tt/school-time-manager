@@ -27,7 +27,7 @@ export default class Homework {
     public task: string;
     public subject: Subject;
     public due?: number;
-    public difficulty?: number;
+    public duration?: number;
     public complete: boolean;
 
     constructor(data: HomeworkArgs) {  
@@ -40,7 +40,7 @@ export default class Homework {
             color: data.subject_color
         } as Subject);
         this.due = data.due && +data.due;
-        this.difficulty = data.difficulty;
+        this.duration = data.duration;
         this.complete = data.complete;
     }
 
@@ -48,21 +48,21 @@ export default class Homework {
         if(this.id) {
             await Database.query(
                 `UPDATE homeworks
-                SET task = $2, subject_id = $3, due = $4, difficulty = $5, complete = $6
+                SET task = $2, subject_id = $3, due = $4, duration = $5, complete = $6
                 WHERE id = $1`, 
                 [
                     this.id, 
                     this.task, 
                     this.subject.id, 
                     this.due, 
-                    this.difficulty,
+                    this.duration,
                     this.complete
                 ]
             )
             return this
         } else {
             const { rows } = await Database.query(
-                `INSERT INTO homeworks (user_id, task, subject_id, due, difficulty, complete)
+                `INSERT INTO homeworks (user_id, task, subject_id, due, duration, complete)
                 VALUES ($1, $2, $3, $4, $5, $6)
                 RETURNING id`, 
                 [
@@ -70,7 +70,7 @@ export default class Homework {
                     this.task, 
                     this.subject.id, 
                     this.due, 
-                    this.difficulty,
+                    this.duration,
                     this.complete
                 ]
             )
@@ -81,10 +81,10 @@ export default class Homework {
 
     static async findById(id: string, userId: string) {
         const { rows } = await Database.query(
-            `SELECT h.id, h.user_id, h.task, h.subject_id, h.due, h.difficulty, h.complete, s.name subject_name, s.color subject_color 
+            `SELECT h.id, h.user_id, h.task, h.subject_id, h.due, h.duration, h.complete, s.name subject_name, s.color subject_color 
             FROM homeworks h 
             INNER JOIN subjects s ON h.subject_id = s.id 
-            WHERE h.id = $1 AND user_id = $2`,
+            WHERE h.id = $1 AND h.user_id = $2`,
             [id, userId]
         );
         if(rows.length === 0) return null
@@ -97,7 +97,7 @@ export default class Homework {
 
     static async getByUser(userId: string) {
         const { rows } = await Database.query(
-            `SELECT h.id, h.user_id, h.task, h.subject_id, h.due, h.difficulty, h.complete, s.name subject_name, s.color subject_color 
+            `SELECT h.id, h.user_id, h.task, h.subject_id, h.due, h.duration, h.complete, s.name subject_name, s.color subject_color 
             FROM homeworks h 
             INNER JOIN subjects s ON h.subject_id = s.id 
             WHERE h.user_id = $1`,

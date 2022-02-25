@@ -4,7 +4,7 @@ import { grey, red } from '@mui/material/colors';
 import { useNavigate } from 'react-router-dom';
 import SwipeableViews from "react-swipeable-views"
 import Homework from '../API/Homework';
-import { ColorIntToString } from '../functions';
+import { ColorIntToString, MinutesToHrsMins } from '../functions';
 
 type Props = {
     homework: Homework;
@@ -14,7 +14,7 @@ type Props = {
 
 export default function HomeworkCard (props: Props) {
     const { _delete, complete } = props;
-    const { _id, task, subject, due, difficulty } = props.homework;
+    const { _id, task, subject, due, duration } = props.homework;
     const { name, color } = subject;
     
     const navigate = useNavigate()
@@ -37,10 +37,6 @@ export default function HomeworkCard (props: Props) {
         ]
 
         return months[date.getMonth()]
-    }
-    
-    const getDifficulty = (difficulty: number) => {
-        return ["Easy", "Medium", "Hard"][difficulty];
     }
 
     const truncateText = (text: string) => {
@@ -92,9 +88,9 @@ export default function HomeworkCard (props: Props) {
                     <Stack direction="row" alignItems="center">
                         <Circle sx={{ color: ColorIntToString(color), mr: 1 }} />
                         <Typography variant="body1">{name}</Typography>
-                        { difficulty != null && <>
+                        { duration != null && <>
                             <AccessTime sx={{ ml: 3, mr: 1 }}/>
-                            <Typography variant="body1">{getDifficulty(difficulty)}</Typography>
+                            <Typography variant="body1">{MinutesToHrsMins(duration)}</Typography>
                         </>}
                     </Stack>
                 </Stack>

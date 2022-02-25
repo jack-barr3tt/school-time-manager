@@ -7,7 +7,7 @@ export default class Homework {
     readonly task: string;
     readonly subject: Subject;
     readonly due?: Date;
-    readonly difficulty: number;
+    readonly duration: number;
     readonly complete: boolean;
 
     constructor(data: Homework) {
@@ -16,7 +16,7 @@ export default class Homework {
         this.task = data.task
         this.subject = new Subject(data.subject)
         this.due = data.due == null ? undefined : new Date(data.due)
-        this.difficulty = data.difficulty
+        this.duration = data.duration
         this.complete = data.complete
     }
 
@@ -30,7 +30,7 @@ export default class Homework {
             task: newData.task,
             subject_id: newData.subject?._id,
             due: newData.due?.getTime(),
-            difficulty: newData.difficulty
+            duration: newData.duration
         })
         return data
     }
