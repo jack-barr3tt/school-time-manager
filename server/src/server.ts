@@ -23,6 +23,7 @@ import repeats from './routes/repeats';
 import subjects from './routes/subjects';
 import teachers from './routes/teachers';
 import times from './routes/times';
+import schedule from './routes/schedule';
 
 const user_router = Router({ mergeParams: true })
 user_router.use('/homework', homework)
@@ -33,6 +34,7 @@ user_router.use('/locations', locations)
 user_router.use('/blocks', blocks)
 user_router.use('/subjects', subjects)
 user_router.use('/times', times)
+user_router.use('/schedule', schedule)
 
 // Routes
 const router = Router({ mergeParams: true })
