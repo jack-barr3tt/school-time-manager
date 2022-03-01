@@ -1,10 +1,16 @@
 import Database from "../connections";
 import Subject from "./subjects";
 
-type HomeworkArgs = Homework & {
-    subject_id: number,
-    subject_name: string, 
-    subject_color: number,
+type HomeworkArgs = {
+    id?: number;
+    user_id: number;
+    task: string;
+    subject_id: number;
+    subject_name: string;
+    subject_color: number;
+    due: number;
+    duration: number;
+    complete: boolean;
 }
 
 export default class Homework {
@@ -25,12 +31,13 @@ export default class Homework {
     
     readonly user_id: number;
     public task: string;
-    public subject: Subject;
+    private subject: Subject;
     public due?: number;
     public duration?: number;
     public complete: boolean;
 
     constructor(data: HomeworkArgs) {  
+        this.id = data.id
         this.user_id = +data.user_id;
         this.task = data.task;
         this.subject = new Subject({ 
