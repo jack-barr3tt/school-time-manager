@@ -5,6 +5,7 @@ import EasyDialog, { EasyDialogProps } from "./EasyDialog";
 
 type Props<A> = {
     label: string;
+    autoFocus?: boolean;
     options: A[];
     chosenSetter: Dispatch<SetStateAction<A|undefined>>;
     chosen: A;
@@ -25,7 +26,7 @@ type InputProps<B> = B & {
 }
 
 export default function CreateableAutocomplete<T extends { _id?: number }>(props: Props<InputProps<T>>) {
-    const { label, options, chosenSetter, chosen, onOpen, dialog, save, edit, _delete } = props
+    const { label, autoFocus, options, chosenSetter, chosen, onOpen, dialog, save, edit, _delete } = props
 
     const filter = createFilterOptions<InputProps<T>>()
 
@@ -79,7 +80,7 @@ export default function CreateableAutocomplete<T extends { _id?: number }>(props
                 return option.name
             }}
             renderInput={(params) => (
-                <TextField {...params} label={label} />
+                <TextField {...params} autoFocus={autoFocus} label={label} />
             )}
             renderOption={(props, option) => {
                 if((edit || _delete) && option._id) {

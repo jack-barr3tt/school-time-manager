@@ -200,7 +200,8 @@ export default function NewTimetable(props: Props) {
         <form onSubmit={saveTimetable}>
             <Stack direction="column" spacing={2}>
                 { subjects && <CreateableAutocomplete<SubjectInput> 
-                    label="Subject" 
+                    label="Subject"
+                    autoFocus
                     options={subjects} 
                     chosenSetter={setSubject} 
                     chosen={subject!} 
