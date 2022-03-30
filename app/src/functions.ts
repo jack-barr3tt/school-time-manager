@@ -7,6 +7,22 @@ export const DayIndexToString = (index: number, size: ("short"|"long") = "short"
     :
         ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"][index]
 
+
+export const DateToMonth = (date: Date) => [
+        "JAN",
+        "FEB",
+        "MAR",
+        "APR",
+        "MAY",
+        "JUN",
+        "JUL",
+        "AUG",
+        "SEP",
+        "OCT",
+        "NOV",
+        "DEC"
+    ][date.getMonth()]
+
 export const ColorIntToString = (color?: number) => {
     if(!color) return grey[500];
     let base = color.toString(16);

@@ -1,10 +1,11 @@
-import { AccessTime, Check, Circle, Delete } from '@mui/icons-material';
-import { ButtonBase, Paper, Stack, styled, Typography, useTheme } from '@mui/material';
-import { grey, red } from '@mui/material/colors';
+import { AccessTime, Check, Delete } from '@mui/icons-material';
+import { Paper, styled, Typography, useTheme } from '@mui/material';
+import { red } from '@mui/material/colors';
 import { useNavigate } from 'react-router-dom';
 import SwipeableViews from "react-swipeable-views"
 import Homework from '../API/Homework';
-import { ColorIntToString, MinutesToHrsMins } from '../functions';
+import { DateToMonth, MinutesToHrsMins } from '../functions';
+import { Card } from './Card';
 
 type Props = {
     homework: Homework;
@@ -19,25 +20,6 @@ export default function HomeworkCard (props: Props) {
     
     const navigate = useNavigate()
     const theme = useTheme()
-
-    const getMonth = (date: Date) => {
-        const months = [
-            "JAN",
-            "FEB",
-            "MAR",
-            "APR",
-            "MAY",
-            "JUN",
-            "JUL",
-            "AUG",
-            "SEP",
-            "OCT",
-            "NOV",
-            "DEC"
-        ]
-
-        return months[date.getMonth()]
-    }
 
     const truncateText = (text: string) => {
         const limit = 55
@@ -73,29 +55,21 @@ export default function HomeworkCard (props: Props) {
                 }}
             >
             {deleteDisplay}
-            <ButtonBase onClick={() => navigate(""+_id)} sx={{ borderRadius: 6, boxSizing: "border-box", width: "100%" }}>
-            <Paper elevation={0} sx={{ p: 2, width: 1, height: 1 }}>
-                <Stack direction="column">
-                    <Stack direction="row" alignItems="center" justifyContent="space-between">
-                        <Typography variant="h5" sx={{ my: 2, pr: 2, textAlign: "left" }}>{truncateText(task)}</Typography>
-                        {due && <Paper elevation={0} sx={{ height: "96px", aspectRatio: "1", backgroundColor: grey[200], borderRadius: 3 }}>
-                            <Paper sx={{ width: "100%", height: "24px", borderRadius: "12px 12px 0 0", backgroundColor: red[500] }} elevation={0}>
-                                <Typography variant="body1" sx={{ textAlign: "center", height: "100%" }} color="white">{getMonth(due)}</Typography>
-                            </Paper>
-                            <Typography variant="body1" sx={{ textAlign: "center", fontSize: "2.5rem", my: "6px" }}>{due.getDate()}</Typography>
-                        </Paper>}
-                    </Stack>
-                    <Stack direction="row" alignItems="center">
-                        <Circle sx={{ color: ColorIntToString(color), mr: 1 }} />
-                        <Typography variant="body1">{name}</Typography>
-                        { duration != null && <>
-                            <AccessTime sx={{ ml: 3, mr: 1 }}/>
-                            <Typography variant="body1">{MinutesToHrsMins(duration)}</Typography>
-                        </>}
-                    </Stack>
-                </Stack>
-            </Paper>
-        </ButtonBase>
+            <Card
+                mainText={truncateText(task)}
+                calendarProps={ due && {
+                    topText: DateToMonth(due),
+                    bottomText: [""+due.getDate()],
+                    accentColor: red[500]
+                }}
+                onClick={() => navigate(""+_id)}
+                subText={name}
+                circleColor={color}
+                footerComponents={ duration != null ? [
+                    <AccessTime sx={{ ml: 3, mr: 1 }}/>,
+                    <Typography variant="body1">{MinutesToHrsMins(duration)}</Typography>
+                ] : []}
+            />
         {completeDisplay}
     </StyledSwiper> 
 }
