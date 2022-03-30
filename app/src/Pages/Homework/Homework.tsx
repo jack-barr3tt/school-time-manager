@@ -1,5 +1,6 @@
 import { Add } from '@mui/icons-material';
 import { CircularProgress, Fab, Stack } from '@mui/material';
+import { compareAsc } from 'date-fns';
 import { useCallback, useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Homework from '../../API/Homework';
@@ -49,11 +50,16 @@ export default function HomeworkPage() {
             </Stack>
         } 
         <Stack direction="column" spacing={3} alignItems="center" sx={{ pt: 2 }}>
-            {homework.filter(h => !h.complete).sort((a,b) => {
-                if(!a.due) return 0
-                if(!b.due) return 0
-                return a.due.getTime() - b.due.getTime()
-            }).map(hw => <HomeworkCard key={hw._id} homework={hw} _delete={() => deleteHomework(hw)} complete={() => completeHomework(hw)} />)}
+            {homework.filter(h => !h.complete)
+            .sort((a,b) => compareAsc(a.due || 0, b.due || 0))
+            .map(hw => 
+                <HomeworkCard
+                    key={hw._id}
+                    homework={hw} 
+                    _delete={() => deleteHomework(hw)} 
+                    complete={() => completeHomework(hw)} 
+                />
+            )}
         </Stack>
         <Fab sx={{ position: "absolute", right: "24px", bottom: "24px" }} onClick={() => navigate("new")}>
             <Add/>

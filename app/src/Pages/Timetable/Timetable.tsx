@@ -4,10 +4,10 @@ import { useState } from "react";
 import LessonBlock from "../../API/LessonBlock";
 import NavBar from "../../Components/NavBar";
 import TimetableView from "../../Components/TimetableView";
-import { useWeek, WeekProvider } from "../../Hooks/useWeek";
+import { useWeek } from "../../Hooks/useWeek";
 import NewTimetable from "./NewTimetable";
 
-function Main() {
+export default function Timetable() {
     const { week, weeks, weekNo, changeWeek } = useWeek()
 
     const [editView, setEditView] = useState(false)
@@ -53,10 +53,4 @@ function Main() {
         : (createBlock != null) && (createDay != null) && week && <NewTimetable block={createBlock} repeat={week.find(r => r.end_day >= createDay && r.start_day <= createDay)} day={createDay} back={ () => setCreating(false) }/>
         }
     </>
-}
-
-export default function Timetable() {
-    return <WeekProvider>
-        <Main/>
-    </WeekProvider>
 }

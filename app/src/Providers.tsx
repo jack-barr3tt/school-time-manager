@@ -5,6 +5,8 @@ import { ScopedCssBaseline } from "@mui/material";
 import { ReactNode } from "react";
 import { theme } from "./App";
 import { HomeworkProvider } from "./Hooks/useHomework";
+import { TimetableProvider } from "./Hooks/useTimetable";
+import { WeekProvider } from "./Hooks/useWeek";
 
 export default function Providers(props: { children: ReactNode }) {
     const { children } = props
@@ -14,7 +16,11 @@ export default function Providers(props: { children: ReactNode }) {
             <ScopedCssBaseline>
                 <ThemeProvider theme={theme}>
                     <HomeworkProvider>
-                        {children}
+                        <WeekProvider>
+                            <TimetableProvider>
+                                {children}
+                            </TimetableProvider>
+                        </WeekProvider>
                     </HomeworkProvider>
                 </ThemeProvider>
             </ScopedCssBaseline>

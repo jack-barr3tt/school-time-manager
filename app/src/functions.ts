@@ -1,4 +1,6 @@
 import { grey } from "@mui/material/colors";
+import { add, startOfDay, intervalToDuration } from "date-fns";
+import LessonBlock from "./API/LessonBlock";
 import Repeat from "./API/Repeat";
 
 export const DayIndexToString = (index: number, size: ("short"|"long") = "short") => 
@@ -62,3 +64,9 @@ export const MinutesToHrsMins = (minutes: number) => {
     const display = (text: string, show: boolean) => show ? `${text}` : ""
     return `${display(`${hrs} hour${display("s", hrs > 1)}`, hrs > 0)} ${display(`${mins} mins`,mins !== 0)}`
 }
+
+export const TransposeLessonBlock = (time: LessonBlock, source?: Date) => ({
+    ...time,
+    start_time: add(startOfDay(source || Date.now()), intervalToDuration({ start: 0, end: (time.start_time.getTime() - startOfDay(time.start_time).getTime()) })),
+    end_time: add(startOfDay(source || Date.now()), intervalToDuration({ start: 0, end: (time.end_time.getTime() - startOfDay(time.end_time).getTime()) }))
+})
