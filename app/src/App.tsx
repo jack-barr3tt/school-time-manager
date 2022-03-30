@@ -1,11 +1,10 @@
-import { LocalizationProvider } from '@mui/lab';
-import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import { Container, createTheme, Paper, ScopedCssBaseline, Stack, ThemeProvider, useMediaQuery } from '@mui/material';
-import { createContext, ReactNode } from 'react';
+import { Stack, useMediaQuery, Container, Paper, createTheme } from '@mui/material';
+import { ReactNode, createContext } from 'react';
 import './App.css';
+import Providers from './Providers';
 import Router from './Router';
 
-const theme = createTheme({
+export const theme = createTheme({
     breakpoints: {
         values: {
             xs: 0,
@@ -36,16 +35,16 @@ function MainGrid (props: { children: ReactNode }) {
 }
 
 export const userContext = createContext({
-    id: 3,
+    id: 1,
     username: "Jack"
 })
 
 export default function App() {
-  const isMobile = useMediaQuery(`(max-width: ${theme.breakpoints.values.sm}px)`);
-  return (
-    <LocalizationProvider dateAdapter={AdapterDateFns}>
-        <ScopedCssBaseline>
-        <ThemeProvider theme={theme}>{
+
+    const isMobile = useMediaQuery(`(max-width: ${theme.breakpoints.values.sm}px)`);
+    
+    return <Providers>
+        {
             isMobile ? 
             <MainGrid>
                 <Router/>
@@ -57,8 +56,6 @@ export default function App() {
                 </MainGrid>
                 </Paper>
             </Container>
-        }</ThemeProvider>
-        </ScopedCssBaseline>
-    </LocalizationProvider>
-  )
+        }
+    </Providers>
 }
