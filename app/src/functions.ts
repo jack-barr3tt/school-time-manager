@@ -78,7 +78,9 @@ export const TransposeLessonBlock = (time: LessonBlock, source?: Date) => ({
 
 function Merge<T>(left: T[], right: T[], compare: (a: T, b: T) => number) {
     const result: T[] = []
-    let l = 0, r = 0
+    let l = 0
+    let r = 0
+
     while(l < left.length && r < right.length) {
         if(compare(left[l], right[r]) <= 0) {
             result.push(left[l])
@@ -88,13 +90,16 @@ function Merge<T>(left: T[], right: T[], compare: (a: T, b: T) => number) {
             r++
         }
     }
+    
     return [...result, ...left.slice(l), ...right.slice(r)]
 }
 
-export function MergeSort<T>(arr: T[], compare: (a: T, b: T) => number) : T[] {
-    if(arr.length < 2) return arr;
-    const middle = Math.floor(arr.length / 2);
-    const left = arr.slice(0, middle);
-    const right = arr.slice(middle);
+export function MergeSort<T>(array: T[], compare: (a: T, b: T) => number) : T[] {
+    if(array.length < 2) return array;
+    
+    const pivot = Math.floor(array.length / 2);
+    const left = array.slice(0, pivot);
+    const right = array.slice(pivot);
+    
     return Merge(MergeSort(left, compare), MergeSort(right, compare), compare);
 }
