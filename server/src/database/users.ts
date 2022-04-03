@@ -1,4 +1,5 @@
-import { hash } from "bcrypt"
+import { compare, hash } from "bcrypt"
+import { sign } from "jsonwebtoken";
 import Database from "../connections";
 import { APIError } from "../errors/types";
 import { Repeat } from "./repeats";
@@ -38,6 +39,7 @@ export class User {
         else
             throw new APIError("Invalid email", 400)
         this.username = data.username;
+        this.hash = data.hash;
         this.prewarning = data.prewarning;
         if(data.repeat_name) 
             this.repeat = new Repeat({
@@ -85,6 +87,16 @@ export class User {
         this.hash = hashedPassword
     }
 
+    async verifyPassword(password?: string) {
+        if(!password) throw new APIError("Password is required", 400)
+        if(!this.hash) throw new APIError("User has no password", 400)
+        
+        const isValid = await compare(password, this.hash)
+        if(!isValid) throw new APIError("Invalid password", 401)
+
+        return sign({ userId: this.id }, process.env.JWT_SECRET || "", { expiresIn: '1h' })
+    }
+
     static async findById(id: string) {
         const { rows } = await Database.query(
             `SELECT u.id, u.username, u.email, u.prewarning, u.repeat_id, u.repeat_ref, r.name repeat_name, r.start_day repeat_start_day, r.end_day repeat_end_day
@@ -92,6 +104,22 @@ export class User {
             LEFT JOIN repeats r ON u.repeat_id = r.id
             WHERE u.id = $1`,
             [id]
+        )
+
+        if(rows.length === 0) return null
+
+        const user = new User(rows[0])
+        user.id = rows[0].id
+
+        return user
+    }
+
+    static async findByEmail(email: string) {
+        const { rows } = await Database.query(
+            `SELECT id, username, email, hash
+            FROM users
+            WHERE email = $1`,
+            [email]
         )
 
         if(rows.length === 0) return null

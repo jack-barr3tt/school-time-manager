@@ -2,6 +2,7 @@ console.log("Starting up...")
 
 import express, { json, NextFunction, Request, Response, Router, urlencoded } from 'express';
 import cors from 'cors';
+import auth from './auth';
 
 const server = express()
 server.use(cors())  
@@ -38,8 +39,9 @@ user_router.use('/schedule', schedule)
 
 // Routes
 const router = Router({ mergeParams: true })
-router.use('/users/:userId/', user_router)
 router.use('/users', users)
+router.use('/users/:userId',auth)
+router.use('/users/:userId/', user_router)
 
 server.use(router)
 

@@ -96,7 +96,7 @@ export class Lesson {
         this.teacher = new Teacher({
             id: data.teacher_id,
             user_id: data.user_id,
-            name: data.location_name
+            name: data.teacher_name
         } as Teacher)
 
         this.repeat = new Repeat({
