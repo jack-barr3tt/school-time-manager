@@ -15,7 +15,8 @@ export default async (req: Request, res: Response, next: NextFunction) => {
             const token = await user.verifyPassword(password);
 
             res.json({
-                token
+                token,
+                id: user.id,
             })
         }catch(err){
             const error = err as APIError
