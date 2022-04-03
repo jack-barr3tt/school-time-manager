@@ -87,7 +87,7 @@ export default function ViewHomework() {
                     <Event sx={getDueColor(homework.due)}/>
                     <Typography variant="h5" sx={getDueColor(homework.due)}>Due</Typography>
                 </Stack>
-                <Typography variant="body1" sx={getDueColor(homework.due)}>{`${format(homework.due, "dd/MM/yy")} (${formatDistanceToNow(homework.due)})`}</Typography>
+                <Typography variant="body1" sx={getDueColor(homework.due)}>{`${format(homework.due, "dd/MM/yy")} (${formatDistanceToNow(homework.due, { addSuffix: true })})`}</Typography>
             </> }
 
             { homework.duration && <>
