@@ -1,4 +1,4 @@
-import axios from "axios";
+import AxiosBase from "./AxiosBase";
 
 export default class Repeat {
     readonly _id: number;
@@ -18,11 +18,11 @@ export default class Repeat {
     }
 
     async delete() {
-        await axios.delete(`http://localhost:3000/users/${this.user_id}/repeats/${this._id}`)
+        await AxiosBase.delete(`/users/${this.user_id}/repeats/${this._id}`)
     }
 
     async edit(changes: Partial<Repeat>) {
-        const { data } = await axios.patch<Repeat>(`http://localhost:3000/users/${this.user_id}/repeats/${this._id}`, changes)
+        const { data } = await AxiosBase.patch<Repeat>(`/users/${this.user_id}/repeats/${this._id}`, changes)
         return new Repeat(data)
     }
 }

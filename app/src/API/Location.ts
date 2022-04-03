@@ -1,4 +1,4 @@
-import axios from "axios";
+import AxiosBase from "./AxiosBase";
 
 export type LocationInput = {
     _id?: number;
@@ -18,11 +18,11 @@ export default class Location {
     }
 
     async delete() {
-        await axios.delete(`http://localhost:3000/users/${this.user_id}/locations/${this._id}`)
+        await AxiosBase.delete(`/users/${this.user_id}/locations/${this._id}`)
     }
 
     async edit(changes: Partial<Location>) {
-        const { data } = await axios.patch<Location>(`http://localhost:3000/users/${this.user_id}/locations/${this._id}`, changes)
+        const { data } = await AxiosBase.patch<Location>(`/users/${this.user_id}/locations/${this._id}`, changes)
         return new Location(data)
     }
 }

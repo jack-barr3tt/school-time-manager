@@ -1,4 +1,4 @@
-import axios from "axios";
+import AxiosBase from "./AxiosBase";
 import Repeat from "./Repeat";
 
 type RepeatCreate = {
@@ -19,16 +19,16 @@ export default class RepeatManager {
     async get(id?: number)
     {
         if(id) {
-            const { data } = await axios.get<Repeat>(`http://localhost:3000/users/${this.userId}/repeats/${id}`)
+            const { data } = await AxiosBase.get<Repeat>(`/users/${this.userId}/repeats/${id}`)
             return new Repeat(data)
         }else{
-            const { data } = await axios.get<Repeat[]>(`http://localhost:3000/users/${this.userId}/repeats`)
+            const { data } = await AxiosBase.get<Repeat[]>(`/users/${this.userId}/repeats`)
             return data.map(r => new Repeat(r))
         }
     } 
 
     async create(repeat: RepeatCreate) {
-        const { data } = await axios.post<Repeat>(`http://localhost:3000/users/${this.userId}/repeats`, repeat)
+        const { data } = await AxiosBase.post<Repeat>(`/users/${this.userId}/repeats`, repeat)
         return new Repeat(data)
     }
 }

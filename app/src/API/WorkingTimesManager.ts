@@ -1,4 +1,4 @@
-import axios from "axios";
+import AxiosBase from "./AxiosBase";
 import WorkingTime from "./WorkingTimes";
 
 type WorkingTimeCreate = {
@@ -18,16 +18,16 @@ export default class WorkingTimesManager {
     async get(id?: number)
     {
         if(id) {
-            const { data } = await axios.get<WorkingTime>(`http://localhost:3000/users/${this.userId}/times/${id}`)
+            const { data } = await AxiosBase.get<WorkingTime>(`/users/${this.userId}/times/${id}`)
             return new WorkingTime(data)
         }else{
-            const { data } = await axios.get<WorkingTime[]>(`http://localhost:3000/users/${this.userId}/times`)
+            const { data } = await AxiosBase.get<WorkingTime[]>(`/users/${this.userId}/times`)
             return data.map(s => new WorkingTime(s))
         }   
     }
 
     async create(time: WorkingTimeCreate) {
-        const { data } = await axios.post<WorkingTime>(`http://localhost:3000/users/${this.userId}/times`, time)
+        const { data } = await AxiosBase.post<WorkingTime>(`/users/${this.userId}/times`, time)
         return data
     }
 }

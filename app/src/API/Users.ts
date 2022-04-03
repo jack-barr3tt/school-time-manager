@@ -1,4 +1,5 @@
-import axios, { AxiosResponse } from "axios";
+import { AxiosResponse } from "axios";
+import AxiosBase from "./AxiosBase";
 import HomeworkManager from "./HomeworkManager";
 import LessonBlockManager from "./LessonBlockManager";
 import LessonManager from "./LessonManager";
@@ -57,16 +58,16 @@ export class User {
     }
 
     static async get(id: number) {
-        const { data } = await axios.get(`http://localhost:3000/users/${id}`) as AxiosResponse<User>
+        const { data } = await AxiosBase.get(`/users/${id}`) as AxiosResponse<User>
         return new User(data)
     }
 
     async setPreWarning(prewarning: number) {
-        await axios.patch(`http://localhost:3000/users/${this._id}`, { prewarning })
+        await AxiosBase.patch(`/users/${this._id}`, { prewarning })
     }
 
     async setRepeat(repeat_id: number) {
-        await axios.patch(`http://localhost:3000/users/${this._id}`, { 
+        await AxiosBase.patch(`/users/${this._id}`, { 
             repeat_id,
             repeat_ref: Date.now()
         })

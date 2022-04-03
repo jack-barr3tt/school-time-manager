@@ -1,4 +1,4 @@
-import axios from "axios";
+import AxiosBase from "./AxiosBase";
 
 export type TeacherInput = {
     _id?: number;
@@ -18,11 +18,11 @@ export default class Teacher {
     }
 
     async edit(changes: Partial<Teacher>) {
-        const { data } = await axios.patch<Teacher>(`http://localhost:3000/users/${this.user_id}/teachers/${this._id}`, changes)
+        const { data } = await AxiosBase.patch<Teacher>(`/users/${this.user_id}/teachers/${this._id}`, changes)
         return new Teacher(data)
     }
 
     async delete() {
-        await axios.delete(`http://localhost:3000/users/${this.user_id}/teachers/${this._id}`)
+        await AxiosBase.delete(`/users/${this.user_id}/teachers/${this._id}`)
     }
 }

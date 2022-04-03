@@ -1,4 +1,4 @@
-import axios from "axios";
+import AxiosBase from "./AxiosBase";
 
 export default class WorkingTime {
     readonly _id: number;
@@ -14,12 +14,12 @@ export default class WorkingTime {
     }
 
     async delete() {
-        const { data } = await axios.delete(`http://localhost:3000/users/${this.user_id}/times/${this._id}`)
+        const { data } = await AxiosBase.delete(`/users/${this.user_id}/times/${this._id}`)
         return data
     }
 
     async edit(newData: Partial<WorkingTime>) {
-        const { data } = await axios.patch<WorkingTime>(`http://localhost:3000/users/${this.user_id}/times/${this._id}`, {
+        const { data } = await AxiosBase.patch<WorkingTime>(`/users/${this.user_id}/times/${this._id}`, {
             start_time: newData.start_time?.getTime(),
             end_time: newData.end_time?.getTime()
         })

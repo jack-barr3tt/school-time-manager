@@ -1,4 +1,4 @@
-import axios from "axios";
+import AxiosBase from "./AxiosBase";
 import Subject from "./Subjects";
 
 type SubjectCreate = {
@@ -17,16 +17,16 @@ export default class SubjectManager {
     async get(id: number) : Promise<Subject>
     async get(id?: number) {
         if(id) {
-            const { data } = await axios.get<Subject>(`http://localhost:3000/users/${this.userId}/subjects/${id}`)
+            const { data } = await AxiosBase.get<Subject>(`/users/${this.userId}/subjects/${id}`)
             return new Subject(data)
         }else{
-            const { data } = await axios.get<Subject[]>(`http://localhost:3000/users/${this.userId}/subjects`)
+            const { data } = await AxiosBase.get<Subject[]>(`/users/${this.userId}/subjects`)
             return data.map(s => new Subject(s))
         }
     }
 
     async create(subject: SubjectCreate) {
-        const { data } = await axios.post<Subject>(`http://localhost:3000/users/${this.userId}/subjects`, subject)
+        const { data } = await AxiosBase.post<Subject>(`/users/${this.userId}/subjects`, subject)
         return data
     }
 }

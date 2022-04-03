@@ -1,4 +1,4 @@
-import axios from "axios";
+import AxiosBase from "./AxiosBase";
 import Subject from "./Subjects";
 
 export default class Homework {
@@ -21,12 +21,12 @@ export default class Homework {
     }
 
     async delete() {
-        const { data } = await axios.delete(`http://localhost:3000/users/${this.user_id}/homework/${this._id}`)
+        const { data } = await AxiosBase.delete(`/users/${this.user_id}/homework/${this._id}`)
         return data
     }
 
     async edit(newData: Partial<Homework>) {
-        const { data } = await axios.patch<Homework>(`http://localhost:3000/users/${this.user_id}/homework/${this._id}`, {
+        const { data } = await AxiosBase.patch<Homework>(`/users/${this.user_id}/homework/${this._id}`, {
             task: newData.task,
             subject_id: newData.subject?._id,
             due: newData.due?.getTime(),
@@ -36,7 +36,7 @@ export default class Homework {
     }
 
     async markComplete() {
-        const { data } = await axios.patch<Homework>(`http://localhost:3000/users/${this.user_id}/homework/${this._id}`, {
+        const { data } = await AxiosBase.patch<Homework>(`/users/${this.user_id}/homework/${this._id}`, {
             complete: true
         })
         return data

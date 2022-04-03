@@ -1,4 +1,5 @@
-import axios, { AxiosResponse } from "axios";
+import { AxiosResponse } from "axios";
+import AxiosBase from "./AxiosBase";
 import Homework from "./Homework";
 
 type HomeworkCreate = {
@@ -19,16 +20,16 @@ export default class HomeworkManager {
     async get(id: number) : Promise<Homework>
     async get(id?: number) {
         if(id) {
-            const { data } = await axios.get(`http://localhost:3000/users/${this.userId}/homework/${id}`) as AxiosResponse<Homework>
+            const { data } = await AxiosBase.get(`/users/${this.userId}/homework/${id}`) as AxiosResponse<Homework>
             return new Homework(data)
         }else{
-            const { data } = await axios.get(`http://localhost:3000/users/${this.userId}/homework`) as AxiosResponse<Homework[]>
+            const { data } = await AxiosBase.get(`/users/${this.userId}/homework`) as AxiosResponse<Homework[]>
             return data.map(s => new Homework(s))
         }
     }
     
     async create(homework: HomeworkCreate) {
-        const { data } = await axios.post<Homework>(`http://localhost:3000/users/${this.userId}/homework`, homework)
+        const { data } = await AxiosBase.post<Homework>(`/users/${this.userId}/homework`, homework)
         return data
     }
 }

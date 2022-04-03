@@ -1,4 +1,4 @@
-import axios from "axios"
+import AxiosBase from "./AxiosBase";
 import Lesson from "./Lesson"
 
 type LessonCreate = {
@@ -21,16 +21,16 @@ export default class LessonManager {
     async get(id: number) : Promise<Lesson>
     async get(id?: number) {
         if(id) {
-            const { data } = await axios.get<Lesson>(`http://localhost:3000/users/${this.userId}/lessons/${id}`)
+            const { data } = await AxiosBase.get<Lesson>(`/users/${this.userId}/lessons/${id}`)
             return new Lesson(data)
         }else{
-            const { data } = await axios.get<Lesson[]>(`http://localhost:3000/users/${this.userId}/lessons`)
+            const { data } = await AxiosBase.get<Lesson[]>(`/users/${this.userId}/lessons`)
             return data.map(l => new Lesson(l))
         }
     }
 
     async create(lesson: LessonCreate) {
-        const { data } = await axios.post<Lesson>(`http://localhost:3000/users/${this.userId}/lessons`, lesson)
+        const { data } = await AxiosBase.post<Lesson>(`/users/${this.userId}/lessons`, lesson)
         return new Lesson(data)
     }
 }

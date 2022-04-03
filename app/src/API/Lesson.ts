@@ -1,4 +1,4 @@
-import axios from "axios";
+import AxiosBase from "./AxiosBase";
 import LessonBlock from "./LessonBlock";
 import Location from "./Location";
 import Repeat from "./Repeat";
@@ -27,7 +27,7 @@ export default class Lesson {
     }
 
     async edit(changes: Partial<Lesson>) {
-        const { data } = await axios.patch<Lesson>(`http://localhost:3000/users/${this.user_id}/lessons/${this._id}`, {
+        const { data } = await AxiosBase.patch<Lesson>(`/users/${this.user_id}/lessons/${this._id}`, {
             subject_id: changes.subject?._id,
             location_id: changes.location?._id,
             teacher_id: changes.teacher?._id
@@ -36,7 +36,7 @@ export default class Lesson {
     }
 
     async delete() {
-        await axios.delete(`http://localhost:3000/users/${this.user_id}/lessons/${this._id}`)
+        await AxiosBase.delete(`/users/${this.user_id}/lessons/${this._id}`)
     }
 
 }

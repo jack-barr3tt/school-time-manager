@@ -1,4 +1,4 @@
-import axios from "axios";
+import AxiosBase from "./AxiosBase";
 import Location from "./Location";
 
 export default class LocationManager {
@@ -13,16 +13,16 @@ export default class LocationManager {
     async get(id?: number)
     {
         if(id) {
-            const { data } = await axios.get<Location>(`http://localhost:3000/users/${this.userId}/locations/${id}`)
+            const { data } = await AxiosBase.get<Location>(`/users/${this.userId}/locations/${id}`)
             return new Location(data)
         }else{
-            const { data } = await axios.get<Location[]>(`http://localhost:3000/users/${this.userId}/locations`)
+            const { data } = await AxiosBase.get<Location[]>(`/users/${this.userId}/locations`)
             return data.map(l => new Location(l))
         }
     }
 
     async create(name: string) {
-        const { data } = await axios.post<Location>(`http://localhost:3000/users/${this.userId}/locations`, { name })
+        const { data } = await AxiosBase.post<Location>(`/users/${this.userId}/locations`, { name })
         return new Location(data)
     }
 }

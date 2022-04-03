@@ -1,4 +1,4 @@
-import axios from "axios";
+import AxiosBase from "./AxiosBase";
 import LessonBlock from "./LessonBlock";
 
 type LessonBlockCreate = {
@@ -19,16 +19,16 @@ export default class LessonBlockManager {
     async get(id?: number)
     {
         if(id) {
-            const { data } = await axios.get<LessonBlock>(`http://localhost:3000/users/${this.userId}/blocks/${id}`)
+            const { data } = await AxiosBase.get<LessonBlock>(`/users/${this.userId}/blocks/${id}`)
             return new LessonBlock(data)
         }else{
-            const { data } = await axios.get<LessonBlock[]>(`http://localhost:3000/users/${this.userId}/blocks`)
+            const { data } = await AxiosBase.get<LessonBlock[]>(`/users/${this.userId}/blocks`)
             return data.map(s => new LessonBlock(s))
         }   
     }
 
     async create(block: LessonBlockCreate) {
-        const { data } = await axios.post<LessonBlock>(`http://localhost:3000/users/${this.userId}/blocks`, block)
+        const { data } = await AxiosBase.post<LessonBlock>(`/users/${this.userId}/blocks`, block)
         return data
     }
 }

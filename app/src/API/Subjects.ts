@@ -1,4 +1,4 @@
-import axios from "axios";
+import AxiosBase from "./AxiosBase";
 
 export type SubjectInput = {
     _id?: number;
@@ -21,11 +21,11 @@ export default class Subject {
     }
 
     async delete() {
-        await axios.delete(`http://localhost:3000/users/${this.user_id}/subjects/${this._id}`)
+        await AxiosBase.delete(`/users/${this.user_id}/subjects/${this._id}`)
     }
 
     async edit(changes: Partial<Subject>) {
-        const { data } = await axios.patch(`http://localhost:3000/users/${this.user_id}/subjects/${this._id}`, changes)
+        const { data } = await AxiosBase.patch(`/users/${this.user_id}/subjects/${this._id}`, changes)
         return new Subject(data)
     }
 }
