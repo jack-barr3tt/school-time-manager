@@ -2,6 +2,7 @@ import { Add } from "@mui/icons-material"
 import { ButtonBase, CircularProgress, Paper, Stack, styled, Typography } from "@mui/material"
 import { addDays, compareAsc, differenceInMinutes, format, isSameDay, isSameMinute, startOfWeek } from "date-fns"
 import { useCallback, useContext, useEffect, useState } from "react"
+import { useNavigate } from "react-router-dom"
 import Lesson from "../API/Lesson"
 import LessonBlock from "../API/LessonBlock"
 import { User } from "../API/Users"
@@ -34,7 +35,8 @@ type FillerProps = {
 }
 
 type LessonCardProps = {
-    lesson: Lesson
+    lesson: Lesson;
+    onClick: () => void;
 }
 
 type LessonGridProps = {
@@ -126,16 +128,18 @@ function Filler(props: FillerProps) {
 }
 
 function LessonCard(props: LessonCardProps) {
-    const { lesson } = props
+    const { lesson, onClick } = props
 
-    return <SizedPaper color={lesson.subject.color}>
-        <ContrastTypography backgroundColor={lesson.subject.color} variant="subtitle1" sx={{ fontWeight: "bold", wordWrap: "break-word", wordBreak: "break-all", lineHeight: "1.25rem" }}>{lesson.subject.name}</ContrastTypography>
-        <ContrastTypography backgroundColor={lesson.subject.color} variant="body2" sx={{ textOverflow: "ellipsis", lineHeight: "1.25rem" }}>{lesson.location.name}</ContrastTypography> 
+    return <SizedPaper color={lesson.subject.color} onClick={onClick}>
+            <ContrastTypography backgroundColor={lesson.subject.color} variant="subtitle1" sx={{ width: 1, textAlign: "left", fontWeight: "bold", wordWrap: "break-word", wordBreak: "break-all", lineHeight: "1.25rem" }}>{lesson.subject.name}</ContrastTypography>
+            <ContrastTypography backgroundColor={lesson.subject.color} variant="body2" sx={{ width: 1, textAlign: "left", textOverflow: "ellipsis", lineHeight: "1.25rem" }}>{lesson.location.name}</ContrastTypography> 
     </SizedPaper>
 }
 
 function LessonGrid(props: LessonGridProps) {
     const { Lessons, LessonBlocks, range, editView, edit } = props
+
+    const navigate = useNavigate()
 
     const [blocksWithFillers, setBlocksWithFillers] = useState<LessonBlockOrFiller[]>()
 
@@ -160,7 +164,10 @@ function LessonGrid(props: LessonGridProps) {
                                 width={`${90 / (range.end_day + 1)}%`}
                             >
                                 { lesson ?
-                                    <LessonCard lesson={lesson}/>
+                                    <LessonCard 
+                                        lesson={lesson}
+                                        onClick={() => navigate((editView ? "edit/" : "") + lesson._id)}
+                                    />
                                     :
                                     <Filler 
                                         addable={!b.filler} 

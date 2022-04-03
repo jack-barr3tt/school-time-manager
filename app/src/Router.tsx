@@ -12,6 +12,8 @@ import ViewBlocks from './Pages/Setup/LessonBlocks/ViewBlocks';
 import NewBlock from './Pages/Setup/LessonBlocks/NewBlock';
 import ViewRepeats from './Pages/Setup/Repeats/ViewRepeats';
 import NewRepeat from './Pages/Setup/Repeats/NewRepeat';
+import ViewLesson from './Pages/Timetable/ViewLesson';
+import EditLesson from './Pages/Timetable/EditLesson';
 
 export default function Router() {
     return <BrowserRouter>
@@ -25,6 +27,8 @@ export default function Router() {
                 </Route>
                 <Route path="timetable">
                     <Route index element={<Timetable/>}/>
+                    <Route path=":id" element={<ViewLesson/>}/>
+                    <Route path="edit/:id" element={<EditLesson/>}/>
                 </Route>
                 <Route path="setup">
                     <Route index element={<Setup/>}/>

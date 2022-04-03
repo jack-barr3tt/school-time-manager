@@ -5,7 +5,7 @@ import LessonBlock from "../../API/LessonBlock";
 import NavBar from "../../Components/NavBar";
 import TimetableView from "../../Components/TimetableView";
 import { useWeek } from "../../Hooks/useWeek";
-import NewTimetable from "./NewTimetable";
+import NewLesson from "./NewLesson";
 
 export default function Timetable() {
     const { week, weeks, weekNo, changeWeek } = useWeek()
@@ -50,7 +50,7 @@ export default function Timetable() {
                     }}
                 />
             </>
-        : (createBlock != null) && (createDay != null) && week && <NewTimetable block={createBlock} repeat={week.find(r => r.end_day >= createDay && r.start_day <= createDay)} day={createDay} back={ () => setCreating(false) }/>
+        : (createBlock != null) && (createDay != null) && week && <NewLesson block={createBlock} repeat={week.find(r => r.end_day >= createDay && r.start_day <= createDay)} day={createDay} back={ () => setCreating(false) }/>
         }
     </>
 }
