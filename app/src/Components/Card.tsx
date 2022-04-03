@@ -16,12 +16,14 @@ type CardProps = {
 export function Card(props: CardProps) {
     const { calendarProps, mainText, onClick, subText, circleColor, footerComponents } = props
 
+    const style = !circleColor && !footerComponents ? { height: 1 } : {}
+
     return <ButtonBase
         sx={{ borderRadius: 6, width: 1, minHeight: "128px" }}
         onClick={onClick}
     >
-        <Paper sx={{ p: 2, borderRadius: 6, width: 1, height: "100%" }} elevation={3}>
-            <Stack direction="row" alignItems="center" height="100%" justifyContent="space-between">
+        <Paper sx={{ p: 2, borderRadius: 6, width: 1, height: 1 }} elevation={3}>
+            <Stack direction="row" alignItems="center" justifyContent="space-between" sx={style}>
                 <Typography variant="h5" textAlign="left" sx={{ py: 2 }}>{mainText}</Typography>
                 { calendarProps && <Calendar {...calendarProps}/> }
             </Stack>

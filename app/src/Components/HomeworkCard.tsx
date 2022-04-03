@@ -1,6 +1,7 @@
 import { AccessTime, Check, Delete } from '@mui/icons-material';
 import { Paper, styled, Typography, useTheme } from '@mui/material';
 import { red } from '@mui/material/colors';
+import { ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
 import SwipeableViews from "react-swipeable-views"
 import Homework from '../API/Homework';
@@ -9,8 +10,8 @@ import { Card } from './Card';
 
 type Props = {
     homework: Homework;
-    _delete: () => void;
-    complete: () => void;
+    _delete?: () => void;
+    complete?: () => void;
 }
 
 export default function HomeworkCard (props: Props) {
@@ -42,34 +43,48 @@ export default function HomeworkCard (props: Props) {
         width: "100%"
     })
 
-    return <StyledSwiper
-                enableMouseEvents
-                index={1}
-                hysteresis={1}
-                onChangeIndex={(index) => {
-                    if(index === 0) {
-                        _delete()
-                    }else if(index === 2) {
-                        complete()
-                    }
-                }}
-            >
-            {deleteDisplay}
-            <Card
-                mainText={truncateText(task)}
-                calendarProps={ due && {
-                    topText: DateToMonth(due),
-                    bottomText: [""+due.getDate()],
-                    accentColor: red[500]
-                }}
-                onClick={() => navigate(""+_id)}
-                subText={name}
-                circleColor={color}
-                footerComponents={ duration != null ? [
-                    <AccessTime sx={{ ml: 3, mr: 1 }}/>,
-                    <Typography variant="body1">{MinutesToHrsMins(duration)}</Typography>
-                ] : []}
-            />
-        {completeDisplay}
-    </StyledSwiper> 
+    const Swiper = (props: { children: ReactNode }) => {
+        const children = []
+        if(!!_delete) children.push(deleteDisplay)
+        children.push(props.children)
+        if(!!complete) children.push(completeDisplay)
+        
+        return <StyledSwiper
+            enableMouseEvents
+            index={1}
+            hysteresis={1}
+            onChangeIndex={(index) => {
+                if(index === 0 && _delete) {
+                    _delete()
+                }else if(index === 2 && complete) {
+                    complete()
+                }
+            }}
+        >
+            {children}
+        </StyledSwiper> 
+    }
+
+    const CardDisplay = () => <Card
+        mainText={truncateText(task)}
+        calendarProps={ due && {
+            topText: DateToMonth(due),
+            bottomText: [""+due.getDate()],
+            accentColor: red[500]
+        }}
+        onClick={() => navigate(""+_id)}
+        subText={name}
+        circleColor={color}
+        footerComponents={ duration != null ? [
+            <AccessTime sx={{ ml: 3, mr: 1 }}/>,
+            <Typography variant="body1">{MinutesToHrsMins(duration)}</Typography>
+        ] : []}
+    />
+
+    if(_delete || complete)
+        return <Swiper>
+            <CardDisplay/>
+        </Swiper>
+    else
+        return <CardDisplay/>
 }
