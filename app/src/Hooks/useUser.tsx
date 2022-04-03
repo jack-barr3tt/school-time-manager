@@ -1,11 +1,11 @@
-import axios, { AxiosRequestConfig } from "axios";
+import { AxiosRequestConfig } from "axios";
 import { createContext, ReactNode, useContext, useState } from "react";
-import { User } from "../API/Users";
+import AxiosBase from "../API/AxiosBase";
 import useLocalStorage from "./useLocalStorage";
 
 interface UserValue {
-    data: User;
-    login: (email: string, password: string) => Promise<void>;
+    userId: number;
+    login: (email: string, password: string) => Promise<boolean>;
     accessToken: string;
     formatAccessToken: () => AxiosRequestConfig;
     isAuth: boolean;
@@ -19,21 +19,22 @@ export function useUser () { return useContext(UserContext) }
 export function UserProvider (props: { children: ReactNode }) {
     const { children } = props;
 
-    const [user, setUser] = useState<User>()
+    const [userId, setUserId] = useState<number>();
     const [accessToken, setAccessToken] = useLocalStorage<string>({ key : 'accessToken', initialValue: '' })
-    const [isAuth, setIsAuth] = useState(!!accessToken)
+    const [isAuth, setIsAuth] = useState(false)
 
     const login = async (email: string, password: string) => {
         try {
-            const { data } = await axios.post('http://localhost:3000/users/login', { email, password })
-            setUser(data)
-            setAccessToken(data.accessToken)
+            const { data } = await AxiosBase.post('/users/login', { email, password })
+            setUserId(data.id)
+            setAccessToken(data.token)
             setIsAuth(true)
-        }catch{}
+            return true
+        }catch{ return false }
     }
 
     const logout = () => {
-        setUser(undefined)
+        setUserId(undefined)
         setAccessToken('')
         setIsAuth(false)
     }
@@ -47,7 +48,7 @@ export function UserProvider (props: { children: ReactNode }) {
     }
 
     const value = {
-        data: user,
+        userId,
         login,
         accessToken,
         formatAccessToken,
