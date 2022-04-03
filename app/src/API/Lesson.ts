@@ -27,7 +27,11 @@ export default class Lesson {
     }
 
     async edit(changes: Partial<Lesson>) {
-        const { data } = await axios.patch<Lesson>(`http://localhost:3000/users/${this.user_id}/lessons/${this._id}`, changes)
+        const { data } = await axios.patch<Lesson>(`http://localhost:3000/users/${this.user_id}/lessons/${this._id}`, {
+            subject_id: changes.subject?._id,
+            location_id: changes.location?._id,
+            teacher_id: changes.teacher?._id
+        })
         return new Lesson(data)
     }
 
