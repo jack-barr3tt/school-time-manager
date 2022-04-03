@@ -8,6 +8,7 @@ import { User } from '../../../API/Users';
 import { userContext } from '../../../App';
 import NavBar from '../../../Components/NavBar';
 import SetupCard from '../../../Components/SetupCard';
+import { MergeSort } from '../../../functions';
 import EditBlock from './EditBlock';
 
 export default function ViewBlocks() {
@@ -47,17 +48,20 @@ export default function ViewBlocks() {
                 <>
                     <NavBar name="Set Lesson Times"/>
                     {
-                        blocks ? blocks
-                            .sort((a, b) => compareAsc(a.start_time, b.start_time))
-                            .map(b => <SetupCard
-                                key={b._id}
-                                id={b._id}
-                                topText={b.name}
-                                bottomText={`${format(b.start_time, "kk:mm")} to ${format(b.end_time, "kk:mm")}`}
-                                setEditing={setEditing}
-                                setEditingId={setEditingId}
-                                deleteItem={() => deleteBlock(b._id)}
-                            /> )
+                        blocks ? MergeSort(
+                                blocks, 
+                                (a, b) => compareAsc(a.start_time, b.start_time)
+                            ).map(b => 
+                                <SetupCard
+                                    key={b._id}
+                                    id={b._id}
+                                    topText={b.name}
+                                    bottomText={`${format(b.start_time, "kk:mm")} to ${format(b.end_time, "kk:mm")}`}
+                                    setEditing={setEditing}
+                                    setEditingId={setEditingId}
+                                    deleteItem={() => deleteBlock(b._id)}
+                                /> 
+                            )
                         :
                             (new Array(5)).fill(0).map((_a, i) =>
                                 <Skeleton key={""+i} variant="rectangular" height={92} animation="wave" sx={{ borderRadius: 1 }}/>

@@ -3,6 +3,7 @@ import { createContext, ReactNode, useCallback, useContext, useEffect, useState 
 import Homework from "../API/Homework";
 import { User } from "../API/Users";
 import { userContext } from "../App";
+import { MergeSort } from "../functions";
 
 type HomeworkContextValue = {
     all: Homework[];
@@ -27,7 +28,10 @@ export function HomeworkProvider (props: { children: ReactNode }) {
         setHomeworks(tempHomeworks)
         if(tempHomeworks)
             setNextHomework(
-                tempHomeworks.sort((a, b) => compareAsc(a.due || 0, b.due || 0)).find(h => !h.complete)
+                MergeSort(
+                    tempHomeworks, 
+                    (a, b) => compareAsc(a.due || 0, b.due || 0)
+                ).find(h => !h.complete)
             )
     }, [user])
 

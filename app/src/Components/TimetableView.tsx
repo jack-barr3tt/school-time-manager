@@ -7,7 +7,7 @@ import Lesson from "../API/Lesson"
 import LessonBlock from "../API/LessonBlock"
 import { User } from "../API/Users"
 import { userContext } from "../App"
-import { DayIndexToString } from "../functions"
+import { DayIndexToString, MergeSort } from "../functions"
 import { useWeek } from "../Hooks/useWeek"
 import ContrastTypography from "./ConstrastTypography"
 import { SizedCell } from "./SizedCell"
@@ -106,7 +106,11 @@ const getBlocksWithFillers = (blocks: LessonBlock[]) => {
 }
 
 function getDayLength (day: LessonBlock[]) {
-    let sortedBlocks = day.sort((a, b) => compareAsc(a.start_time, b.start_time))
+    const sortedBlocks = MergeSort(
+        day, 
+        (a, b) => compareAsc(a.start_time, b.start_time)
+    )
+
     return differenceInMinutes(sortedBlocks[sortedBlocks.length - 1].end_time, sortedBlocks[0].start_time)
 }
 

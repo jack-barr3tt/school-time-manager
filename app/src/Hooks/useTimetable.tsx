@@ -4,7 +4,7 @@ import Lesson from "../API/Lesson";
 import LessonBlock from "../API/LessonBlock";
 import { User } from "../API/Users";
 import { userContext } from "../App";
-import { TransposeLessonBlock } from "../functions";
+import { MergeSort, TransposeLessonBlock } from "../functions";
 import { useWeek } from "./useWeek";
 
 type TimetableContextValue = {
@@ -44,7 +44,10 @@ export function TimetableProvider (props: { children: ReactNode }) {
         if(lessonBlocks && lessons) {
             const lessonsToday = lessons?.filter(l => l.day === new Date().getDay() - 1)
             const lessonBlocksToday = lessonBlocks.map(b => TransposeLessonBlock(b))
-            const lessonBlocksLeft = lessonBlocksToday.filter(b => isFuture(b.start_time)).sort((a,b) => compareAsc(a.start_time, b.start_time))
+            const lessonBlocksLeft = MergeSort(
+                lessonBlocksToday.filter(b => isFuture(b.start_time)),
+                (a,b) => compareAsc(a.start_time, b.start_time)
+            )
             setNextLesson(
                 lessonsToday?.find(l => lessonBlocksLeft.some(b => b._id === l.block._id))
             )

@@ -44,7 +44,12 @@ export const RepeatsToWeeks = (repeats: Repeat[]) => {
         return lastRepeat.end_day
     }
 
-    for(let r of repeats.sort((a, b) => a.index - b.index)) {
+    const sortedRepeats = MergeSort(
+        repeats,
+        (a, b) => a.index - b.index
+    )
+
+    for(let r of sortedRepeats) {
         if(weeks.length === 0) {
             weeks.push([r])
         }else if(getRepeatEnd(weeks[currentWeek]) < r.start_day) {
@@ -70,3 +75,26 @@ export const TransposeLessonBlock = (time: LessonBlock, source?: Date) => ({
     start_time: add(startOfDay(source || Date.now()), intervalToDuration({ start: 0, end: (time.start_time.getTime() - startOfDay(time.start_time).getTime()) })),
     end_time: add(startOfDay(source || Date.now()), intervalToDuration({ start: 0, end: (time.end_time.getTime() - startOfDay(time.end_time).getTime()) }))
 })
+
+function Merge<T>(left: T[], right: T[], compare: (a: T, b: T) => number) {
+    const result: T[] = []
+    let l = 0, r = 0
+    while(l < left.length && r < right.length) {
+        if(compare(left[l], right[r]) <= 0) {
+            result.push(left[l])
+            l++
+        }else{
+            result.push(right[r])
+            r++
+        }
+    }
+    return [...result, ...left.slice(l), ...right.slice(r)]
+}
+
+export function MergeSort<T>(arr: T[], compare: (a: T, b: T) => number) : T[] {
+    if(arr.length < 2) return arr;
+    const middle = Math.floor(arr.length / 2);
+    const left = arr.slice(0, middle);
+    const right = arr.slice(middle);
+    return Merge(MergeSort(left, compare), MergeSort(right, compare), compare);
+}

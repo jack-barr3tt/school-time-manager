@@ -3,6 +3,7 @@ import { compareDesc, compareAsc, isPast } from "date-fns"
 import { useState, useEffect } from "react"
 import Homework from "../../API/Homework"
 import HomeworkCard from "../../Components/HomeworkCard"
+import { MergeSort } from "../../functions"
 
 type HomeworkByDueProps = {
     homework: Homework[],
@@ -19,11 +20,17 @@ export default function HomeworkByDue(props: HomeworkByDueProps) {
 
     useEffect(() => {
         setCompletedHomework(
-            homework
-            .sort((a, b) => compareDesc(a.due || 0, b.due || 0))
+            MergeSort(homework,
+                (a, b) => compareDesc(a.due || 0, b.due || 0)
+            )
             .filter(h => h.complete)
         )
-        const sortedHomework = homework.sort((a, b) => compareAsc(a.due || 0, b.due || 0))
+
+        const sortedHomework = MergeSort(
+            homework, 
+            (a, b) => compareAsc(a.due || 0, b.due || 0)
+        )
+
         const incompleteHomework = sortedHomework.filter(h => !h.complete)
         setOverdueHomework(incompleteHomework.filter(h => isPast(h.due || 0) ))
         setTodoHomework(incompleteHomework.filter(h => !isPast(h.due || 0) ))
