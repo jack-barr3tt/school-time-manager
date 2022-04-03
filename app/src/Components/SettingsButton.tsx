@@ -17,7 +17,7 @@ type Props = {
 
 export default function SettingsButton (props: Props) {
     const { mainText, lowerText, onClick } = props
-    return <HoverButton color="inherit" sx={{ p: 2, justifyContent: "flex-start", width: "100%" }} onClick={onClick}>
+    return <HoverButton color="inherit" sx={{ p: 2, justifyContent: "flex-start", width: 1 }} onClick={onClick}>
         <Settings sx={{ mr: 2 }}/>
         <Stack alignItems="flex-start">
             <Typography variant="subtitle1">{mainText}</Typography>

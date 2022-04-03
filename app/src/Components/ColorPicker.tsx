@@ -61,7 +61,7 @@ export default function ColorPicker(props: Props) {
                         <ButtonBase sx={{ borderRadius: "50%" }} onClick={() => setChecked({ x, y })} key={`${x}-${y}`}>
                             <Paper sx={{ backgroundColor: s, borderRadius: "50%", width: "2rem", aspectRatio: "1" }} >
                                 { (checked && (x === checked.x && y === checked.y)) &&
-                                    <Stack direction="column" justifyContent="center" alignItems="center" sx={{ height: "100%" }}>
+                                    <Stack direction="column" justifyContent="center" alignItems="center" sx={{ height: 1 }}>
                                         <Check/> 
                                     </Stack>
                                 }

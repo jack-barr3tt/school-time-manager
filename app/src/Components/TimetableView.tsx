@@ -156,7 +156,7 @@ function LessonGrid(props: LessonGridProps) {
             blocksWithFillers && blocksWithFillers.map((b, blockI) => 
                 <tr key={b._id || `f-${blockI}`}>
                     <td>
-                        <Typography variant="body1">{format(b.start_time, "kk:mm")}</Typography>
+                        <Typography variant="body1" sx={{ height: 1 }}>{format(b.start_time, "kk:mm")}</Typography>
                     </td>
                     {
                         Array(range.end_day + 1).fill(0).map((_, i) => {

@@ -54,7 +54,7 @@ export default function ViewLesson() {
                 </IconButton>
             ]}
         />
-        { loading && <Stack direction="column" justifyContent="center" alignItems="center" sx={{ height: "100%" }}>
+        { loading && <Stack direction="column" justifyContent="center" alignItems="center" sx={{ height: 1 }}>
                 <CircularProgress/>
             </Stack>
         }

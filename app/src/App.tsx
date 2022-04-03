@@ -1,4 +1,5 @@
 import { Stack, useMediaQuery, Container, Paper, createTheme } from '@mui/material';
+import { green, red } from '@mui/material/colors';
 import { ReactNode, createContext } from 'react';
 import './App.css';
 import Providers from './Providers';
@@ -19,6 +20,16 @@ export const theme = createTheme({
             main: "#c2e7ff",
             light: "#f5ffff",
             dark: "#91b5cc"
+        },
+        success: {
+            main: green.A700,
+            light: green.A400,
+            dark: green[800]
+        },
+        error: {
+            main: red[500],
+            light: red[300],
+            dark: red[800]
         }
     },
     components: {
@@ -31,7 +42,7 @@ export const theme = createTheme({
 })
 
 function MainGrid (props: { children: ReactNode }) {
-  return <Stack spacing={2} sx={{ width: "100%", positon: "absolute", top: 0, left: 0, m: 0, px: 2, height: "100%", overflowY: "scroll" }}>{props.children}</Stack>
+  return <Stack spacing={2} sx={{ width: 1, height: 1, positon: "absolute", top: 0, left: 0, m: 0, px: 2, overflowY: "scroll" }}>{props.children}</Stack>
 }
 
 export const userContext = createContext({
@@ -49,8 +60,8 @@ export default function App() {
             <MainGrid>
                 <Router/>
             </MainGrid> :
-            <Container maxWidth="sm" disableGutters sx={{ height: "100%", py: 2 }}>
-                <Paper sx={{ position: "relative", height: "100%" }}>
+            <Container maxWidth="sm" disableGutters sx={{ height: 1, py: 2 }}>
+                <Paper sx={{ position: "relative", height: 1 }}>
                 <MainGrid>
                     <Router/>
                 </MainGrid>

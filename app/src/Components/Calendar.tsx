@@ -12,7 +12,7 @@ export default function Calendar(props: CalendarProps) {
     const { topText, bottomText, accentColor } = props
     const accentColorToUse = typeof accentColor === 'string' ? accentColor : ColorIntToString(accentColor)
     return <Paper elevation={0} sx={{ height: "96px", aspectRatio: "1", backgroundColor: grey[200], borderRadius: 3 }}>
-        <Paper sx={{ width: "100%", height: "24px", borderRadius: "12px 12px 0 0", backgroundColor: accentColorToUse }} elevation={0}>
+        <Paper sx={{ width: 1, height: "24px", borderRadius: "12px 12px 0 0", backgroundColor: accentColorToUse }} elevation={0}>
             <Typography variant="body1" sx={{ textAlign: "center", px: 1, height: "24px", width:"96px", textOverflow: "ellipsis", overflow: "hidden", whiteSpace: "nowrap" }} color="white">{topText}</Typography>
         </Paper>
         { bottomText.length < 2 ?
