@@ -10,7 +10,7 @@ type LocalStorageReturn<T> = [T, Dispatch<SetStateAction<T>>, () => void]
 function useLocalStorage<T>(props: LocalStorageProps<T>): LocalStorageReturn<T> {
     const { key, initialValue } = props
 
-    const keyToUse = "stm" + key
+    const keyToUse = "stm-" + key
     const [value, setValue] = useState<T>(() => {
 
         const json = localStorage.getItem(keyToUse)
@@ -24,7 +24,7 @@ function useLocalStorage<T>(props: LocalStorageProps<T>): LocalStorageReturn<T> 
         }
     })
 
-    const clearValue = () => sessionStorage.removeItem("stm" + key);
+    const clearValue = () => sessionStorage.removeItem("stm-" + key);
 
     useEffect(() => {
         if (value) localStorage.setItem(keyToUse, JSON.stringify(value));
