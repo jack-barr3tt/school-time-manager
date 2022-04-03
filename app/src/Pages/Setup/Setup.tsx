@@ -9,6 +9,7 @@ import WorkingTime from '../../API/WorkingTimes';
 import { userContext } from '../../App';
 import NavBar from '../../Components/NavBar';
 import SettingsButton from '../../Components/SettingsButton';
+import { useWeek } from '../../Hooks/useWeek';
 
 export default function Setup() {
     const navigate = useNavigate()
@@ -37,6 +38,8 @@ export default function Setup() {
         fetchData()
     }, [fetchData])
 
+    const { weeks } = useWeek()
+
     const skeletonFiller = <SettingsButton mainText="Loading" lowerText="Loading"/>
 
     return <>
@@ -45,7 +48,7 @@ export default function Setup() {
         <Typography variant="h6">Timetable</Typography>
         { repeats ? <SettingsButton 
             mainText="Repeats" 
-            lowerText={`${repeats.length} timetables, repeats every 2 weeks`} 
+            lowerText={`${weeks.reduce((a, b) => a + b.length, 0)} timetables, repeats every ${weeks.length} weeks`} 
             onClick={() => navigate("repeats")}
         /> : <Skeleton variant="rectangular" width="100%" height="82px" animation="wave">{skeletonFiller}</Skeleton> }
 
