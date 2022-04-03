@@ -3,6 +3,7 @@ import { green, red } from '@mui/material/colors';
 import { ReactNode, createContext } from 'react';
 import './App.css';
 import Providers from './Providers';
+import RouteProtector from './RouteProtector';
 import Router from './Router';
 
 export const theme = createTheme({
@@ -58,12 +59,16 @@ export default function App() {
         {
             isMobile ? 
             <MainGrid>
-                <Router/>
+                <RouteProtector>
+                    <Router/>
+                </RouteProtector>
             </MainGrid> :
             <Container maxWidth="sm" disableGutters sx={{ height: 1, py: 2 }}>
                 <Paper sx={{ position: "relative", height: 1 }}>
                 <MainGrid>
-                    <Router/>
+                    <RouteProtector>
+                        <Router/>
+                    </RouteProtector>
                 </MainGrid>
                 </Paper>
             </Container>

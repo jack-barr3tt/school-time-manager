@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import Home from './Pages/Home';
 import Homework from './Pages/Homework/Homework';
 import SetWorkingTimes from './Pages/Setup/WorkingTimes/ViewWorkingTimes';
@@ -17,8 +17,7 @@ import EditLesson from './Pages/Timetable/EditLesson';
 import Login from './Pages/Login';
 
 export default function Router() {
-    return <BrowserRouter>
-        <Routes>
+    return <Routes>
             <Route path="/">
                 <Route index element={<Home/>}/>
                 <Route path="homework">
@@ -49,6 +48,5 @@ export default function Router() {
                 </Route>
                 <Route path="login" element={<Login/>}/>
             </Route>
-        </Routes>
-    </BrowserRouter>
+    </Routes>
 }
