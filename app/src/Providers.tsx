@@ -5,6 +5,7 @@ import { ReactNode } from "react";
 import { theme } from "./App";
 import { HomeworkProvider } from "./Hooks/useHomework";
 import { TimetableProvider } from "./Hooks/useTimetable";
+import { UserProvider } from "./Hooks/useUser";
 import { WeekProvider } from "./Hooks/useWeek";
 
 export default function Providers(props: { children: ReactNode }) {
@@ -14,13 +15,15 @@ export default function Providers(props: { children: ReactNode }) {
         <LocalizationProvider dateAdapter={AdapterDateFns}>
             <ScopedCssBaseline>
                 <ThemeProvider theme={theme}>
-                    <HomeworkProvider>
-                        <WeekProvider>
-                            <TimetableProvider>
-                                {children}
-                            </TimetableProvider>
-                        </WeekProvider>
-                    </HomeworkProvider>
+                    <UserProvider>
+                        <HomeworkProvider>
+                            <WeekProvider>
+                                <TimetableProvider>
+                                    {children}
+                                </TimetableProvider>
+                            </WeekProvider>
+                        </HomeworkProvider>
+                    </UserProvider>
                 </ThemeProvider>
             </ScopedCssBaseline>
         </LocalizationProvider>
