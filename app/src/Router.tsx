@@ -14,6 +14,7 @@ import ViewRepeats from './Pages/Setup/Repeats/ViewRepeats';
 import NewRepeat from './Pages/Setup/Repeats/NewRepeat';
 import ViewLesson from './Pages/Timetable/ViewLesson';
 import EditLesson from './Pages/Timetable/EditLesson';
+import Login from './Pages/Login';
 
 export default function Router() {
     return <BrowserRouter>
@@ -46,6 +47,7 @@ export default function Router() {
                     </Route>
                     <Route path="prewarning" element={<PreWarning/>}/>
                 </Route>
+                <Route path="login" element={<Login/>}/>
             </Route>
         </Routes>
     </BrowserRouter>
