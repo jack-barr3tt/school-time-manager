@@ -6,12 +6,13 @@ import CreateableAutocomplete from "../CreatableAutocomplete";
 import EasyDialog from "../EasyDialog";
 
 type TeachersDropdownProps = {
+    autoFocus?: boolean;
     teacher: TeacherInput|undefined;
     setTeacher: Dispatch<SetStateAction<TeacherInput|undefined>>;
 }
 
 export default function TeachersDropdown(props: TeachersDropdownProps) {
-    const { teacher, setTeacher } = props
+    const { autoFocus, teacher, setTeacher } = props
 
     const [teachers, setTeachers] = useState<Teacher[]>()
 
@@ -66,6 +67,7 @@ export default function TeachersDropdown(props: TeachersDropdownProps) {
     return <>
         { teachers && <CreateableAutocomplete<TeacherInput>
             label="Teacher"
+            autoFocus={autoFocus}
             options={teachers}
             chosenSetter={setTeacher}
             chosen={teacher!}

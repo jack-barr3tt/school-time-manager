@@ -6,12 +6,13 @@ import CreateableAutocomplete from "../CreatableAutocomplete";
 import EasyDialog from "../EasyDialog";
 
 type LocationsDropdownProps = {
+    autoFocus?: boolean;
     location: LocationInput|undefined;
     setLocation: Dispatch<SetStateAction<LocationInput|undefined>>;
 }
 
 export default function LocationsDropdown(props: LocationsDropdownProps) {
-    const { location, setLocation } = props
+    const { autoFocus, location, setLocation } = props
 
     const [locations, setLocations] = useState<Location[]>()
     const [locationEditing, setLocationEditing] = useState<LocationInput>()
@@ -65,6 +66,7 @@ export default function LocationsDropdown(props: LocationsDropdownProps) {
     return <>
         { locations && <CreateableAutocomplete<LocationInput>
             label="Location"
+            autoFocus={autoFocus}
             options={locations}
             chosenSetter={setLocation}
             chosen={location!}

@@ -50,6 +50,7 @@ export default function NewLesson(props: Props) {
         <form onSubmit={saveLesson}>
             <Stack direction="column" spacing={2}>
                 <SubjectsDropdown
+                    autoFocus
                     subject={subject}
                     setSubject={setSubject}
                 />

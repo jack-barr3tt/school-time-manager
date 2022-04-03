@@ -61,6 +61,7 @@ export default function EditLesson() {
         <form onSubmit={saveLesson}>
             <Stack direction="column" spacing={2}>
                 <SubjectsDropdown
+                    autoFocus
                     subject={subject}
                     setSubject={setSubject}
                 />

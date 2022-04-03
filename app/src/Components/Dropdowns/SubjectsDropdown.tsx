@@ -6,12 +6,13 @@ import CreateableAutocomplete from "../CreatableAutocomplete";
 import EasyDialog from "../EasyDialog";
 
 type SubjectsDropdownProps = {
+    autoFocus?: boolean;
     subject: SubjectInput|undefined;
     setSubject: Dispatch<SetStateAction<SubjectInput|undefined>>;
 }
 
 export default function SubjectsDropdown(props: SubjectsDropdownProps) {
-    const { subject, setSubject } = props
+    const { autoFocus, subject, setSubject } = props
 
     const [subjects, setSubjects] = useState<Subject[]>()
     const [newSubjectText, setNewSubjectText] = useState<string>()
@@ -71,7 +72,7 @@ export default function SubjectsDropdown(props: SubjectsDropdownProps) {
     return <>
         { subjects && <CreateableAutocomplete<SubjectInput> 
             label="Subject"
-            autoFocus
+            autoFocus={autoFocus}
             options={subjects} 
             chosenSetter={setSubject} 
             chosen={subject!} 
