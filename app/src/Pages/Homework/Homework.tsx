@@ -1,16 +1,17 @@
 import { Add } from '@mui/icons-material';
-import { CircularProgress, Fab, Stack } from '@mui/material';
-import { compareAsc } from 'date-fns';
+import { CircularProgress, Fab, MenuItem, Select, Stack } from '@mui/material';
 import { useCallback, useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Homework from '../../API/Homework';
 import { User } from '../../API/Users';
 import { userContext } from '../../App';
-import HomeworkCard from '../../Components/HomeworkCard';
 import NavBar from '../../Components/NavBar';
+import HomeworkByDue from './HomeworkByDue';
 
 export default function HomeworkPage() {
     const [homework, setHomework] = useState<Homework[]>([])
+    const [displayType, setDisplayType] = useState<'date'|'rec'>('date')
+
     const navigate = useNavigate()
 
     const user = useContext(userContext)
@@ -18,7 +19,7 @@ export default function HomeworkPage() {
     const [loading, setLoading] = useState<boolean>(true)
 
     const loadHomework = useCallback(async () => {
-        let tempHomework = await User.forge(user.id).homework?.get()
+        const tempHomework = await User.forge(user.id).homework?.get()
         if(tempHomework) {
             setHomework(tempHomework)
             setLoading(false)
@@ -28,6 +29,8 @@ export default function HomeworkPage() {
     useEffect(() => {
         loadHomework()    
     }, [loadHomework])
+
+    
 
     const deleteHomework = async (hw: Homework) => {
         await hw.delete()
@@ -44,23 +47,33 @@ export default function HomeworkPage() {
     }
     
     return <>
-        <NavBar name="Homework"/>
+        <NavBar 
+            name="Homework"
+            controls={[
+                <Select
+                    key="week-select"
+                    variant="standard"
+                    value={displayType}
+                    onChange={(e) => setDisplayType(e.target.value as 'date'|'rec')}
+                >
+                    <MenuItem value="date">Date</MenuItem>
+                    <MenuItem value="rec">Reccomendation</MenuItem>
+                </Select>
+            ]}
+        />
         {loading && <Stack direction="column" justifyContent="center" alignItems="center" sx={{ height: "100%" }}>
                 <CircularProgress/>
             </Stack>
-        } 
-        <Stack direction="column" spacing={3} alignItems="center" sx={{ pt: 2 }}>
-            {homework.filter(h => !h.complete)
-            .sort((a,b) => compareAsc(a.due || 0, b.due || 0))
-            .map(hw => 
-                <HomeworkCard
-                    key={hw._id}
-                    homework={hw} 
-                    _delete={() => deleteHomework(hw)} 
-                    complete={() => completeHomework(hw)} 
-                />
-            )}
-        </Stack>
+        }
+        { displayType === "date" ?
+            <HomeworkByDue
+                homework={homework}
+                deleteHomework={deleteHomework}
+                completeHomework={completeHomework}
+            />
+            :
+            <div>Not ready yet</div>
+        }
         <Fab sx={{ position: "absolute", right: "24px", bottom: "24px" }} onClick={() => navigate("new")}>
             <Add/>
         </Fab>
