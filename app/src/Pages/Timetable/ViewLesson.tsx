@@ -33,9 +33,7 @@ export default function ViewLesson() {
             try{
                 await lesson.delete()
                 navigate("/timetable")
-            }catch(err){
-                console.log(err)
-            }
+            }catch{}
     }, [lesson, navigate])
 
     useEffect(() => {
