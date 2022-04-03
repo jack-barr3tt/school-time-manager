@@ -2,26 +2,39 @@ import { Settings } from '@mui/icons-material';
 import { ButtonBase, Paper, Stack, Typography, useTheme } from '@mui/material';
 import { red } from '@mui/material/colors';
 import { format } from 'date-fns';
-import { useContext } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { userContext } from '../App';
+import { User } from '../API/Users';
 import { Card } from '../Components/Card';
 import { DateToMonth } from '../functions';
 import { useHomework } from '../Hooks/useHomework';
 import { useTimetable } from '../Hooks/useTimetable';
+import { useUser } from '../Hooks/useUser';
 
 export default function Home() {
+    const [user, setUser] = useState<User>();
+
     const navigate = useNavigate()
     const theme = useTheme()
 
     const { next: nextHomework }= useHomework()
     const { next: nextLesson } = useTimetable()
 
-    const user = useContext(userContext)
+    const { userId } = useUser()
+
+    const fetchUser = useCallback(async () => {
+        if(userId && !user) setUser(
+            await User.get(userId)
+        )
+    }, [userId, user])
+
+    useEffect(() => {
+        fetchUser()
+    }, [fetchUser])
 
     return <>
         <Paper sx={{ backgroundImage: `linear-gradient(${theme.palette.secondary.main}, ${theme.palette.background.default})`, p: 3, width: 1, position: "absolute", left: 0, top: 0 }} elevation={0}/>
-        <Typography variant="h5" textAlign="center" sx={{ zIndex: 1, py: 1 }}>{user.username ? `Welcome, ${user.username}` : "Welcome"}</Typography>
+        <Typography variant="h5" textAlign="center" sx={{ zIndex: 1, py: 1 }}>{ user && user.username ? `Welcome, ${user.username}` : "Welcome"}</Typography>
         <Stack direction="column" alignItems="center" spacing={2}>
             <Card
                 mainText="Homework"
