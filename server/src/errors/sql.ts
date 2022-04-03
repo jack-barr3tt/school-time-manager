@@ -6,7 +6,6 @@ export default async (req: Request, res: Response, next: NextFunction) => {
         if(res.locals.error.code > 0 && res.locals.error.code < 600) return next()
 
         if(res.locals.error.code == 23505) {
-            console.log(res.locals.error)
             return res.status(400).json({
                 message: res.locals.error.detail || "Duplicate key"
             })

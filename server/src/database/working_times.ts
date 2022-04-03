@@ -13,6 +13,7 @@ export class WorkingTime {
     public end_time: number;
 
     constructor(data: WorkingTime) {
+        this.id = data.id
         this.user_id = +data.user_id
         this.start_time = data.start_time && +data.start_time
         this.end_time = data.end_time && +data.end_time
