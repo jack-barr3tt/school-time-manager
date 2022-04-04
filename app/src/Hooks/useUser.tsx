@@ -26,13 +26,11 @@ export function UserProvider (props: { children: ReactNode }) {
     const [isAuth, setIsAuth] = useState(false)
 
     const login = async (email: string, password: string) => {
-        try {
-            const { data } = await AxiosBase.post('/users/login', { email, password })
-            setUserId(data.id)
-            setAccessToken(data.token)
-            setIsAuth(true)
-            return true
-        }catch{ return false }
+        const { data } = await AxiosBase.post('/users/login', { email, password })
+        setUserId(data.id)
+        setAccessToken(data.token)
+        setIsAuth(true)
+        return true
     }
 
     const logout = () => {

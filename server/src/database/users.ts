@@ -92,7 +92,7 @@ export class User {
         if(!this.hash) throw new APIError("User has no password", 400)
         
         const isValid = await compare(password, this.hash)
-        if(!isValid) throw new APIError("Invalid password", 401)
+        if(!isValid) throw new APIError("Incorrect password", 401)
 
         return sign({ userId: this.id }, process.env.JWT_SECRET || "", { expiresIn: '1h' })
     }
