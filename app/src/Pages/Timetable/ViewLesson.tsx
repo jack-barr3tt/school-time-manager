@@ -1,32 +1,32 @@
 import { Circle, Edit, Place, Person, Delete } from '@mui/icons-material'
 import { CircularProgress, IconButton, Stack, Typography } from '@mui/material'
-import { useCallback, useContext, useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import Lesson from '../../API/Lesson'
 import { User } from '../../API/Users'
-import { userContext } from '../../App'
 import NavBar from '../../Components/NavBar'
 import { ColorIntToString } from '../../functions'
+import { useUser } from '../../Hooks/useUser'
 export default function ViewLesson() {
     const [lesson, setLesson] = useState<Lesson>()
     const [loading, setLoading] = useState<boolean>(true)
+
+    const { userId } = useUser()
     
     const navigate = useNavigate()
     const { id } = useParams()
-    const user = useContext(userContext)
-
     
     const fetchLesson = useCallback(async () => {
         if(id)
             try{
                 setLesson(
-                    await User.forge(user.id).lessons?.get(parseInt(id || "0"))
+                    await User.forge(userId).lessons?.get(parseInt(id || "0"))
                 )
                 setLoading(false)
             }catch(err){
                 navigate("/timetable")
             }
-    }, [id, user.id, navigate])
+    }, [id, userId, navigate])
 
     const deleteLesson = useCallback(async () => {
         if(lesson)

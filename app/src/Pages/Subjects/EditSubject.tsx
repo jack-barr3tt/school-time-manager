@@ -1,11 +1,11 @@
 import { Save } from "@mui/icons-material"
 import { Fab, Stack, TextField } from "@mui/material"
-import { FormEvent, useCallback, useContext, useEffect, useState } from "react"
+import { FormEvent, useCallback, useEffect, useState } from "react"
 import Subject from "../../API/Subjects"
 import { User } from "../../API/Users"
-import { userContext } from "../../App"
 import ColorPicker from "../../Components/ColorPicker"
 import NavBar from "../../Components/NavBar"
+import { useUser } from "../../Hooks/useUser"
 
 type Props = {
     subject_id: number,
@@ -19,13 +19,13 @@ export default function EditSubject(props: Props) {
     const [newName, setNewName] = useState<string>()
     const [newColor, setNewColor] = useState<number>()
 
-    const user = useContext(userContext)
+    const { userId } = useUser()
 
     const fetchSubject = useCallback(async () => {
         setSubject(
-            await User.forge(user.id).subjects?.get(subject_id)
+            await User.forge(userId).subjects?.get(subject_id)
         )
-    }, [subject_id, user.id])
+    }, [subject_id, userId])
 
     useEffect(() => {
         if(subject) {

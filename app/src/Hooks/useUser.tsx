@@ -1,4 +1,3 @@
-import { AxiosRequestConfig } from "axios";
 import { createContext, ReactNode, useContext, useState } from "react";
 import AxiosBase from "../API/AxiosBase";
 import useLocalStorage from "./useLocalStorage";
@@ -7,14 +6,17 @@ interface UserValue {
     userId: number;
     login: (email: string, password: string) => Promise<boolean>;
     accessToken: string;
-    formatAccessToken: () => AxiosRequestConfig;
     isAuth: boolean;
     logout: () => void;
 }
 
-const UserContext = createContext<Partial<UserValue>>({});
+const UserContext = createContext<UserValue|undefined>(undefined);
 
-export function useUser () { return useContext(UserContext) }
+export function useUser () { 
+    const context = useContext(UserContext) 
+    if(!context) throw new Error("No user context")
+    return context
+}
 
 export function UserProvider (props: { children: ReactNode }) {
     const { children } = props;
@@ -39,19 +41,13 @@ export function UserProvider (props: { children: ReactNode }) {
         setIsAuth(false)
     }
 
-    const formatAccessToken = () => {
-        return {
-            headers: {
-                Authorization: `Bearer ${accessToken}`
-            }
-        }
-    }
-
     const value = {
-        userId,
+        get userId() { 
+            if(!userId) throw new Error("No user ID")
+            return userId
+        },
         login,
         accessToken,
-        formatAccessToken,
         isAuth,
         logout
     }

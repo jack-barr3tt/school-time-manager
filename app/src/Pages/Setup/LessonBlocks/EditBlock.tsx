@@ -1,10 +1,10 @@
 import { Stack, TextField } from '@mui/material';
-import { FormEvent, useCallback, useContext, useEffect, useState } from 'react';
+import { FormEvent, useCallback, useEffect, useState } from 'react';
 import LessonBlock from '../../../API/LessonBlock';
 import { User } from '../../../API/Users';
-import { userContext } from '../../../App';
 import NavBar from '../../../Components/NavBar';
 import TimeRangePicker from '../../../Components/TimeRangePicker';
+import { useUser } from '../../../Hooks/useUser';
 
 export default function EditWorkingTime(props: { back: () => void, id?: number }) {
     const { back, id } = props
@@ -13,14 +13,14 @@ export default function EditWorkingTime(props: { back: () => void, id?: number }
     const [newEndTime, setNewEndTime] = useState<Date|null>()
     const [block, setBlock] = useState<LessonBlock>()
 
-    const user = useContext(userContext)
+    const { userId } = useUser()
 
     const fetchBlock = useCallback(async () => {
         if(id)
             setBlock(
-                await User.forge(user.id)?.lessonBlocks?.get(id)
+                await User.forge(userId)?.lessonBlocks?.get(id)
             )
-    }, [id, user.id])
+    }, [id, userId])
 
     useEffect(() => {
         if(block) {

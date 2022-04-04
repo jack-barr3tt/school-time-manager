@@ -1,7 +1,7 @@
-import { Dispatch, SetStateAction, useCallback, useContext, useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useCallback, useEffect, useState } from "react";
 import Location, { LocationInput } from "../../API/Location";
 import { User } from "../../API/Users";
-import { userContext } from "../../App";
+import { useUser } from "../../Hooks/useUser";
 import CreateableAutocomplete from "../CreatableAutocomplete";
 import EasyDialog from "../EasyDialog";
 
@@ -17,13 +17,13 @@ export default function LocationsDropdown(props: LocationsDropdownProps) {
     const [locations, setLocations] = useState<Location[]>()
     const [locationEditing, setLocationEditing] = useState<LocationInput>()
 
-    const user = useContext(userContext)
+    const { userId } = useUser()
 
     const fetchLocations = useCallback(async () => {
         setLocations(
-            await User.forge(user.id).locations?.get()
+            await User.forge(userId).locations?.get()
         )
-    }, [user.id])
+    }, [userId])
 
     useEffect(() => {
         fetchLocations()
@@ -31,7 +31,7 @@ export default function LocationsDropdown(props: LocationsDropdownProps) {
     
     const createLocation = async (name?: string) => {
         if(name) {
-            const location = await User.forge(user.id).locations?.create(name as string)
+            const location = await User.forge(userId).locations?.create(name as string)
             if(location) {
                 if(locations) setLocations(
                     [...locations, location]
@@ -43,7 +43,7 @@ export default function LocationsDropdown(props: LocationsDropdownProps) {
     
     const editLocation = async (name?: string) => {
         if(locationEditing && locationEditing._id && locations && name) {
-            const location = await User.forge(user.id).locations?.get(locationEditing._id)
+            const location = await User.forge(userId).locations?.get(locationEditing._id)
             if(location) {
                 const editedLocation = await location.edit({
                     name
@@ -57,7 +57,7 @@ export default function LocationsDropdown(props: LocationsDropdownProps) {
 
     const deleteLocation = async (id?: number) => {
         if(id && locations) {
-            const location = await User.forge(user.id).locations?.get(id)
+            const location = await User.forge(userId).locations?.get(id)
             if(location) await location.delete()
             setLocations(locations.filter(l => l._id !== id))
         }

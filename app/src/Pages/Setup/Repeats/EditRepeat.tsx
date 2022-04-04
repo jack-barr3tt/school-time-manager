@@ -1,11 +1,11 @@
 import { Save } from "@mui/icons-material"
 import { Stack, TextField, Typography, Container, Slider, Fab } from "@mui/material"
-import { useState, useContext, useCallback, useEffect, FormEvent } from "react"
+import { useState, useCallback, useEffect, FormEvent } from "react"
 import Repeat from "../../../API/Repeat"
 import { User } from "../../../API/Users"
-import { userContext } from "../../../App"
 import NavBar from "../../../Components/NavBar"
 import { DayIndexToString } from "../../../functions"
+import { useUser } from "../../../Hooks/useUser"
 
 type Props = {
     back: () => void;
@@ -18,18 +18,18 @@ export default function EditRepeat(props: Props) {
     const [newDays, setNewDays] = useState<number[]>([0,1])
     const [repeat, setRepeat] = useState<Repeat>()
 
-    const user = useContext(userContext)
+    const { userId } = useUser()
 
     const fetchRepeat = useCallback(async () => {
         if(id) {
-            let tempRepeat = await User.forge(user.id)?.repeats?.get(id)
+            let tempRepeat = await User.forge(userId)?.repeats?.get(id)
             setRepeat(tempRepeat)
             if(tempRepeat) {
                 setNewName(tempRepeat.name)
                 setNewDays([tempRepeat.start_day, tempRepeat.end_day])
             }
         }
-    }, [id, user.id])
+    }, [id, userId])
 
     useEffect(() => {
         fetchRepeat()

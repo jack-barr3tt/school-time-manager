@@ -2,14 +2,14 @@ import { Save } from "@mui/icons-material";
 import { DatePicker } from "@mui/lab";
 import { Stack, TextField, Typography, Slider, Fab } from "@mui/material";
 import { grey } from "@mui/material/colors";
-import { useState, useContext, useCallback, useEffect, FormEvent } from "react";
+import { useState, useCallback, useEffect, FormEvent } from "react";
 import Homework from "../../API/Homework";
 import Subject from "../../API/Subjects";
 import { User } from "../../API/Users";
-import { userContext } from "../../App";
 import NavBar from "../../Components/NavBar";
 import SubjectsDropdown from "../../Components/Dropdowns/SubjectsDropdown";
 import { MinutesToHrsMins } from "../../functions";
+import { useUser } from "../../Hooks/useUser";
 
 type SubjectInput = {
     _id?: number;
@@ -32,11 +32,11 @@ export default function EditHomework(props: Props) {
     const [duration, setDuration] = useState<number>();
     const [homework, setHomework] = useState<Homework>()
 
-    const user = useContext(userContext);
+    const { userId } = useUser()
 
     const fetchHomework = useCallback(async () => {
         if(id) {
-            let tempHomework = await User.forge(user.id).homework?.get(id);
+            let tempHomework = await User.forge(userId).homework?.get(id);
             if (tempHomework) {
                 setHomework(tempHomework)
                 setTask(tempHomework.task);
@@ -45,7 +45,7 @@ export default function EditHomework(props: Props) {
                 setDuration(tempHomework.duration);
             }
         }
-    }, [user.id, id]);
+    }, [userId, id]);
 
     useEffect(() => {
         fetchHomework();

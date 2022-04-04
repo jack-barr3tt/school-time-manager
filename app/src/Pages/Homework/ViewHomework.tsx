@@ -1,13 +1,13 @@
 import { AccessTime, Assignment, Check, Circle, Delete, Edit, Event } from '@mui/icons-material';
 import { Button, CircularProgress, IconButton, Stack, Typography } from '@mui/material';
 import { addDays, format, formatDistanceToNow, isAfter, startOfDay } from 'date-fns';
-import { useCallback, useContext, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import Homework from '../../API/Homework';
 import { User } from '../../API/Users';
-import { userContext } from '../../App';
 import NavBar from '../../Components/NavBar';
 import { ColorIntToString, MinutesToHrsMins } from '../../functions';
+import { useUser } from '../../Hooks/useUser';
 import EditHomework from './EditHomework';
 
 export default function ViewHomework() {
@@ -15,22 +15,23 @@ export default function ViewHomework() {
     const [loading, setLoading] = useState<boolean>(true)
     const [editing, setEditing] = useState<boolean>(false)
     const [editingId, setEditingId] = useState<number>()
+    
     const { id } = useParams()
-    const user = useContext(userContext)
     const navigate = useNavigate()
+    const { userId } = useUser()
 
     const fetchHomework = useCallback(async () => {
         if(id) {
             try{
                 setHomework(
-                    await User.forge(user.id).homework?.get(parseInt(id || "0"))
+                    await User.forge(userId).homework?.get(parseInt(id || "0"))
                 )
                 setLoading(false)
             }catch(err){
                 navigate("/homework")
             }
         }
-    }, [user.id, navigate, id])
+    }, [userId, navigate, id])
 
     useEffect(() => {
         fetchHomework()

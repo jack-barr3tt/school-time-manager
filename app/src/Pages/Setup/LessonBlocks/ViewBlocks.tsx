@@ -1,29 +1,29 @@
 import { Add, } from '@mui/icons-material';
 import { Fab, Skeleton } from '@mui/material';
 import { compareAsc, format } from 'date-fns';
-import { useCallback, useContext, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import LessonBlock from '../../../API/LessonBlock';
 import { User } from '../../../API/Users';
-import { userContext } from '../../../App';
 import NavBar from '../../../Components/NavBar';
 import SetupCard from '../../../Components/SetupCard';
 import { MergeSort } from '../../../functions';
+import { useUser } from '../../../Hooks/useUser';
 import EditBlock from './EditBlock';
 
 export default function ViewBlocks() {
     const [blocks, setBlocks] = useState<LessonBlock[]>()
     const [editing, setEditing] = useState(false)
     const [editingId, setEditingId] = useState<number>()
+    
+    const { userId } = useUser()
     const navigate = useNavigate()
-
-    const user = useContext(userContext)
 
     const fetchBlocks = useCallback(async () => {
         setBlocks(
-            await User.forge(user.id).lessonBlocks?.get()
+            await User.forge(userId).lessonBlocks?.get()
         )
-    }, [user.id])
+    }, [userId])
 
     useEffect(() => {
         fetchBlocks()

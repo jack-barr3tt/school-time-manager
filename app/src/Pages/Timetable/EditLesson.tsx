@@ -1,17 +1,17 @@
 import { Save } from "@mui/icons-material";
 import { Fab, Stack } from "@mui/material";
-import { FormEvent, useCallback, useContext, useEffect, useState } from "react";
+import { FormEvent, useCallback, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Lesson from "../../API/Lesson";
 import Location, { LocationInput } from "../../API/Location";
 import Subject, { SubjectInput } from "../../API/Subjects";
 import Teacher, { TeacherInput } from "../../API/Teacher";
 import { User } from "../../API/Users";
-import { userContext } from "../../App";
 import NavBar from "../../Components/NavBar";
 import LocationsDropdown from "../../Components/Dropdowns/LocationsDropdown";
 import SubjectsDropdown from "../../Components/Dropdowns/SubjectsDropdown";
 import TeachersDropdown from "../../Components/Dropdowns/TeachersDropdown";
+import { useUser } from "../../Hooks/useUser";
 
 export default function EditLesson() {
     const [lesson, setLesson] = useState<Lesson>();
@@ -20,19 +20,19 @@ export default function EditLesson() {
     const [location, setLocation] = useState<LocationInput>();
     const [teacher, setTeacher] = useState<TeacherInput>();
 
-    const user = useContext(userContext);
     const { id } = useParams();
     const navigate = useNavigate()
+    const { userId } = useUser()
     
     const fetchLesson = useCallback(async () => {
-        const tempLesson = await User.forge(user.id).lessons?.get(parseInt(id || "0"))
+        const tempLesson = await User.forge(userId).lessons?.get(parseInt(id || "0"))
         if(tempLesson) {
             setLesson(tempLesson)
             setSubject(tempLesson.subject)
             setLocation(tempLesson.location)
             setTeacher(tempLesson.teacher)
         }
-    }, [user.id, id]);
+    }, [userId, id]);
 
     useEffect(() => {
         fetchLesson()

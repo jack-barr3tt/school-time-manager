@@ -1,9 +1,9 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField } from '@mui/material';
 import { AxiosError } from 'axios';
-import { Dispatch, FormEvent, SetStateAction, useContext, useEffect, useState } from 'react';
+import { Dispatch, FormEvent, SetStateAction, useEffect, useState } from 'react';
 import { User } from '../../API/Users';
-import { userContext } from '../../App';
 import ColorPicker from '../../Components/ColorPicker';
+import { useUser } from '../../Hooks/useUser';
 
 type Props<A> = {
     open: boolean;
@@ -18,7 +18,8 @@ export default function CreateSubject<T>(props: Props<T>) {
     const [color, setColor] = useState<number>();
     const [subject, setSubject] = useState<string>();
     const [error, setError] = useState<string>();
-    const user = useContext(userContext)
+
+    const { userId } = useUser()
 
     useEffect(() => 
         setSubject(defaultValue)
@@ -29,7 +30,7 @@ export default function CreateSubject<T>(props: Props<T>) {
 
         if(color && subject) {
             try {
-                const createdSubject = await User.forge(user.id).subjects?.create({
+                const createdSubject = await User.forge(userId).subjects?.create({
                     name: subject,
                     color: color
                 })

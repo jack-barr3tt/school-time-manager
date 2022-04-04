@@ -1,10 +1,10 @@
 import { Stack } from '@mui/material';
-import { FormEvent, useCallback, useContext, useEffect, useState } from 'react';
+import { FormEvent, useCallback, useEffect, useState } from 'react';
 import { User } from '../../../API/Users';
 import WorkingTime from '../../../API/WorkingTimes';
-import { userContext } from '../../../App';
 import NavBar from '../../../Components/NavBar';
 import TimeRangePicker, { OptionalDate } from '../../../Components/TimeRangePicker';
+import { useUser } from '../../../Hooks/useUser';
 
 export default function EditWorkingTime(props: { back: () => void, id?: number }) {
     const { back, id } = props
@@ -12,14 +12,14 @@ export default function EditWorkingTime(props: { back: () => void, id?: number }
     const [newEndTime, setNewEndTime] = useState<OptionalDate>()
     const [time, setTime] = useState<WorkingTime>()
 
-    const user = useContext(userContext)
+    const { userId } = useUser()
 
     const fetchTime = useCallback(async () => {
         if(id)
             setTime(
-                await User.forge(user.id)?.workingTimes?.get(id)
+                await User.forge(userId)?.workingTimes?.get(id)
             )
-    }, [id, user.id])
+    }, [id, userId])
 
     useEffect(() => {   
         fetchTime()

@@ -1,13 +1,13 @@
 import { Add } from "@mui/icons-material";
 import { Fab, Skeleton } from "@mui/material";
-import { useCallback, useContext, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Repeat from "../../../API/Repeat";
 import { User } from "../../../API/Users";
-import { userContext } from "../../../App";
 import NavBar from "../../../Components/NavBar";
 import SetupCard from "../../../Components/SetupCard";
 import { DayIndexToString } from "../../../functions";
+import { useUser } from "../../../Hooks/useUser";
 import EditRepeat from "./EditRepeat";
 
 export default function ViewRepeats() {
@@ -15,14 +15,14 @@ export default function ViewRepeats() {
     const [editing, setEditing] = useState(false)
     const [editingId, setEditingId] = useState<number>()
 
-    const user = useContext(userContext)
+    const { userId } = useUser()
     const navigate = useNavigate()
 
     const fetchRepeats = useCallback(async () => {
         setRepeats(
-            await User.forge(user.id).repeats?.get()
+            await User.forge(userId).repeats?.get()
         )
-    }, [user.id])
+    }, [userId])
 
     const deleteRepeat = async (repeat: Repeat) => {
         await repeat.delete()

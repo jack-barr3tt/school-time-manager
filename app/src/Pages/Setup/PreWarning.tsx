@@ -1,21 +1,21 @@
 import { Save } from '@mui/icons-material';
 import { Stack, Slider, Typography, Fab } from '@mui/material';
-import { FormEvent, useCallback, useContext, useEffect, useState } from 'react';
+import { FormEvent, useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { User } from '../../API/Users';
-import { userContext } from '../../App';
 import NavBar from '../../Components/NavBar';
+import { useUser } from '../../Hooks/useUser';
 
 export default function PreWarning() {
     const [prewarning, setPrewarning] = useState<number>()
     const [fetchedUser, setFetchedUser] = useState<User>()
 
-    const user = useContext(userContext)
+    const { userId } = useUser()
     const navigate = useNavigate()
 
     const fetchUser = useCallback(async () => {
-        setFetchedUser(await User.get(user.id))
-    }, [user.id])
+        setFetchedUser(await User.get(userId))
+    }, [userId])
 
     useEffect(() => {
         if(fetchedUser && fetchedUser.prewarning) setPrewarning(fetchedUser.prewarning)

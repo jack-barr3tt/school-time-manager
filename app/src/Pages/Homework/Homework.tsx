@@ -1,11 +1,11 @@
 import { Add } from '@mui/icons-material';
 import { CircularProgress, Fab, MenuItem, Select, Stack } from '@mui/material';
-import { useCallback, useContext, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Homework from '../../API/Homework';
 import { User } from '../../API/Users';
-import { userContext } from '../../App';
 import NavBar from '../../Components/NavBar';
+import { useUser } from '../../Hooks/useUser';
 import HomeworkByDue from './HomeworkByDue';
 
 export default function HomeworkPage() {
@@ -13,18 +13,17 @@ export default function HomeworkPage() {
     const [displayType, setDisplayType] = useState<'date'|'rec'>('date')
 
     const navigate = useNavigate()
-
-    const user = useContext(userContext)
+    const { userId } = useUser()
 
     const [loading, setLoading] = useState<boolean>(true)
 
     const loadHomework = useCallback(async () => {
-        const tempHomework = await User.forge(user.id).homework?.get()
+        const tempHomework = await User.forge(userId).homework?.get()
         if(tempHomework) {
             setHomework(tempHomework)
             setLoading(false)
         }
-    }, [user.id])
+    }, [userId])
     
     useEffect(() => {
         loadHomework()    
@@ -39,7 +38,7 @@ export default function HomeworkPage() {
 
     const completeHomework = async (hw: Homework) => {
         await hw.markComplete()
-        let replacement = await User.forge(user.id).homework?.get(hw._id)
+        let replacement = await User.forge(userId).homework?.get(hw._id)
         if(replacement) setHomework([
             ...homework.filter(h => h._id !== hw._id),
             replacement

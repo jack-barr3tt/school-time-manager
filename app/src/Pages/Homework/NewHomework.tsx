@@ -3,14 +3,14 @@ import { DatePicker } from '@mui/lab';
 import { Fab, Slider, Stack, TextField, Typography } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import { startOfDay } from 'date-fns';
-import { FormEvent, useContext, useState } from 'react';
+import { FormEvent, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { SubjectInput } from '../../API/Subjects';
 import { User } from '../../API/Users';
-import { userContext } from '../../App';
 import NavBar from '../../Components/NavBar';
 import SubjectsDropdown from '../../Components/Dropdowns/SubjectsDropdown';
 import { MinutesToHrsMins } from '../../functions';
+import { useUser } from '../../Hooks/useUser';
 
 export default function NewHomework() {    
     const [task, setTask] = useState<string>();
@@ -18,15 +18,14 @@ export default function NewHomework() {
     const [due, setDue] = useState<Date|null>();
     const [duration, setDuration] = useState<number>();
 
-    const user = useContext(userContext)
-
     const navigate = useNavigate()
+    const { userId } = useUser()
 
     const saveHomework = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
 
         if(task && subject && subject._id) {
-            await User.forge(user.id).homework?.create({
+            await User.forge(userId).homework?.create({
                 task,
                 subject_id: subject._id,
                 due: due == null ? undefined : startOfDay(due).getTime(),

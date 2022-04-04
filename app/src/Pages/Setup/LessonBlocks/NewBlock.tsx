@@ -1,11 +1,11 @@
 import { Stack, TextField } from '@mui/material';
 import { addHours } from 'date-fns';
-import { FormEvent, useContext, useState } from 'react';
+import { FormEvent, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { User } from '../../../API/Users';
-import { userContext } from '../../../App';
 import NavBar from '../../../Components/NavBar';
 import TimeRangePicker, { OptionalDate } from '../../../Components/TimeRangePicker';
+import { useUser } from '../../../Hooks/useUser';
 
 export default function NewBlock() {
     const defaultEnd = addHours(new Date(), 1)
@@ -13,15 +13,14 @@ export default function NewBlock() {
     const [start, setStart] = useState<OptionalDate>(new Date())
     const [end, setEnd] = useState<OptionalDate>(defaultEnd)
 
-    const user = useContext(userContext)
-
+    const { userId } = useUser()
     const navigate = useNavigate()
 
     const saveTime = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
 
-        if(name && start && end && user) {
-            await User.forge(user.id).lessonBlocks?.create({
+        if(name && start && end) {
+            await User.forge(userId).lessonBlocks?.create({
                 name,
                 start_time: start.getTime(),
                 end_time: end.getTime()

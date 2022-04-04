@@ -1,17 +1,17 @@
 import { Stack } from '@mui/material';
 import { add } from 'date-fns';
-import { FormEvent, useContext, useState } from 'react';
+import { FormEvent, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { User } from '../../../API/Users';
-import { userContext } from '../../../App';
 import NavBar from '../../../Components/NavBar';
 import TimeRangePicker, { OptionalDate } from '../../../Components/TimeRangePicker';
+import { useUser } from '../../../Hooks/useUser';
 
 export default function NewWorkingTime() {
     const [startTime, setStartTime] = useState<OptionalDate>(new Date())
     const [endTime, setEndTime] = useState<OptionalDate>(add(new Date(), { hours: 2 }))
 
-    const user = useContext(userContext)
+    const { userId } = useUser()
     const navigate = useNavigate()
 
     const saveWorkingTime = async (e: FormEvent<HTMLFormElement>) => {
@@ -19,7 +19,7 @@ export default function NewWorkingTime() {
 
         if(startTime && endTime) {
             try{
-                await User.forge(user.id).workingTimes?.create({
+                await User.forge(userId).workingTimes?.create({
                     start_time: startTime.getTime(),
                     end_time: endTime.getTime()
                 })

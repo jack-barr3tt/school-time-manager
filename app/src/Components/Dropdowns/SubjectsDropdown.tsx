@@ -1,7 +1,7 @@
-import { Dispatch, SetStateAction, useCallback, useContext, useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useCallback, useEffect, useState } from "react";
 import Subject, { SubjectInput } from "../../API/Subjects"
 import { User } from "../../API/Users";
-import { userContext } from "../../App";
+import { useUser } from "../../Hooks/useUser";
 import CreateableAutocomplete from "../CreatableAutocomplete";
 import EasyDialog from "../EasyDialog";
 
@@ -19,13 +19,13 @@ export default function SubjectsDropdown(props: SubjectsDropdownProps) {
     const [subjectDialogOpen, setSubjectDialogOpen] = useState<boolean>(false)
     const [subjectEditing, setSubjectEditing] = useState<SubjectInput>()
 
-    const user = useContext(userContext)
+    const { userId } = useUser()
 
     const fetchSubjects = useCallback(async () => {
         setSubjects(
-            await User.forge(user.id).subjects?.get()
+            await User.forge(userId).subjects?.get()
         )
-    }, [user])
+    }, [userId])
 
     useEffect(() => {
         fetchSubjects()
@@ -33,7 +33,7 @@ export default function SubjectsDropdown(props: SubjectsDropdownProps) {
 
     const createSubject = async (name?: string, color?: number) => {
         if(name && color) {
-            const createdSubject = await User.forge(user.id).subjects?.create({
+            const createdSubject = await User.forge(userId).subjects?.create({
                 name,
                 color
             })
@@ -49,7 +49,7 @@ export default function SubjectsDropdown(props: SubjectsDropdownProps) {
 
     const editSubject = async (name?: string, color?: number) => {
         if(subjectEditing && subjectEditing._id && subjects && (name || color)) {
-            const subject = await User.forge(user.id).subjects?.get(subjectEditing._id)
+            const subject = await User.forge(userId).subjects?.get(subjectEditing._id)
             if(subject) {
                 await subject.edit({
                     name,
@@ -63,7 +63,7 @@ export default function SubjectsDropdown(props: SubjectsDropdownProps) {
     
     const deleteSubject = async (id?: number) => {
         if(id && subjects) {
-            const subject = await User.forge(user.id).subjects?.get(id)
+            const subject = await User.forge(userId).subjects?.get(id)
             if(subject) await subject.delete()
             setSubjects(subjects.filter(s => s._id !== id))
         }

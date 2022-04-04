@@ -1,24 +1,25 @@
 import { Save } from "@mui/icons-material";
 import { Container, Fab, Slider, Stack, TextField, Typography } from "@mui/material";
-import { FormEvent, useContext, useState } from "react";
+import { FormEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { User } from "../../../API/Users";
-import { userContext } from "../../../App";
 import NavBar from "../../../Components/NavBar";
 import { DayIndexToString } from "../../../functions";
+import { useUser } from "../../../Hooks/useUser";
 
 export default function NewRepeat() {
     const [name, setName] = useState<string>()
     const [days, setDays] = useState<number[]>([0,1])
 
-    const user = useContext(userContext)
+    const { userId } = useUser()
+
     const navigate = useNavigate()
 
     const saveRepeat = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
 
-        if(name && days && user) {
-            await User.forge(user.id).repeats?.create({
+        if(name && days) {
+            await User.forge(userId).repeats?.create({
                 name,
                 start_day: days[0],
                 end_day: days[1]

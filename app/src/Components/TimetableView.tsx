@@ -1,13 +1,13 @@
 import { Add } from "@mui/icons-material"
 import { ButtonBase, CircularProgress, Paper, Stack, styled, Typography } from "@mui/material"
 import { addDays, compareAsc, differenceInMinutes, format, isSameDay, isSameMinute, startOfWeek } from "date-fns"
-import { useCallback, useContext, useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import Lesson from "../API/Lesson"
 import LessonBlock from "../API/LessonBlock"
 import { User } from "../API/Users"
-import { userContext } from "../App"
 import { DayIndexToString, MergeSort } from "../functions"
+import { useUser } from "../Hooks/useUser"
 import { useWeek } from "../Hooks/useWeek"
 import ContrastTypography from "./ConstrastTypography"
 import { SizedCell } from "./SizedCell"
@@ -198,20 +198,20 @@ export default function TimetableView(props: TimetableViewProps) {
     const [lessonBlocks, setLessonBlocks] = useState<LessonBlock[]>()
     const [range, setRange] = useState<{start_day: number, end_day: number}>()
 
-    const user = useContext(userContext)
+    const { userId } = useUser()
 
     const fetchLessons = useCallback(async () => {
         if(week) {
-            const tempLessons = await User.forge(user.id).lessons?.get()
+            const tempLessons = await User.forge(userId).lessons?.get()
             setLessons(
                 tempLessons?.filter(l => week.some(r => r._id === l.repeat._id))
             )
         }
-    }, [user.id, week])
+    }, [userId, week])
 
     const fetchBlocks = useCallback(async () => {
-        setLessonBlocks(await User.forge(user.id).lessonBlocks?.get())
-    }, [user.id])
+        setLessonBlocks(await User.forge(userId).lessonBlocks?.get())
+    }, [userId])
 
     useEffect(() => {
         fetchBlocks()

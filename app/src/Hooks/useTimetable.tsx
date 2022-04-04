@@ -3,8 +3,8 @@ import { createContext, ReactNode, useCallback, useContext, useEffect, useState 
 import Lesson from "../API/Lesson";
 import LessonBlock from "../API/LessonBlock";
 import { User } from "../API/Users";
-import { userContext } from "../App";
 import { MergeSort, TransposeLessonBlock } from "../functions";
+import { useUser } from "./useUser";
 import { useWeek } from "./useWeek";
 
 type TimetableContextValue = {
@@ -20,25 +20,24 @@ export const useTimetable = () => useContext(TimetableContext) as TimetableConte
 export function TimetableProvider (props: { children: ReactNode }) {
     const { children } = props
 
-    const { week } = useWeek()
-
     const [lessons, setLessons] = useState<Lesson[]>()
     const [nextLesson, setNextLesson] = useState<Lesson>()
     const [lessonBlocks, setLessonBlocks] = useState<LessonBlock[]>()
-
-    const user = useContext(userContext)
+    
+    const { week } = useWeek()
+    const { userId } = useUser()
 
     const fetchLessons = useCallback(async () => {
         if(week) {
-            const tempLessons = await User.forge(user.id).lessons?.get()
+            const tempLessons = await User.forge(userId).lessons?.get()
             const tempLessonsThisWeek = tempLessons?.filter(l => week.some(r => r._id === l.repeat._id))
             setLessons(tempLessonsThisWeek)
         }
-    }, [user.id, week])
+    }, [userId, week])
 
     const fetchBlocks = useCallback(async () => {
-        setLessonBlocks(await User.forge(user.id).lessonBlocks?.get())
-    }, [user.id])
+        setLessonBlocks(await User.forge(userId).lessonBlocks?.get())
+    }, [userId])
 
     const getNextLesson = useCallback(async () => {
         if(lessonBlocks && lessons) {

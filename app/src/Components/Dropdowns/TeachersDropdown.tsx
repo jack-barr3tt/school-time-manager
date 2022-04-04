@@ -1,7 +1,7 @@
-import { Dispatch, SetStateAction, useState, useCallback, useContext, useEffect } from "react";
+import { Dispatch, SetStateAction, useState, useCallback, useEffect } from "react";
 import Teacher, { TeacherInput } from "../../API/Teacher";
 import { User } from "../../API/Users";
-import { userContext } from "../../App";
+import { useUser } from "../../Hooks/useUser";
 import CreateableAutocomplete from "../CreatableAutocomplete";
 import EasyDialog from "../EasyDialog";
 
@@ -15,16 +15,15 @@ export default function TeachersDropdown(props: TeachersDropdownProps) {
     const { autoFocus, teacher, setTeacher } = props
 
     const [teachers, setTeachers] = useState<Teacher[]>()
-
     const [teacherEditing, setTeacherEditing] = useState<TeacherInput>()
 
-    const user = useContext(userContext)
+    const { userId } = useUser()
 
     const fetchTeachers = useCallback(async () => {
         setTeachers(
-            await User.forge(user.id).teachers?.get()
+            await User.forge(userId).teachers?.get()
         )
-    }, [user.id])
+    }, [userId])
 
     useEffect(() => {
         fetchTeachers()
@@ -32,7 +31,7 @@ export default function TeachersDropdown(props: TeachersDropdownProps) {
     
     const createTeacher = async (name?: string) => {
         if(name) {
-            const teacher = await User.forge(user.id).teachers?.create(name as string)
+            const teacher = await User.forge(userId).teachers?.create(name as string)
             if(teacher) {
                 if(teachers) setTeachers(
                     [...teachers, teacher]
@@ -44,7 +43,7 @@ export default function TeachersDropdown(props: TeachersDropdownProps) {
 
     const editTeacher = async (name?: string) => {
         if(teacherEditing && teacherEditing._id && teachers && name) {
-            const teacher = await User.forge(user.id).teachers?.get(teacherEditing._id)
+            const teacher = await User.forge(userId).teachers?.get(teacherEditing._id)
             if(teacher) {
                 const editedTeacher = await teacher.edit({
                     name
@@ -58,7 +57,7 @@ export default function TeachersDropdown(props: TeachersDropdownProps) {
 
     const deleteTeacher = async (id?: number) => {
         if(id && teachers) {
-            const teacher = await User.forge(user.id).teachers?.get(id)
+            const teacher = await User.forge(userId).teachers?.get(id)
             if(teacher) await teacher.delete()
             setTeachers(teachers.filter(t => t._id !== id))
         }

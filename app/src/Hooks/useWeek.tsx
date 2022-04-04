@@ -2,8 +2,8 @@ import { differenceInWeeks } from "date-fns";
 import { createContext, useContext, useState, useCallback, useEffect, ReactNode } from "react";
 import Repeat from "../API/Repeat";
 import { User } from "../API/Users";
-import { userContext } from "../App";
 import { RepeatsToWeeks } from "../functions";
+import { useUser } from "./useUser";
 
 type WeekContextValue = {
     week: Repeat[],
@@ -27,16 +27,16 @@ export function WeekProvider (props: { children: ReactNode }) {
     const [repeats, setRepeats] = useState<Repeat[]>();
     const [weeks, setWeeks] = useState<Repeat[][]>([]);
 
-    const user = useContext(userContext)
+    const { userId } = useUser()
 
     const fetchData = useCallback(async () => {
         const [tempUser, tempRepeats] = await Promise.all([
-            User.get(user.id),
-            User.forge(user.id).repeats?.get()
+            User.get(userId),
+            User.forge(userId).repeats?.get()
         ])
         setAPIUser(tempUser)
         setRepeats(tempRepeats)
-    }, [user.id])
+    }, [userId])
 
     useEffect(() => {
         fetchData()

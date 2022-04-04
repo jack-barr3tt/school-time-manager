@@ -2,8 +2,8 @@ import { compareAsc } from "date-fns";
 import { createContext, ReactNode, useCallback, useContext, useEffect, useState } from "react";
 import Homework from "../API/Homework";
 import { User } from "../API/Users";
-import { userContext } from "../App";
 import { MergeSort } from "../functions";
+import { useUser } from "./useUser";
 
 type HomeworkContextValue = {
     all: Homework[];
@@ -21,10 +21,10 @@ export function HomeworkProvider (props: { children: ReactNode }) {
     const [homeworks, setHomeworks] = useState<Homework[]>()
     const [nextHomework, setNextHomework] = useState<Homework>()
 
-    const user = useContext(userContext)
+    const { userId } = useUser()
 
     const fetchHomeworks = useCallback(async () => {
-        const tempHomeworks = await User.forge(user.id).homework?.get()
+        const tempHomeworks = await User.forge(userId).homework?.get()
         setHomeworks(tempHomeworks)
         if(tempHomeworks)
             setNextHomework(
@@ -33,7 +33,7 @@ export function HomeworkProvider (props: { children: ReactNode }) {
                     (a, b) => compareAsc(a.due || 0, b.due || 0)
                 ).find(h => !h.complete)
             )
-    }, [user])
+    }, [userId])
 
     useEffect(() => {
         fetchHomeworks()

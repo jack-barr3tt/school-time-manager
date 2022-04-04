@@ -1,17 +1,17 @@
 import { Fab, Stack } from '@mui/material';
-import { FormEvent, useContext, useState } from 'react';
+import { FormEvent, useState } from 'react';
 import LessonBlock from '../../API/LessonBlock';
 import { SubjectInput } from '../../API/Subjects';
 import { LocationInput } from "../../API/Location"
 import { TeacherInput } from "../../API/Teacher"
 import { User } from '../../API/Users';
-import { userContext } from '../../App';
 import NavBar from '../../Components/NavBar';
 import { Save } from '@mui/icons-material';
 import Repeat from '../../API/Repeat';
 import SubjectsDropdown from '../../Components/Dropdowns/SubjectsDropdown';
 import TeachersDropdown from '../../Components/Dropdowns/TeachersDropdown';
 import LocationsDropdown from '../../Components/Dropdowns/LocationsDropdown';
+import { useUser } from '../../Hooks/useUser';
 
 type Props = {
     block: LessonBlock;
@@ -27,13 +27,13 @@ export default function NewLesson(props: Props) {
     const [location, setLocation] = useState<LocationInput>()
     const [teacher, setTeacher] = useState<TeacherInput>()
 
-    const user = useContext(userContext)    
+    const { userId } = useUser()
 
     const saveLesson = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
 
         if(subject && subject._id && block && repeat) {           
-            await User.forge(user.id).lessons?.create({
+            await User.forge(userId).lessons?.create({
                 subject_id: subject._id,
                 block_id: block._id,
                 location_id: location?._id,

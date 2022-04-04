@@ -1,28 +1,27 @@
 import { Add } from '@mui/icons-material';
 import { Fab, Skeleton } from '@mui/material';
 import { format } from 'date-fns';
-import { useCallback, useContext, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { User } from '../../../API/Users';
 import WorkingTime from '../../../API/WorkingTimes';
-import { userContext } from '../../../App';
 import NavBar from '../../../Components/NavBar';
 import SetupCard from '../../../Components/SetupCard';
+import { useUser } from '../../../Hooks/useUser';
 import EditWorkingTime from './EditWorkingTime';
 
 export default function SetWorkingTimes() {
-    const navigate = useNavigate()
-
     const [times, setTimes] = useState<WorkingTime[]>()
     const [editing, setEditing] = useState(false)
     const [editingId, setEditingId] = useState<number>()
-
-    const user = useContext(userContext)
-
+    
+    const { userId } = useUser()
+    const navigate = useNavigate()
+    
     const fetchWorkingTimes = useCallback(async () => {
-        const times = await User.forge(user.id).workingTimes?.get()
+        const times = await User.forge(userId).workingTimes?.get()
         setTimes(times)
-    }, [user.id])
+    }, [userId])
 
     const deleteTime = async (id: number) => {
         if(times) {
