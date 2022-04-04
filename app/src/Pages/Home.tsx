@@ -1,5 +1,5 @@
 import { Logout, Settings } from '@mui/icons-material';
-import { Paper, Stack, Typography, useTheme } from '@mui/material';
+import { Paper, Typography, useTheme } from '@mui/material';
 import { red } from '@mui/material/colors';
 import { format } from 'date-fns';
 import { useCallback, useEffect, useState } from 'react';
@@ -35,44 +35,44 @@ export default function Home() {
 
     return <>
         <Paper sx={{ backgroundImage: `linear-gradient(${theme.palette.secondary.main}, ${theme.palette.background.default})`, p: 3, width: 1, position: "absolute", left: 0, top: 0 }} elevation={0}/>
+        
         <Typography variant="h5" textAlign="center" sx={{ zIndex: 1, py: 1 }}>{ user && user.username ? `Welcome, ${user.username}` : "Welcome"}</Typography>
-        <Stack direction="column" alignItems="center" spacing={2}>
-            <Card
-                mainText="Homework"
-                calendarProps={ nextHomework && nextHomework.due && {
-                    topText: DateToMonth(nextHomework.due),
-                    bottomText: [""+nextHomework.due.getDate()],
-                    accentColor: red[500]
-                }}
-                onClick={() => navigate("homework")}
-            />
+        
+        <Card
+            mainText="Homework"
+            calendarProps={ nextHomework && nextHomework.due && {
+                topText: DateToMonth(nextHomework.due),
+                bottomText: [""+nextHomework.due.getDate()],
+                accentColor: red[500]
+            }}
+            onClick={() => navigate("homework")}
+        />
 
-            <Card
-                mainText="Timetable"
-                calendarProps={ nextLesson && {
-                    topText: nextLesson.subject.name,
-                    bottomText: [
-                        format(nextLesson.block.start_time, "kk:mm"),
-                        "TO",
-                        format(nextLesson.block.end_time, "kk:mm")
-                    ],
-                    accentColor: nextLesson.subject.color
-                }}
-                onClick={() => navigate("timetable")}
-            />
+        <Card
+            mainText="Timetable"
+            calendarProps={ nextLesson && {
+                topText: nextLesson.subject.name,
+                bottomText: [
+                    format(nextLesson.block.start_time, "kk:mm"),
+                    "TO",
+                    format(nextLesson.block.end_time, "kk:mm")
+                ],
+                accentColor: nextLesson.subject.color
+            }}
+            onClick={() => navigate("timetable")}
+        />
 
-            <SimpleButton
-                onClick={() =>  navigate("/setup")}
-                text="Setup"
-                icon={<Settings/>}
-            />
+        <SimpleButton
+            onClick={() =>  navigate("/setup")}
+            text="Setup"
+            icon={<Settings/>}
+        />
 
-            <SimpleButton
-                onClick={logout}
-                text="Logout"
-                icon={<Logout/>}
-            />
-        </Stack>
+        <SimpleButton
+            onClick={logout}
+            text="Logout"
+            icon={<Logout/>}
+        />
     </>
 }
 

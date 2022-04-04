@@ -42,7 +42,7 @@ export const theme = createTheme({
     }
 })
 
-function MainGrid (props: { children: ReactNode }) {
+export function MainGrid (props: { children: ReactNode }) {
   return <Stack spacing={2} sx={{ width: 1, height: 1, positon: "absolute", top: 0, left: 0, m: 0, px: 2, overflowY: "scroll" }}>{props.children}</Stack>
 }
 
@@ -53,23 +53,24 @@ export default function App() {
     return <GeneralProviders>
         {
             isMobile ? 
-            <MainGrid>
-                <RouteProtector>
-                    <DataProviders>
+            <RouteProtector>
+                <DataProviders>
+                    <MainGrid>
                         <Router/>
-                    </DataProviders>
-                </RouteProtector>
-            </MainGrid> :
+                    </MainGrid>
+                </DataProviders>
+            </RouteProtector>
+            :
             <Container maxWidth="sm" disableGutters sx={{ height: 1, py: 2 }}>
                 <Paper sx={{ position: "relative", height: 1 }}>
-                <MainGrid>
-                    <RouteProtector>
-                        <DataProviders>
+                <RouteProtector>
+                    <DataProviders>
+                        <MainGrid>
                             <Router/>
-                        </DataProviders>
-                    </RouteProtector>
-                </MainGrid>
-                </Paper>
+                        </MainGrid>
+                    </DataProviders>
+                </RouteProtector>
+            </Paper>
             </Container>
         }
     </GeneralProviders>

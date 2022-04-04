@@ -6,12 +6,13 @@ import { ReactNode } from 'react';
 
 type Props = {
     name: string;
+    backDisabled?: boolean
     onBack?: () => void
     controls?: ReactNode[];
 }
 
 export default function NavBar (props: Props) {
-    const { name, onBack, controls } = props
+    const { name, backDisabled, onBack, controls } = props
     const navigate = useNavigate()
     const location = useLocation()
     const theme = useTheme()
@@ -22,24 +23,24 @@ export default function NavBar (props: Props) {
 
     return <>
         <Paper sx={{ zIndex: 10, backgroundImage: `linear-gradient(${theme.palette.secondary.main}, ${theme.palette.background.default})`, p: 3, width: 1, position: "absolute", left: 0, top: 0 }} elevation={0}/>
-        <Paper elevation={0} sx={{ zIndex: 11, position: "absolute", top: 7, left: 0, width: 1, p: 2, backgroundColor: grey[50], borderRadius: 4 }}>
+        <Paper elevation={0} sx={{ zIndex: 11, position: "absolute", top: 7, left: 0, width: 1, p: 2, backgroundColor: grey[50], borderRadius: 4, minHeight: "72px" }}>
             { controls ?
-                <Stack direction="row" alignItems="center" justifyContent="space-between">
-                    <Stack direction="row" alignItems="center">
-                        <IconButton aria-label="back" sx={{ mr: 2 }} onClick={onBack || navigateBack}>
+                <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ height: "40px" }}>
+                    <Stack direction="row" alignItems="center" sx={{ height: "40px" }}>
+                        { !backDisabled && <IconButton aria-label="back" sx={{ mr: 2 }} onClick={onBack || navigateBack}>
                             <ArrowBack/>
-                        </IconButton>                
-                        <Typography variant="h5">{name}</Typography>
+                        </IconButton> }
+                        <Typography variant="h5" sx={ backDisabled ? { pl: 7 } : {} }>{name}</Typography>
                     </Stack>
                     <Stack direction="row" alignItems="center">
                         {controls}
                     </Stack>
                 </Stack>
-            : <Stack direction="row" alignItems="center">
-                <IconButton aria-label="back" sx={{ mr: 2 }} onClick={onBack || navigateBack}>
+            : <Stack direction="row" alignItems="center" sx={{ height: "40px" }}>
+                { !backDisabled && <IconButton aria-label="back" sx={{ mr: 2 }} onClick={onBack || navigateBack}>
                     <ArrowBack/>
-                </IconButton>
-                <Typography variant="h5">{name}</Typography>
+                </IconButton> }
+                <Typography variant="h5" sx={ backDisabled ? { pl: 7 } : {} }>{name}</Typography>
             </Stack>
             }
         </Paper>
