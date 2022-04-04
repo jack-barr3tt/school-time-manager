@@ -72,4 +72,12 @@ export class User {
             repeat_ref: Date.now()
         })
     }
+
+    static async register(email: string, username: string, password: string) {
+        await AxiosBase.post('/users', {
+            email,
+            username,
+            password
+        })
+    }
 }

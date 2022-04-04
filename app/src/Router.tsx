@@ -14,39 +14,39 @@ import ViewRepeats from './Pages/Setup/Repeats/ViewRepeats';
 import NewRepeat from './Pages/Setup/Repeats/NewRepeat';
 import ViewLesson from './Pages/Timetable/ViewLesson';
 import EditLesson from './Pages/Timetable/EditLesson';
-import Login from './Pages/Login';
+import Login from './Pages/Auth/Login';
 
 export default function Router() {
     return <Routes>
-            <Route path="/">
-                <Route index element={<Home/>}/>
-                <Route path="homework">
-                    <Route index element={<Homework/>}/>
-                    <Route path="new" element={<NewHomework/>}/>
-                    <Route path=":id" element={<ViewHomework/>}/>
-                </Route>
-                <Route path="timetable">
-                    <Route index element={<Timetable/>}/>
-                    <Route path=":id" element={<ViewLesson/>}/>
-                    <Route path="edit/:id" element={<EditLesson/>}/>
-                </Route>
-                <Route path="setup">
-                    <Route index element={<Setup/>}/>
-                    <Route path="repeats">
-                        <Route index element={<ViewRepeats/>}/>
-                        <Route path="new" element={<NewRepeat/>}/>
-                    </Route>
-                    <Route path="times">
-                        <Route index element={<ViewBlocks/>}/>
-                        <Route path="new" element={<NewBlock/>}/>
-                    </Route>
-                    <Route path="workingtimes">
-                        <Route index element={<SetWorkingTimes/>}/>
-                        <Route path="new" element={<NewWorkingTime/>}/>
-                    </Route>
-                    <Route path="prewarning" element={<PreWarning/>}/>
-                </Route>
-                <Route path="login" element={<Login/>}/>
+        <Route path="/">
+            <Route index element={<Home/>}/>
+            <Route path="homework">
+                <Route index element={<Homework/>}/>
+                <Route path="new" element={<NewHomework/>}/>
+                <Route path=":id" element={<ViewHomework/>}/>
             </Route>
+            <Route path="timetable">
+                <Route index element={<Timetable/>}/>
+                <Route path=":id" element={<ViewLesson/>}/>
+                <Route path="edit/:id" element={<EditLesson/>}/>
+            </Route>
+            <Route path="setup">
+                <Route index element={<Setup/>}/>
+                <Route path="repeats">
+                    <Route index element={<ViewRepeats/>}/>
+                    <Route path="new" element={<NewRepeat/>}/>
+                </Route>
+                <Route path="times">
+                    <Route index element={<ViewBlocks/>}/>
+                    <Route path="new" element={<NewBlock/>}/>
+                </Route>
+                <Route path="workingtimes">
+                    <Route index element={<SetWorkingTimes/>}/>
+                    <Route path="new" element={<NewWorkingTime/>}/>
+                </Route>
+                <Route path="prewarning" element={<PreWarning/>}/>
+            </Route>
+            <Route path="login" element={<Login/>}/>
+        </Route>
     </Routes>
 }
