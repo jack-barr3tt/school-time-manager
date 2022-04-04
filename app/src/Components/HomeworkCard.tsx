@@ -30,11 +30,11 @@ export default function HomeworkCard (props: Props) {
 
     const displayCardTheme = { borderRadius: 0, width: 1, height: 1, display: "flex", flexDirection: "row", alignItems: "center", px: 2 }
     const completeDisplay = <Paper sx={{ backgroundColor: "success.main", justifyContent: "flex-start", ...displayCardTheme}}>
-        <Check sx={{ width: "3rem", height: "3rem"}}/>
+        <Check sx={{ width: "3rem", height: "3rem", color: "white"}}/>
     </Paper>
 
     const deleteDisplay = <Paper sx={{ backgroundColor: "error.main", justifyContent: "flex-end", ...displayCardTheme}}>
-        <Delete sx={{ width: "3rem", height: "3rem"}}/>
+        <Delete sx={{ width: "3rem", height: "3rem", color: "white" }}/>
     </Paper>
 
     const StyledSwiper = styled(SwipeableViews)({
