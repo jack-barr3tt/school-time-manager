@@ -8,21 +8,29 @@ import { TimetableProvider } from "./Hooks/useTimetable";
 import { UserProvider } from "./Hooks/useUser";
 import { WeekProvider } from "./Hooks/useWeek";
 
-export default function Providers(props: { children: ReactNode }) {
+export function DataProviders(props: { children: ReactNode }) {
     const { children } = props
     
+    return <>
+        <HomeworkProvider>
+            <WeekProvider>
+                <TimetableProvider>
+                    {children}
+                </TimetableProvider>
+            </WeekProvider>
+        </HomeworkProvider>
+    </>
+}
+
+export function GeneralProviders(props: { children: ReactNode }) {
+    const { children } = props
+
     return <>
         <LocalizationProvider dateAdapter={AdapterDateFns}>
             <ScopedCssBaseline>
                 <ThemeProvider theme={theme}>
                     <UserProvider>
-                        <HomeworkProvider>
-                            <WeekProvider>
-                                <TimetableProvider>
-                                    {children}
-                                </TimetableProvider>
-                            </WeekProvider>
-                        </HomeworkProvider>
+                        {children}
                     </UserProvider>
                 </ThemeProvider>
             </ScopedCssBaseline>

@@ -1,8 +1,8 @@
 import { Stack, useMediaQuery, Container, Paper, createTheme } from '@mui/material';
 import { green, red } from '@mui/material/colors';
-import { ReactNode, createContext } from 'react';
+import { ReactNode } from 'react';
 import './App.css';
-import Providers from './Providers';
+import { DataProviders, GeneralProviders } from './Providers';
 import RouteProtector from './RouteProtector';
 import Router from './Router';
 
@@ -46,32 +46,31 @@ function MainGrid (props: { children: ReactNode }) {
   return <Stack spacing={2} sx={{ width: 1, height: 1, positon: "absolute", top: 0, left: 0, m: 0, px: 2, overflowY: "scroll" }}>{props.children}</Stack>
 }
 
-export const userContext = createContext({
-    id: 1,
-    username: "Jack"
-})
-
 export default function App() {
 
     const isMobile = useMediaQuery(`(max-width: ${theme.breakpoints.values.sm}px)`);
     
-    return <Providers>
+    return <GeneralProviders>
         {
             isMobile ? 
             <MainGrid>
                 <RouteProtector>
-                    <Router/>
+                    <DataProviders>
+                        <Router/>
+                    </DataProviders>
                 </RouteProtector>
             </MainGrid> :
             <Container maxWidth="sm" disableGutters sx={{ height: 1, py: 2 }}>
                 <Paper sx={{ position: "relative", height: 1 }}>
                 <MainGrid>
                     <RouteProtector>
-                        <Router/>
+                        <DataProviders>
+                            <Router/>
+                        </DataProviders>
                     </RouteProtector>
                 </MainGrid>
                 </Paper>
             </Container>
         }
-    </Providers>
+    </GeneralProviders>
 }
