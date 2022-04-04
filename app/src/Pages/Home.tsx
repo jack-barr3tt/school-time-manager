@@ -1,11 +1,12 @@
-import { Settings } from '@mui/icons-material';
-import { ButtonBase, Paper, Stack, Typography, useTheme } from '@mui/material';
+import { Logout, Settings } from '@mui/icons-material';
+import { Paper, Stack, Typography, useTheme } from '@mui/material';
 import { red } from '@mui/material/colors';
 import { format } from 'date-fns';
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { User } from '../API/Users';
 import { Card } from '../Components/Card';
+import SimpleButton from '../Components/SimpleButton';
 import { DateToMonth } from '../functions';
 import { useHomework } from '../Hooks/useHomework';
 import { useTimetable } from '../Hooks/useTimetable';
@@ -17,10 +18,10 @@ export default function Home() {
     const navigate = useNavigate()
     const theme = useTheme()
 
-    const { next: nextHomework }= useHomework()
+    const { next: nextHomework } = useHomework()
     const { next: nextLesson } = useTimetable()
 
-    const { userId } = useUser()
+    const { userId, logout } = useUser()
 
     const fetchUser = useCallback(async () => {
         if(userId && !user) setUser(
@@ -60,19 +61,17 @@ export default function Home() {
                 onClick={() => navigate("timetable")}
             />
 
-            <ButtonBase 
-                sx={{
-                    borderRadius: 3 
-                }}
-                onClick={() => navigate("setup")}
-            >
-                <Paper sx={{ py: 1, px: 3, borderRadius: 3 }} elevation={3}>
-                    <Stack direction="row" spacing={1} alignItems="center">
-                        <Settings/>
-                        <Typography variant="h5">Setup</Typography>
-                    </Stack>
-                </Paper>
-            </ButtonBase>
+            <SimpleButton
+                onClick={() =>  navigate("/setup")}
+                text="Setup"
+                icon={<Settings/>}
+            />
+
+            <SimpleButton
+                onClick={logout}
+                text="Logout"
+                icon={<Logout/>}
+            />
         </Stack>
     </>
 }
