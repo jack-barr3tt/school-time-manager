@@ -65,7 +65,7 @@ export default function HomeworkCard (props: Props) {
         </StyledSwiper> 
     }
 
-    const CardDisplay = () => <Card
+    const CardDisplay = (props: { swiper?: boolean }) => <Card
         mainText={truncateText(task)}
         calendarProps={ due && {
             topText: DateToMonth(due),
@@ -75,6 +75,8 @@ export default function HomeworkCard (props: Props) {
         onClick={() => navigate(""+_id)}
         subText={name}
         circleColor={color}
+        fullHeight
+        disableShadow={props.swiper}
         footerComponents={ duration != null ? [
             <AccessTime sx={{ ml: 3, mr: 1 }}/>,
             <Typography variant="body1">{MinutesToHrsMins(duration)}</Typography>
@@ -83,7 +85,7 @@ export default function HomeworkCard (props: Props) {
 
     if(_delete || complete)
         return <Swiper>
-            <CardDisplay/>
+            <CardDisplay swiper/>
         </Swiper>
     else
         return <CardDisplay/>

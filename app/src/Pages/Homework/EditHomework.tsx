@@ -95,6 +95,7 @@ export default function EditHomework(props: Props) {
                         aria-labelledby="duration-label"
                         valueLabelFormat={MinutesToHrsMins}
                         onChangeCommitted={(_e,v) => setDuration(v as number)}
+                        value={duration || 30}
                         sx={{ color: duration ? "primary.main" : grey[500] }}
                         defaultValue={30}
                         valueLabelDisplay="auto"

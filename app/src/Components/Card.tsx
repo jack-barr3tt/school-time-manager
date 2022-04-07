@@ -10,19 +10,21 @@ type CardProps = {
     calendarProps?: CalendarProps;
     subText?: string;
     circleColor?: number
-    footerComponents?: ReactNode[]
+    footerComponents?: ReactNode[];
+    fullHeight?: boolean;
+    disableShadow?: boolean;
 }
 
 export function Card(props: CardProps) {
-    const { calendarProps, mainText, onClick, subText, circleColor, footerComponents } = props
+    const { calendarProps, mainText, onClick, subText, circleColor, footerComponents, fullHeight, disableShadow } = props
 
     const style = !circleColor && !footerComponents ? { height: 1 } : {}
 
     return <ButtonBase
-        sx={{ borderRadius: 6, width: 1, minHeight: "128px" }}
+        sx={{ borderRadius: 6, width: 1, minHeight: "128px", ...(fullHeight ? { height: 1 } : {} ) }}
         onClick={onClick}
     >
-        <Paper sx={{ p: 2, borderRadius: 6, width: 1, height: 1 }} elevation={3}>
+        <Paper sx={{ p: 2, borderRadius: 6, width: 1, height: 1 }} elevation={disableShadow ? 0 : 3}>
             <Stack direction="row" alignItems="center" justifyContent="space-between" sx={style}>
                 <Typography variant="h5" textAlign="left" sx={{ py: 2 }}>{mainText}</Typography>
                 { calendarProps && <Calendar {...calendarProps}/> }

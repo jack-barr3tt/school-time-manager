@@ -1,4 +1,4 @@
-import { compareAsc } from "date-fns";
+import { compareDesc } from "date-fns";
 import { createContext, ReactNode, useCallback, useContext, useEffect, useState } from "react";
 import Homework from "../API/Homework";
 import { User } from "../API/Users";
@@ -30,7 +30,7 @@ export function HomeworkProvider (props: { children: ReactNode }) {
             setNextHomework(
                 MergeSort(
                     tempHomeworks, 
-                    (a, b) => compareAsc(a.due || 0, b.due || 0)
+                    (a, b) => compareDesc(a.due || 0, b.due || 0)
                 ).find(h => !h.complete)
             )
     }, [userId])

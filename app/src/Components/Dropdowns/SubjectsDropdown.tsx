@@ -32,7 +32,7 @@ export default function SubjectsDropdown(props: SubjectsDropdownProps) {
     }, [fetchSubjects])
 
     const createSubject = async (name?: string, color?: number) => {
-        if(name && color) {
+        if(name) {
             const createdSubject = await User.forge(userId).subjects?.create({
                 name,
                 color
@@ -51,11 +51,12 @@ export default function SubjectsDropdown(props: SubjectsDropdownProps) {
         if(subjectEditing && subjectEditing._id && subjects && (name || color)) {
             const subject = await User.forge(userId).subjects?.get(subjectEditing._id)
             if(subject) {
-                await subject.edit({
+                const editedSubject = await subject.edit({
                     name,
                     color
                 })
                 setSubjects(subjects.map(s => s._id === subjectEditing._id ? subject : s))
+                setSubject(editedSubject)
             }
         }
         setSubjectEditing(undefined)
@@ -89,7 +90,7 @@ export default function SubjectsDropdown(props: SubjectsDropdownProps) {
                 textValueSetter: setNewSubjectText,
                 setOpen: setSubjectDialogOpen
             }}
-            save={async ([name, color]) => createSubject(name, color)}
+            save={([name, color]) => createSubject(name, color)}
             edit={(item) => setSubjectEditing(item)}
             _delete={(item) => deleteSubject(item._id)}
         /> }

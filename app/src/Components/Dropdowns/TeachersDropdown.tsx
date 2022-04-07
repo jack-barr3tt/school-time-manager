@@ -71,7 +71,7 @@ export default function TeachersDropdown(props: TeachersDropdownProps) {
             chosenSetter={setTeacher}
             chosen={teacher!}
             onOpen={() => fetchTeachers()}
-            save={async ([name]) => createTeacher(name)}
+            save={([name]) => createTeacher(name)}
             edit={(item) => setTeacherEditing(item)}
             _delete={(item) => deleteTeacher(item._id)}
         /> }

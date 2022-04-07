@@ -71,7 +71,7 @@ export default function LocationsDropdown(props: LocationsDropdownProps) {
             chosenSetter={setLocation}
             chosen={location!}
             onOpen={() => fetchLocations()}
-            save={async ([name]) => createLocation(name)}
+            save={([name]) => createLocation(name)}
             edit={(item) => setLocationEditing(item)}
             _delete={(item) => deleteLocation(item._id)}
         /> }
