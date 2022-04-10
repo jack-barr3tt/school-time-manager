@@ -8,12 +8,13 @@ type RepeatCreate = {
 }
 
 export default class RepeatManager {
-    private userId: number;
+    private userId: number
 
     constructor(userId: number) {
         this.userId = userId
     }
 
+    // Get method will fetch all the repeats for the user if no id is provided, otherwise it will fetch the repeat with the provided id
     async get() : Promise<Repeat[]>
     async get(id: number) : Promise<Repeat>
     async get(id?: number)

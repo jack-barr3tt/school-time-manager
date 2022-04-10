@@ -4,9 +4,9 @@ import { ColorIntToString } from "../functions"
 import useContainerDimensions from "../Hooks/useContainerDimensions"
 
 type SizedPaperProps = { 
-    children: ReactNode;
-    color: number;
-    onClick?: () => void;
+    children: ReactNode
+    color: number
+    onClick?: () => void
 }
 
 export default function SizedPaper (props: SizedPaperProps) {
@@ -16,6 +16,10 @@ export default function SizedPaper (props: SizedPaperProps) {
     const [fixedWidth, setFixedWidth] = useState<string>()
     const [fixedHeight, setFixedHeight] = useState<string>()
 
+    /* Initially, the component renders with relative dimensions, 
+    but once the width and height has been determined, it will render with fixed dimensions 
+    to allow for CSS-based text overflow control*/
+
     useEffect(() => {
         if(width && height) {
             setFixedWidth(`${width}px`)
@@ -23,7 +27,7 @@ export default function SizedPaper (props: SizedPaperProps) {
         }
     }, [width, height])
 
-    var childrenToUse
+    let childrenToUse
     if(onClick)
         childrenToUse = <ButtonBase onClick={onClick} sx={{ width: fixedWidth || 1, height: fixedHeight || 1, p: 0.75, flexDirection: "column", justifyContent: "flex-start", borderRadius: 1 }}>{children}</ButtonBase>
     else

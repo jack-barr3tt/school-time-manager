@@ -13,10 +13,10 @@ import { MinutesToHrsMins } from '../../functions';
 import { useUser } from '../../Hooks/useUser';
 
 export default function NewHomework() {    
-    const [task, setTask] = useState<string>();
-    const [subject, setSubject] = useState<SubjectInput>();
-    const [due, setDue] = useState<Date|null>();
-    const [duration, setDuration] = useState<number>();
+    const [task, setTask] = useState<string>()
+    const [subject, setSubject] = useState<SubjectInput>()
+    const [due, setDue] = useState<Date|null>()
+    const [duration, setDuration] = useState<number>()
 
     const navigate = useNavigate()
     const { userId } = useUser()

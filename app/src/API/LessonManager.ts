@@ -2,12 +2,12 @@ import AxiosBase from "./AxiosBase";
 import Lesson from "./Lesson"
 
 type LessonCreate = {
-    subject_id: number;
-    block_id: number;
-    location_id?: number;
-    teacher_id?: number;
-    repeat_id?: number;
-    day: number;
+    subject_id: number
+    block_id: number
+    location_id?: number
+    teacher_id?: number
+    repeat_id?: number
+    day: number
 }
 
 export default class LessonManager {
@@ -17,6 +17,7 @@ export default class LessonManager {
         this.userId = userId
     }
 
+    // Get method will fetch all the lesson for the user if no id is provided, otherwise it will fetch the lesson with the provided id
     async get() : Promise<Lesson[]>
     async get(id: number) : Promise<Lesson>
     async get(id?: number) {

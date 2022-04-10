@@ -6,11 +6,12 @@ import CreateableAutocomplete from "../CreatableAutocomplete";
 import EasyDialog from "../EasyDialog";
 
 type SubjectsDropdownProps = {
-    autoFocus?: boolean;
-    subject: SubjectInput|undefined;
-    setSubject: Dispatch<SetStateAction<SubjectInput|undefined>>;
+    autoFocus?: boolean
+    subject: SubjectInput|undefined
+    setSubject: Dispatch<SetStateAction<SubjectInput|undefined>>
 }
 
+// Create a dropdown for subjects with the ability to create, edit and delete subjects
 export default function SubjectsDropdown(props: SubjectsDropdownProps) {
     const { autoFocus, subject, setSubject } = props
 
@@ -27,6 +28,7 @@ export default function SubjectsDropdown(props: SubjectsDropdownProps) {
         )
     }, [userId])
 
+    // Fetch subjects on mount
     useEffect(() => {
         fetchSubjects()
     }, [fetchSubjects])

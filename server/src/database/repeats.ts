@@ -1,18 +1,18 @@
 import Database from "../connections";
 
 export class Repeat {
-    private _id?: number;
+    private _id?: number
     public get id() {
         return this._id
     }
     private set id(newId: number|undefined) {
         this._id = newId
     }
-    readonly user_id: number;
-    public name: string;
-    public start_day: number;
-    public end_day: number;
-    public index: number;
+    readonly user_id: number
+    public name: string
+    public start_day: number
+    public end_day: number
+    public index: number
 
     constructor(data: Repeat) {
         this.id = data.id
@@ -39,15 +39,17 @@ export class Repeat {
             )
             return this
         }else{
-            let { rows: getRows } = await Database.query(
+            // Get the users current repeats
+            const { rows: getRows } = await Database.query(
                 `SELECT * from repeats WHERE user_id = $1`,
                 [this.user_id]
             )
 
             const sortedRepeats = getRows.sort((a, b) => a.index - b.index)
+            // Give this new repeat an index greater than the largest one currently in the table
             this.index = sortedRepeats.length > 0 ? sortedRepeats[sortedRepeats.length - 1].index + 1 : 0
 
-            let { rows } = await Database.query(
+            const { rows } = await Database.query(
                 `INSERT INTO repeats (user_id, name, start_day, end_day, index)
                 VALUES ($1, $2, $3, $4, $5)
                 RETURNING id`,
@@ -60,22 +62,14 @@ export class Repeat {
                 ]
             )
 
-            await this.setRepeatReference()
+            if(sortedRepeats.length < 1) await this.setRepeatReference(rows[0].id)
 
             this.id = rows[0].id
             return this
         }
     }
 
-    async setRepeatReference() {
-        const { rows } = await Database.query(
-            `SELECT id FROM repeats WHERE user_id = $1`,
-            [this.user_id]
-        )
-        if(rows.length > 1) return
-
-        const repeatId = rows[0].id
-
+    async setRepeatReference(repeatId: number) {
         await Database.query(
             `UPDATE users SET repeat_id = $2, repeat_ref = $3 WHERE id = $1`,
             [

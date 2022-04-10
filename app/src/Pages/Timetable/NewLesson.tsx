@@ -14,9 +14,9 @@ import LocationsDropdown from '../../Components/Dropdowns/LocationsDropdown';
 import { useUser } from '../../Hooks/useUser';
 
 type Props = {
-    block: LessonBlock;
-    repeat?: Repeat;
-    day: number;
+    block: LessonBlock
+    repeat?: Repeat
+    day: number
     back: () => void
 }
 

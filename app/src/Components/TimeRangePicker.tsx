@@ -7,11 +7,11 @@ import { Dispatch, SetStateAction, useEffect } from 'react';
 export type OptionalDate = Date|null|undefined
 
 type Props = {
-    startTime: OptionalDate;
-    setStartTime: Dispatch<SetStateAction<OptionalDate>>;
-    endTime: OptionalDate;
-    setEndTime: Dispatch<SetStateAction<OptionalDate>>;
-    autoDifference?: Duration;
+    startTime: OptionalDate
+    setStartTime: Dispatch<SetStateAction<OptionalDate>>
+    endTime: OptionalDate
+    setEndTime: Dispatch<SetStateAction<OptionalDate>>
+    autoDifference?: Duration
 }
 
 export default function TimeRangePicker(props: Props) {
@@ -21,11 +21,15 @@ export default function TimeRangePicker(props: Props) {
         setStartTime(new Date())
     }, [setStartTime])
 
+    // Returns two time pickers where the end time is automatically set to the start time + autoDifference
     return <>
         <TimePicker
             label="Start"
             renderInput={(params) => <TextField {...params} />}
-            onChange={(e) => { setStartTime(e); if(autoDifference && startTime) setEndTime(add(startTime, autoDifference)) } }
+            onChange={(e) => { 
+                setStartTime(e) 
+                if(autoDifference && startTime) setEndTime(add(startTime, autoDifference)) 
+            } }
             value={startTime}
         />
         <TimePicker

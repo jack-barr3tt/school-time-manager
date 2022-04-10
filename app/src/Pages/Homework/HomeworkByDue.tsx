@@ -19,21 +19,24 @@ export default function HomeworkByDue(props: HomeworkByDueProps) {
     const [todoHomework, setTodoHomework] = useState<Homework[]>([])
 
     useEffect(() => {
+        // Sort completed homework by date with the most recently due homework first
         setCompletedHomework(
-            MergeSort(homework,
+            MergeSort(
+                homework.filter(h => h.complete),
                 (a, b) => compareDesc(a.due || 0, b.due || 0)
             )
-            .filter(h => h.complete)
         )
 
+        // Sort all incomplete homework by due date soonest to latest
         const sortedHomework = MergeSort(
-            homework, 
+            homework.filter(h => !h.complete), 
             (a, b) => compareAsc(a.due || 0, b.due || 0)
         )
 
-        const incompleteHomework = sortedHomework.filter(h => !h.complete)
-        setOverdueHomework(incompleteHomework.filter(h => isPast(h.due || 0) ))
-        setTodoHomework(incompleteHomework.filter(h => !isPast(h.due || 0) ))
+        // All homework due in the past is saved to overdueHomework
+        setOverdueHomework(sortedHomework.filter(h => isPast(h.due || 0) ))
+        // All homework due in the future is saved to todoHomework
+        setTodoHomework(sortedHomework.filter(h => !isPast(h.due || 0) ))
     }, [homework])
 
     return <Stack direction="column" spacing={3} alignItems="center" sx={{ pt: 2 }}>

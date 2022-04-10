@@ -9,7 +9,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
 
         res.json(teachers)
     }catch(err){
-        res.locals.error = err;
-        next(err);
+        res.locals.error = err
+        next(err)
     }
-};
+}

@@ -17,10 +17,12 @@ export default function PreWarning() {
         setFetchedUser(await User.get(userId))
     }, [userId])
 
+    // Set the prewarning state as soon as the user comes available
     useEffect(() => {
         if(fetchedUser && fetchedUser.prewarning) setPrewarning(fetchedUser.prewarning)
     }, [fetchedUser])
 
+    // Fetch the user on mount
     useEffect(() => {
         fetchUser()
     }, [fetchUser])

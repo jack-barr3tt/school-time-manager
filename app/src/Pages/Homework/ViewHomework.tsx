@@ -33,10 +33,12 @@ export default function ViewHomework() {
         }
     }, [userId, navigate, id])
 
+    // Fetch the homework on mount and when edit mode is toggled
     useEffect(() => {
         fetchHomework()
     }, [fetchHomework, editing])
 
+    // If homework is due tomorrow, the text should have the error color
     const getDueColor = (due: Date) => {
         if(isAfter(addDays(Date.now(), 1),startOfDay(due))) return { color: "error.main" }
         return {}
@@ -58,7 +60,7 @@ export default function ViewHomework() {
                 }}>
                     <Edit/>
                 </IconButton>,
-                <IconButton onClick={() => deleteHomework()}>
+                <IconButton onClick={deleteHomework}>
                     <Delete/>
                 </IconButton>
             ]}/>
@@ -72,7 +74,7 @@ export default function ViewHomework() {
                     <Assignment/>
                     <Typography variant="h5">Task</Typography>
                 </Stack>
-                <Typography variant="body1">{homework.task}</Typography>
+                <Typography>{homework.task}</Typography>
             </> }
 
             { homework.subject?.name && <>
@@ -80,7 +82,7 @@ export default function ViewHomework() {
                     <Circle sx={{ color: ColorIntToString(homework.subject?.color), mr: 1 }} />
                     <Typography variant="h5">Subject</Typography>
                 </Stack>
-                <Typography variant="body1">{homework.subject?.name}</Typography>
+                <Typography>{homework.subject?.name}</Typography>
             </> }
 
             { homework.due != null && <>
@@ -88,7 +90,7 @@ export default function ViewHomework() {
                     <Event sx={getDueColor(homework.due)}/>
                     <Typography variant="h5" sx={getDueColor(homework.due)}>Due</Typography>
                 </Stack>
-                <Typography variant="body1" sx={getDueColor(homework.due)}>{`${format(homework.due, "dd/MM/yy")} (${formatDistanceToNow(homework.due, { addSuffix: true })})`}</Typography>
+                <Typography sx={getDueColor(homework.due)}>{`${format(homework.due, "dd/MM/yy")} (${formatDistanceToNow(homework.due, { addSuffix: true })})`}</Typography>
             </> }
 
             { homework.duration && <>
@@ -96,8 +98,9 @@ export default function ViewHomework() {
                     <AccessTime/>
                     <Typography variant="h5">Duration</Typography>
                 </Stack>
-                <Typography variant="body1">{MinutesToHrsMins(homework.duration)}</Typography>
+                <Typography>{MinutesToHrsMins(homework.duration)}</Typography>
             </> }
+
             <Button
                 fullWidth
                 variant="outlined"

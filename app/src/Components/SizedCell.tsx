@@ -8,12 +8,13 @@ type RelativeCellProps = {
 }
 
 export function SizedCell(props: RelativeCellProps) {
-    const { children, height, width } = props;
+    const { children, height, width } = props
 
-    let Cell = styled("td")({
+    // Creates a styled td components that has a height and width defined by the props
+    const Cell = styled("td")({
         height,
         width,
         overflow: "hidden"
-    });
-    return <Cell>{children}</Cell>;
+    })
+    return <Cell>{children}</Cell>
 }

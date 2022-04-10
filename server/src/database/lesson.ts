@@ -6,20 +6,20 @@ import Subject from "./subjects";
 import { Teacher } from "./teacher";
 
 type LessonArgs = Lesson & {
-    subject_name: string;
-    subject_color: number;
-    block_name: string;
-    block_start_time: number;
-    block_end_time: number;
-    location_name: string;
-    teacher_name: string;
-    repeat_name: string;
-    repeat_start_day: number;
-    repeat_end_day: number;
+    subject_name: string
+    subject_color: number
+    block_name: string
+    block_start_time: number
+    block_end_time: number
+    location_name: string
+    teacher_name: string
+    repeat_name: string
+    repeat_start_day: number
+    repeat_end_day: number
 }
 
 export class Lesson {
-    private _id?: number;
+    private _id?: number
     public get id() {
         return this._id
     }
@@ -62,13 +62,13 @@ export class Lesson {
         this.repeat = { id: newId } as Repeat
     }
 
-    readonly user_id: number;
-    public subject: Subject;
-    public block: LessonBlock;
-    public location: Location;
-    public teacher: Teacher;
-    public repeat: Repeat;
-    public day: number;
+    readonly user_id: number
+    public subject: Subject
+    public block: LessonBlock
+    public location: Location
+    public teacher: Teacher
+    public repeat: Repeat
+    public day: number
 
     constructor (data: LessonArgs) {
         this.user_id = +data.user_id
@@ -112,6 +112,7 @@ export class Lesson {
 
     async save() {
         if(this.id) {
+            // If the lesson has an id, it already exists in the database, so we update it
             await Database.query(`
                 UPDATE lessons
                 SET user_id = $2, subject_id = $3, block_id = $4, location_id = $5, teacher_id = $6, day = $7, repeat_id = $8
@@ -129,6 +130,7 @@ export class Lesson {
             )
             return this
         }else{
+            // When the homework is created, we want to get it's id
             const { rows } = await Database.query(`
                 INSERT INTO lessons (user_id, subject_id, block_id, location_id, teacher_id, day, repeat_id)
                 VALUES ($1, $2, $3, $4, $5, $6, $7)
@@ -149,8 +151,10 @@ export class Lesson {
     }
 
     static async findById(id: string, userId: string) {
+        // Cross table query to get the lesson, and it's subject, block, location, teacher, and repeat
         const { rows } = await Database.query(
-            `SELECT l.*, s.name subject_name, s.color subject_color, b.name block_name, b.start_time block_start_time, b.end_time block_end_time, lo.name location_name, t.name teacher_name, r.name repeat_name, r.start_day repeat_start_day, r.end_day repeat_end_day
+            `SELECT l.*, s.name subject_name, s.color subject_color, b.name block_name, b.start_time block_start_time, b.end_time block_end_time, 
+            lo.name location_name, t.name teacher_name, r.name repeat_name, r.start_day repeat_start_day, r.end_day repeat_end_day
             FROM lessons l
             INNER JOIN subjects s ON l.subject_id = s.id
             INNER JOIN lesson_blocks b ON l.block_id = b.id
@@ -169,8 +173,10 @@ export class Lesson {
     }
 
     static async findByUser(userId: string) {
+        // Cross table query to get all the user's lessons, and their subjects, blocks, locations, teachers, and repeats
         const { rows } = await Database.query(
-            `SELECT l.*, s.name subject_name, s.color subject_color, b.name block_name, b.start_time block_start_time, b.end_time block_end_time, lo.name location_name, t.name teacher_name, r.name repeat_name, r.start_day repeat_start_day, r.end_day repeat_end_day
+            `SELECT l.*, s.name subject_name, s.color subject_color, b.name block_name, b.start_time block_start_time, b.end_time block_end_time, 
+            lo.name location_name, t.name teacher_name, r.name repeat_name, r.start_day repeat_start_day, r.end_day repeat_end_day
             FROM lessons l
             INNER JOIN subjects s ON l.subject_id = s.id
             INNER JOIN lesson_blocks b ON l.block_id = b.id

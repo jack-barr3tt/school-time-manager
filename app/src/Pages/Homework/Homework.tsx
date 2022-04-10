@@ -38,7 +38,9 @@ export default function HomeworkPage() {
 
     const completeHomework = async (hw: Homework) => {
         await hw.markComplete()
-        let replacement = await User.forge(userId).homework?.get(hw._id)
+        // Re-fetch the homework
+        const replacement = await User.forge(userId).homework?.get(hw._id)
+        // If the homework was successfully fetched, replace the old homework with the new one
         if(replacement) setHomework([
             ...homework.filter(h => h._id !== hw._id),
             replacement

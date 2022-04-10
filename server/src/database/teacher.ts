@@ -1,15 +1,15 @@
 import Database from "../connections";
 
 export class Teacher {
-    private _id?: number;
+    private _id?: number
     public get id() {
         return this._id
     }
     private set id(newId: number|undefined) {
         this._id = newId
     }
-    readonly user_id: number;
-    public name: string;
+    readonly user_id: number
+    public name: string
 
     constructor(data: Teacher) {
         this.id = data.id
@@ -19,6 +19,7 @@ export class Teacher {
 
     async save() {
         if(this.id) {
+            // If the teacher has an id, it already exists in the database, so we update it
             await Database.query(
                 `UPDATE teachers
                 SET name = $2
@@ -30,6 +31,7 @@ export class Teacher {
             )
             return this
         }else{
+            // When the teacher is created, we want to get it's id
             const { rows } = await Database.query(
                 `INSERT INTO teachers (user_id, name)
                 VALUES ($1, $2)

@@ -11,20 +11,20 @@ import TeacherManager from "./TeacherManager";
 import WorkingTimesManager from "./WorkingTimesManager";
 
 export class User {
-    readonly _id: number;
-    readonly email : string;
-    readonly username : string;
-    readonly prewarning? : number;
-    readonly repeat?: Repeat;
-    readonly repeat_ref?: Date;
-    readonly subjects : SubjectManager;
-    readonly homework : HomeworkManager;
-    readonly repeats : RepeatManager;
-    readonly workingTimes: WorkingTimesManager;
-    readonly lessonBlocks: LessonBlockManager;
-    readonly locations: LocationManager;
-    readonly teachers: TeacherManager;
-    readonly lessons: LessonManager;
+    readonly _id: number
+    readonly email : string
+    readonly username : string
+    readonly prewarning? : number
+    readonly repeat?: Repeat
+    readonly repeat_ref?: Date
+    readonly subjects : SubjectManager
+    readonly homework : HomeworkManager
+    readonly repeats : RepeatManager
+    readonly workingTimes: WorkingTimesManager
+    readonly lessonBlocks: LessonBlockManager
+    readonly locations: LocationManager
+    readonly teachers: TeacherManager
+    readonly lessons: LessonManager
 
     constructor(data: User) {
         this._id = data._id
@@ -43,6 +43,7 @@ export class User {
         this.lessons = new LessonManager(this._id)
     }
 
+    // Forge method returns a user object with only its mangers, so that the user does not have to be fetched before any subsequent requests are made
     static forge(id: number) {
         return { 
             _id: id, 

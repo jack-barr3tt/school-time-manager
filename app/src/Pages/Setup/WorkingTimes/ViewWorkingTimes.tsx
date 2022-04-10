@@ -25,9 +25,11 @@ export default function SetWorkingTimes() {
 
     const deleteTime = async (id: number) => {
         if(times) {
-            let time = times.find(t => t._id === id)
+            // Find the working time to delete
+            const time = times.find(t => t._id === id)
             if(time) {
                 await time.delete()
+                // Remove the deleted working time from the list
                 setTimes(
                     times.filter(t => t._id !== id)
                 )
@@ -35,6 +37,7 @@ export default function SetWorkingTimes() {
         }
     }
 
+    // Fetch working times on mount or when edit mode is toggled
     useEffect(() => {
         fetchWorkingTimes()
     }, [fetchWorkingTimes, editing])
@@ -55,6 +58,7 @@ export default function SetWorkingTimes() {
                             deleteItem={() => deleteTime(t._id)}
                         />)
                     :
+                        // Show 5 loading skeletons while blocks have not loaded
                         (new Array(5)).fill(0).map((_a, i) => 
                             <Skeleton key={""+i} variant="rectangular" height={56} animation="wave" sx={{ borderRadius: 1 }}/>
                         )
@@ -64,5 +68,5 @@ export default function SetWorkingTimes() {
                 </Fab>
             </> : <EditWorkingTime back={() => setEditing(false)} id={editingId}/>
         }
-    </>;
+    </>
 }

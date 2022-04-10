@@ -8,12 +8,13 @@ type LessonBlockCreate = {
 }
 
 export default class LessonBlockManager {
-    private userId: number;
+    private userId: number
 
     constructor(userId: number) {
         this.userId = userId
     }
 
+    // Get method will fetch all the lesson blocks for the user if no id is provided, otherwise it will fetch the lesson block with the provided id
     async get() : Promise<LessonBlock[]>
     async get(id: number) : Promise<LessonBlock> 
     async get(id?: number)

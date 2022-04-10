@@ -21,6 +21,7 @@ export default function Setup() {
     const navigate = useNavigate()
 
     const fetchData = useCallback(async () => {
+        // Fetch the user, their repeats, their working times and their lesson blocks in parallel
         const [tempRepeats, tempTimes, tempBlocks, fetchedUser] = await Promise.all([
             User.forge(userId).repeats?.get(),
             User.forge(userId).workingTimes?.get(),
@@ -33,6 +34,7 @@ export default function Setup() {
         setNotification(fetchedUser.prewarning || -1)
     }, [userId])
 
+    // Fetch data on mount
     useEffect(() => {
         fetchData()
     }, [fetchData])
@@ -45,30 +47,51 @@ export default function Setup() {
         <NavBar name="Setup"/>
         
         <Typography variant="h6">Timetable</Typography>
-        { repeats ? <SettingsButton 
-            mainText="Repeats" 
-            lowerText={`${weeks.reduce((a, b) => a + b.length, 0)} timetables, repeats every ${weeks.length} weeks`} 
-            onClick={() => navigate("repeats")}
-        /> : <Skeleton variant="rectangular" width="100%" height="82px" animation="wave">{skeletonFiller}</Skeleton> }
 
-        { lessonBlocks ? <SettingsButton 
-            mainText="Lesson Times" 
-            lowerText={`${lessonBlocks.length} lessons per day`}
-            onClick={() => navigate("times")}
-        /> : <Skeleton variant="rectangular" width="100%" height="82px" animation="wave">{skeletonFiller}</Skeleton> }
+        { repeats ? 
+            <SettingsButton 
+                mainText="Repeats" 
+                lowerText={`${weeks.reduce((a, b) => a + b.length, 0)} timetables, repeats every ${weeks.length} weeks`} 
+                onClick={() => navigate("repeats")}
+            /> 
+        : 
+            // Show a loading skeleton while repeats have not loaded
+            <Skeleton variant="rectangular" width="100%" height="82px" animation="wave">{skeletonFiller}</Skeleton> 
+        }
 
-        { workingTimes ? <SettingsButton 
-            mainText="Working Times" 
-            lowerText={workingTimes.map(t => differenceInHours(t.end_time, t.start_time)).reduce((a,b) => a + b, 0).toFixed() + " hours per day"}
-            onClick={() => navigate("workingtimes")}
-        /> : <Skeleton variant="rectangular" width="100%" height="82px" animation="wave">{skeletonFiller}</Skeleton> }
+        { lessonBlocks ? 
+            <SettingsButton 
+                mainText="Lesson Times" 
+                lowerText={`${lessonBlocks.length} lessons per day`}
+                onClick={() => navigate("times")}
+            /> 
+        : 
+            // Show a loading skeleton while lesson blocks have not loaded
+            <Skeleton variant="rectangular" width="100%" height="82px" animation="wave">{skeletonFiller}</Skeleton> 
+        }
+
+        { workingTimes ? 
+            <SettingsButton 
+                mainText="Working Times" 
+                lowerText={workingTimes.map(t => differenceInHours(t.end_time, t.start_time)).reduce((a,b) => a + b, 0).toFixed() + " hours per day"}
+                onClick={() => navigate("workingtimes")}
+            /> 
+        : 
+            // Show a loading skeleton while working times have not loaded
+            <Skeleton variant="rectangular" width="100%" height="82px" animation="wave">{skeletonFiller}</Skeleton> 
+        }
         
         <Typography variant="h6">Notifications</Typography>
 
-        { notification ? <SettingsButton 
-            mainText="Pre-warning" 
-            lowerText={notification === -1 ? "Not set" : `${notification} minutes before`} 
-            onClick={() => navigate("prewarning")}
-        /> : <Skeleton variant="rectangular" width="100%" height="82px" animation="wave">{skeletonFiller}</Skeleton> }
+        { notification ? 
+            <SettingsButton 
+                mainText="Pre-warning" 
+                lowerText={notification === -1 ? "Not set" : `${notification} minutes before`} 
+                onClick={() => navigate("prewarning")}
+            /> 
+        : 
+            // Show a loading skeleton while notification prewarning has not loaded
+            <Skeleton variant="rectangular" width="100%" height="82px" animation="wave">{skeletonFiller}</Skeleton> 
+        }
     </>
 }

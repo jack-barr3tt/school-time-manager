@@ -3,17 +3,17 @@ import Homework from "../../database/homework";
 
 export default async (req: Request, res: Response, next: NextFunction) => {
     try{
-        const homeworkItem = new Homework({
+        const homework = new Homework({
             ...req.body,
             user_id: req.params.userId,
             complete: false
         })
 
-        await homeworkItem.save();
+        await homework.save()
 
-        res.status(201).json(homeworkItem)
+        res.status(201).json(homework)
     }catch(err){
-        res.locals.error = err;
+        res.locals.error = err
         next()
     }
 }

@@ -7,12 +7,13 @@ type SubjectCreate = {
 }
 
 export default class SubjectManager {
-    private userId: number;
+    private userId: number
 
     constructor(userId: number) {
         this.userId = userId
     }
     
+    // Get method will fetch all the subjects for the user if no id is provided, otherwise it will fetch the subject with the provided id
     async get() : Promise<Subject[]>
     async get(id: number) : Promise<Subject>
     async get(id?: number) {

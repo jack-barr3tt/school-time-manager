@@ -1,15 +1,15 @@
 import AxiosBase from "./AxiosBase";
 
 export type LocationInput = {
-    _id?: number;
-    name: string;
-    inputValue?: string;
+    _id?: number
+    name: string
+    inputValue?: string
 }
 
 export default class Location {
-    readonly _id: number;
-    private user_id: number;
-    public name: string;
+    readonly _id: number
+    private user_id: number
+    public name: string
 
     constructor(data: Location) {
         this._id = data._id

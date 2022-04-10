@@ -3,12 +3,12 @@ import Homework from "../../database/homework";
 import { APIError } from "../../errors/types";
 
 export default async (req: Request, res: Response, next: NextFunction) => {
-    const { userId, id } = req.params;
+    const { userId, id } = req.params
     try{
-        const homework = await Homework.findById(id, userId);
-        if(!homework) throw new APIError("Homework not found", 404);
+        const homework = await Homework.findById(id, userId)
+        if(!homework) throw new APIError("Homework not found", 404)
 
-        await homework.delete();
+        await homework.delete()
 
         res.json({
             message: "Homework deleted"

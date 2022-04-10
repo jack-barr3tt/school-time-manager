@@ -1,12 +1,12 @@
 import AxiosBase from "./AxiosBase";
 
 export default class Repeat {
-    readonly _id: number;
-    private user_id: number;
-    public name: string;
-    public start_day: number;
-    public end_day: number;
-    public index: number;
+    readonly _id: number
+    private user_id: number
+    public name: string
+    public start_day: number
+    public end_day: number
+    public index: number
 
     constructor(data: Repeat) {
         this._id = data._id

@@ -1,11 +1,13 @@
 import { config } from "dotenv";
 import { Pool } from "pg";
-config();
+
+// Gets the database config from the environment variables
+config()
 
 const Database = new Pool()
 
-Database.connect(async () => {
+Database.connect(() => 
     console.log("Connected to Database")
-})
+)
 
 export default Database

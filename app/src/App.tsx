@@ -8,6 +8,7 @@ import Router from './Router';
 
 export const theme = createTheme({
     breakpoints: {
+        // Defines the minimum width in pixels for each screen size
         values: {
             xs: 0,
             sm: 425,
@@ -43,16 +44,31 @@ export const theme = createTheme({
 })
 
 export function MainGrid (props: { children: ReactNode }) {
-  return <Stack spacing={2} sx={{ width: 1, height: 1, positon: "absolute", top: 0, left: 0, m: 0, px: 2, overflowY: "scroll" }}>{props.children}</Stack>
+  return <Stack 
+    spacing={2} 
+    sx={{ 
+        width: 1, 
+        height: 1, 
+        positon: "absolute", 
+        top: 0, 
+        left: 0, 
+        m: 0, 
+        px: 2, 
+        overflowY: "scroll" 
+    }}>
+        {props.children}
+    </Stack>
 }
 
 export default function App() {
 
-    const isMobile = useMediaQuery(`(max-width: ${theme.breakpoints.values.sm}px)`);
+    // Mobile screens are those with a width less than the value of the "sm" breakpoint
+    const isMobile = useMediaQuery(`(max-width: ${theme.breakpoints.values.sm}px)`)
     
     return <GeneralProviders>
         {
             isMobile ? 
+            // If mobile, render the layout without a container
             <RouteProtector>
                 <DataProviders>
                     <MainGrid>
@@ -61,6 +77,7 @@ export default function App() {
                 </DataProviders>
             </RouteProtector>
             :
+            // If not mobile, render the layout with a container
             <Container maxWidth="sm" disableGutters sx={{ height: 1, py: 2 }}>
                 <Paper sx={{ position: "relative", height: 1 }}>
                 <RouteProtector>

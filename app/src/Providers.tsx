@@ -11,29 +11,27 @@ import { WeekProvider } from "./Hooks/useWeek";
 export function DataProviders(props: { children: ReactNode }) {
     const { children } = props
     
-    return <>
-        <HomeworkProvider>
-            <WeekProvider>
-                <TimetableProvider>
-                    {children}
-                </TimetableProvider>
-            </WeekProvider>
-        </HomeworkProvider>
-    </>
+    // Providers that return user-specifc data
+    return <HomeworkProvider>
+        <WeekProvider>
+            <TimetableProvider>
+                {children}
+            </TimetableProvider>
+        </WeekProvider>
+    </HomeworkProvider>
 }
 
 export function GeneralProviders(props: { children: ReactNode }) {
     const { children } = props
 
-    return <>
-        <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <ScopedCssBaseline>
-                <ThemeProvider theme={theme}>
-                    <UserProvider>
-                        {children}
-                    </UserProvider>
-                </ThemeProvider>
-            </ScopedCssBaseline>
-        </LocalizationProvider>
-    </>
+    // Providers that are needed for all parts of the app
+    return <LocalizationProvider dateAdapter={AdapterDateFns}>
+        <ScopedCssBaseline>
+            <ThemeProvider theme={theme}>
+                <UserProvider>
+                    {children}
+                </UserProvider>
+            </ThemeProvider>
+        </ScopedCssBaseline>
+    </LocalizationProvider>
 }

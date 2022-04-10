@@ -8,10 +8,10 @@ import { WorkingTime } from "./working_times";
 import { AssignActivitiesToBlock, AssignActivitiesToShortBlocks } from "../scheduling/AssignmentHelpers";
 
 type ActivityArgs = Activity & {
-    homework_task: string;
-    homework_due: number;
-    homework_duration: number;
-    homework_complete: boolean;
+    homework_task: string
+    homework_due: number
+    homework_duration: number
+    homework_complete: boolean
     subject_id: number,
     subject_name: string, 
     subject_color: number,
@@ -20,7 +20,7 @@ type ActivityArgs = Activity & {
 }
 
 export default class Activity {
-    private _id?: number;
+    private _id?: number
     public get id() {
         return this._id
     }
@@ -42,12 +42,12 @@ export default class Activity {
         this.working_time = { id: newId } as WorkingTime
     }
     
-    readonly user_id: number;
-    public homework: Homework;
-    public working_time: WorkingTime;
-    public time: number;
-    public complete: boolean;
-    public duration: number;
+    readonly user_id: number
+    public homework: Homework
+    public working_time: WorkingTime
+    public time: number
+    public complete: boolean
+    public duration: number
 
     constructor(data: ActivityArgs) {
         this.id = data.id
@@ -128,7 +128,7 @@ export default class Activity {
             for(let homework of homeworks) {
                 if(!homework.due || !homework.duration || !homework.id) continue
 
-                let activities = allActivities.filter(a => a.homework_id === homework.id)
+                const activities = allActivities.filter(a => a.homework_id === homework.id)
 
                 if(activities.length > 0) {
                     const acitivitySum = activities.reduce((a, b) => a + b.duration, 0)

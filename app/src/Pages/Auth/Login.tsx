@@ -11,6 +11,7 @@ export default function Login() {
     const [error, setError] = useState<string>()
     const [errorElements, setErrorElements] = useState<number[]>([])
 
+    // Whenever the user changes the email or password, clear the error
     useEffect(() => {
         setError(undefined)
         setErrorElements([])    
@@ -25,6 +26,7 @@ export default function Login() {
 
         if(email && password && login) {
             try{
+                // If login is successful, navigate to the home page
                 if(await login(email, password)) navigate("/")
             }catch(err){
                 const { response } = err as AxiosError
@@ -32,7 +34,9 @@ export default function Login() {
                 const { message } = response.data as { message: string }
                 
                 setError(message)
+                // If user is not found, highlight the email field
                 if(message === "User not found") setErrorElements([0])
+                // If password is incorrect, highlight the password field
                 if(message === "Incorrect password") setErrorElements([1])
             }
         }
@@ -59,7 +63,7 @@ export default function Login() {
                 />
 
                 <Button color="secondary" variant="contained" type="submit">Login</Button>
-                <Typography color="error.main" variant="body1" sx={{ height: "2rem" }}>{error}</Typography>
+                <Typography color="error.main" sx={{ height: "2rem" }}>{error}</Typography>
                 <Button onClick={() => navigate("/register")}>Register</Button>      
             </Stack>
         </form>

@@ -12,48 +12,52 @@ import { MinutesToHrsMins } from "../../functions";
 import { useUser } from "../../Hooks/useUser";
 
 type SubjectInput = {
-    _id?: number;
-    name: string;
-    color?: number;
-    inputValue?: string;
+    _id?: number
+    name: string
+    color?: number
+    inputValue?: string
 }
 
 type Props = {
-    id?: number;
-    back: (goHome: boolean) => void;
+    id?: number
+    back: () => void
 }
 
 export default function EditHomework(props: Props) {
-    const { id, back } = props;
+    const { id, back } = props
 
-    const [task, setTask] = useState<string>("");
-    const [subject, setSubject] = useState<SubjectInput>();
-    const [due, setDue] = useState<Date|null>();
-    const [duration, setDuration] = useState<number>();
+    const [task, setTask] = useState<string>("")
+    const [subject, setSubject] = useState<SubjectInput>()
+    const [due, setDue] = useState<Date|null>()
+    const [duration, setDuration] = useState<number>()
     const [homework, setHomework] = useState<Homework>()
 
     const { userId } = useUser()
 
     const fetchHomework = useCallback(async () => {
         if(id) {
-            let tempHomework = await User.forge(userId).homework?.get(id);
+            const tempHomework = await User.forge(userId).homework?.get(id)
             if (tempHomework) {
+                // If homework is successfully fetched, set the homework state
                 setHomework(tempHomework)
-                setTask(tempHomework.task);
-                setSubject(tempHomework.subject);
-                setDue(tempHomework.due);
-                setDuration(tempHomework.duration);
+                // And set the states of the values used by the form
+                setTask(tempHomework.task)
+                setSubject(tempHomework.subject)
+                setDue(tempHomework.due)
+                setDuration(tempHomework.duration)
             }
         }
-    }, [userId, id]);
+    }, [userId, id])
 
+    // Fetch the homework on mount
     useEffect(() => {
-        fetchHomework();
-    }, [fetchHomework]);
+        fetchHomework()
+    }, [fetchHomework])
 
     const saveHomework = async (event: FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
+        event.preventDefault()
 
+        // If all necessary values are set, save the homework
         if(homework && task && subject) {
             try{
                 await homework.edit({
@@ -62,13 +66,14 @@ export default function EditHomework(props: Props) {
                     due: due == null ? undefined : due,
                     duration
                 })
-                back(false)
+                // If the homework was successfully saved, go back to the previous page
+                back()
             }catch{}
         }
     }
 
     return <>
-        <NavBar name="Edit Homework" onBack={() => back(false)}/>
+        <NavBar name="Edit Homework" onBack={back}/>
         <form onSubmit={saveHomework}>
             <Stack direction="column" spacing={2}>
                 <TextField 
@@ -109,5 +114,5 @@ export default function EditHomework(props: Props) {
                 <Save/>
             </Fab>
         </form>
-    </>;
+    </>
 }

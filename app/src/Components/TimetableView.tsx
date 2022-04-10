@@ -14,12 +14,12 @@ import { SizedCell } from "./SizedCell"
 import SizedPaper from "./SizedPaper"
 
 type TimetableRange = {
-    start_day: number;
-    end_day: number;
+    start_day: number
+    end_day: number
 }
 
 type DateRowProps = {
-    dayCount: number;
+    dayCount: number
 }
 
 type TimetableViewProps = {
@@ -35,8 +35,8 @@ type FillerProps = {
 }
 
 type LessonCardProps = {
-    lesson: Lesson;
-    onClick: () => void;
+    lesson: Lesson
+    onClick: () => void
 }
 
 type LessonGridProps = {
@@ -47,36 +47,6 @@ type LessonGridProps = {
     edit: (block: LessonBlock, day: number) => void
 }
 
-function DateRow(props: DateRowProps) {
-    const { dayCount } = props
-    
-    const HeaderRow = styled("thead")({
-        height: '10%'
-    })
-
-    return <HeaderRow>
-        <tr>
-            <td/>
-            { 
-                Array(dayCount).fill(0).map((_, i) => {
-                    let thisDay = addDays(startOfWeek(new Date(), {weekStartsOn: 1}), i)
-                    let sameDay = isSameDay(new Date(), thisDay)
-                    let circleColor = sameDay ? "primary.main" : "background.default"
-                    
-                    return <SizedCell key={i} width={`${90 / dayCount}%`}>
-                        <Stack direction="column" alignItems="center" spacing={0.75}>
-                            <Paper elevation={0} sx={{ borderRadius: "50%", width: "2.5rem", aspectRatio: "1", display: "flex", alignItems: "center", justifyContent: "center", backgroundColor: circleColor }}>
-                                <ContrastTypography backgroundColor={circleColor} variant="h6">{format(thisDay, "d")}</ContrastTypography>
-                            </Paper>
-                            <ContrastTypography backgroundColor={circleColor} variant="body1">{DayIndexToString(i)}</ContrastTypography>
-                        </Stack>
-                    </SizedCell>
-                })
-            }
-        </tr>
-    </HeaderRow>
-}
-
 type LessonBlockOrFiller = { 
     _id?: number, 
     name: string, 
@@ -85,8 +55,54 @@ type LessonBlockOrFiller = {
     filler?: boolean
 }
 
+function DateRow(props: DateRowProps) {
+    const { dayCount } = props
+    
+    // The top row of the table will always be 10% of the height of the whole table
+    const HeaderRow = styled("thead")({
+        height: '10%'
+    })
+
+    // Returns a row of the table with the day names and dates, with the current date highlighted
+    return <HeaderRow>
+        <tr>
+            <td/>
+            { 
+                Array(dayCount).fill(0).map((_, i) => {
+                    const thisDay = addDays(startOfWeek(new Date(), {weekStartsOn: 1}), i) // Gets the date of this day in the week
+                    const sameDay = isSameDay(new Date(), thisDay) 
+                    const circleColor = sameDay ? "primary.main" : "background.default" // If this day is today, highlight it
+                    
+                    return <SizedCell key={i} width={`${90 / dayCount}%`}>
+                        <Stack direction="column" alignItems="center" spacing={0.75}>
+                            <Paper 
+                                elevation={0}
+                                sx={{
+                                    borderRadius: "50%", 
+                                    width: "2.5rem", 
+                                    aspectRatio: "1", 
+                                    display: "flex", 
+                                    alignItems: "center", 
+                                    justifyContent: "center", 
+                                    backgroundColor: circleColor
+                                }}>
+                                <ContrastTypography backgroundColor={circleColor} variant="h6">{format(thisDay, "d")}</ContrastTypography>
+                            </Paper>
+                            <ContrastTypography backgroundColor={circleColor}>{DayIndexToString(i)}</ContrastTypography>
+                        </Stack>
+                    </SizedCell>
+                })
+            }
+        </tr>
+    </HeaderRow>
+}
+
+/*
+Some lesson blocks may not have lessons in, so to ensure everything is rendered in the correct places,
+all unfilled blocks are filled with a filler block.
+*/
 const getBlocksWithFillers = (blocks: LessonBlock[]) => {
-    let temp: LessonBlockOrFiller[] = []
+    const temp: LessonBlockOrFiller[] = []
     for(let block of blocks) {
         if(temp.length === 0) {
             temp.push(block)
@@ -105,19 +121,24 @@ const getBlocksWithFillers = (blocks: LessonBlock[]) => {
     return temp
 }
 
+// Gets the difference in time between the earliest and latest lesson block
 function getDayLength (day: LessonBlock[]) {
     const sortedBlocks = MergeSort(
         day, 
         (a, b) => compareAsc(a.start_time, b.start_time)
     )
 
-    return differenceInMinutes(sortedBlocks[sortedBlocks.length - 1].end_time, sortedBlocks[0].start_time)
+    return differenceInMinutes(
+        sortedBlocks[sortedBlocks.length - 1].end_time, // End of the last lesson
+        sortedBlocks[0].start_time // Start of the first lesson
+    )
 }
 
+// Fillers will render an add button when the user is in edit mode, otherwise they render nothing
 function Filler(props: FillerProps) {
     const { addable, editView, clicked } = props
 
-    if(editView && addable) {
+    if(editView && addable) { // We also need to know if a lesson block is "addable", i.e does a lesson block actually exist at this time?
         return  <ButtonBase 
             sx={{ width: 1, height: 1 }}
             onClick={clicked}
@@ -134,9 +155,35 @@ function Filler(props: FillerProps) {
 function LessonCard(props: LessonCardProps) {
     const { lesson, onClick } = props
 
+    // Displays lesson data in a card
     return <SizedPaper color={lesson.subject.color} onClick={onClick}>
-            <ContrastTypography backgroundColor={lesson.subject.color} variant="subtitle1" sx={{ width: 1, textAlign: "left", fontWeight: "bold", wordWrap: "break-word", wordBreak: "break-all", lineHeight: "1.25rem" }}>{lesson.subject.name}</ContrastTypography>
-            <ContrastTypography backgroundColor={lesson.subject.color} variant="body2" sx={{ width: 1, textAlign: "left", textOverflow: "ellipsis", lineHeight: "1.25rem" }}>{lesson.location.name}</ContrastTypography> 
+            <ContrastTypography 
+                backgroundColor={lesson.subject.color}
+                variant="subtitle1" 
+                sx={{ 
+                    width: 1, 
+                    textAlign: "left", 
+                    fontWeight: "bold", 
+                    wordWrap: "break-word", 
+                    wordBreak: "break-all", 
+                    lineHeight: "1.25rem" 
+                }}
+            >
+                {lesson.subject.name}
+            </ContrastTypography>
+
+            <ContrastTypography 
+                backgroundColor={lesson.subject.color} 
+                variant="body2" 
+                sx={{ 
+                    width: 1, 
+                    textAlign: "left", 
+                    textOverflow: "ellipsis", 
+                    lineHeight: "1.25rem" 
+                }}
+            >
+                {lesson.location.name}
+            </ContrastTypography> 
     </SizedPaper>
 }
 
@@ -147,6 +194,7 @@ function LessonGrid(props: LessonGridProps) {
 
     const [blocksWithFillers, setBlocksWithFillers] = useState<LessonBlockOrFiller[]>()
 
+    // When the component mounts, we need to get the blocks and fillers
     useEffect(() => {
         setBlocksWithFillers(getBlocksWithFillers(LessonBlocks))
     }, [LessonBlocks])
@@ -154,25 +202,30 @@ function LessonGrid(props: LessonGridProps) {
     return <tbody>
         {
             blocksWithFillers && blocksWithFillers.map((b, blockI) => 
+                // For each block, we render a row of the table
                 <tr key={b._id || `f-${blockI}`}>
                     <td>
-                        <Typography variant="body1" sx={{ height: 1 }}>{format(b.start_time, "kk:mm")}</Typography>
+                        {/* The first column will contain the start time of the block */}
+                        <Typography sx={{ height: 1 }}>{format(b.start_time, "kk:mm")}</Typography> 
                     </td>
                     {
                         Array(range.end_day + 1).fill(0).map((_, i) => {
-                            const lesson = Lessons.find(l => l.block._id === b._id && l.day === i)
+                            const lesson = Lessons.find(l => l.block._id === b._id && l.day === i) // Find the lesson in this block on this day
 
                             return <SizedCell 
                                 key={i} 
+                                // Height of the cell is proportional to the length of the lesson block
                                 height={`${100 * (differenceInMinutes(b.end_time, b.start_time) / getDayLength(LessonBlocks))}%`}
                                 width={`${90 / (range.end_day + 1)}%`}
                             >
                                 { lesson ?
+                                    // If there is a lesson at this time, we render it as a car
                                     <LessonCard 
                                         lesson={lesson}
                                         onClick={() => navigate((editView ? "edit/" : "") + lesson._id)}
                                     />
                                     :
+                                    // Otherwise we render a filler
                                     <Filler 
                                         addable={!b.filler} 
                                         editView={editView}
@@ -204,6 +257,7 @@ export default function TimetableView(props: TimetableViewProps) {
         if(week) {
             const tempLessons = await User.forge(userId).lessons?.get()
             setLessons(
+                // We only want to store lessons for the current week
                 tempLessons?.filter(l => week.some(r => r._id === l.repeat._id))
             )
         }
@@ -213,14 +267,17 @@ export default function TimetableView(props: TimetableViewProps) {
         setLessonBlocks(await User.forge(userId).lessonBlocks?.get())
     }, [userId])
 
+    // When the component mounts, we need to fetch the lessons and blocks
     useEffect(() => {
         fetchBlocks()
     }, [fetchBlocks])
 
+    // When the user starts or stops creating a lesson, we need to re-fetch the lessons
     useEffect(() => {
         fetchLessons()
     }, [fetchLessons, creating])
 
+    // Set the day range to the number of days in the current week
     useEffect(() => {
         if(week) setRange({
             start_day: week[0].start_day,
@@ -235,11 +292,13 @@ export default function TimetableView(props: TimetableViewProps) {
 
     return <>
         { (lessons && lessonBlocks && range && week) ?
+            // Display the lesson table if we have all the data
             <LessonTable>
                 <DateRow dayCount={range.end_day + 1}/>
                 <LessonGrid LessonBlocks={lessonBlocks} range={range} Lessons={lessons} editView={editView} edit={edit}/>
             </LessonTable>
             :
+            // Otherwise display a loading indicator
             <Stack direction="column" alignItems="center" justifyContent="center" spacing={2}>
                 <CircularProgress/>
             </Stack>

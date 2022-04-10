@@ -36,6 +36,7 @@ export default function ViewLesson() {
             }catch{}
     }, [lesson, navigate])
 
+    // Fetch lessons on mount
     useEffect(() => {
         fetchLesson()
     }, [fetchLesson])
@@ -61,19 +62,19 @@ export default function ViewLesson() {
                     <Circle sx={{ color: ColorIntToString(lesson.subject.color) }}/>
                     <Typography variant="h5">Subject</Typography>
                 </Stack>
-                <Typography variant="body1">{lesson.subject.name}</Typography>
+                <Typography>{lesson.subject.name}</Typography>
 
                 <Stack direction="row" spacing={3} alignItems="center" sx={{ pt: 2 }}>
                     <Place/>
                     <Typography variant="h5">Location</Typography>
                 </Stack>
-                <Typography variant="body1">{lesson.location.name}</Typography>
+                <Typography>{lesson.location.name}</Typography>
 
                 <Stack direction="row" spacing={3} alignItems="center" sx={{ pt: 2 }}>
                     <Person/>
                     <Typography variant="h5">Teacher</Typography>
                 </Stack>
-                <Typography variant="body1">{lesson.teacher.name}</Typography>
+                <Typography>{lesson.teacher.name}</Typography>
             </Stack>
         }
     </>

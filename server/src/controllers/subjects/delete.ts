@@ -3,10 +3,10 @@ import Subject from "../../database/subjects";
 import { APIError } from "../../errors/types";
 
 export default async (req: Request, res: Response, next: NextFunction) => {
-    const { userId, id } = req.params;
+    const { userId, id } = req.params
     try{
         const subject = await Subject.findById(id, userId)
-        if(!subject) throw new APIError("Subject not found", 404);
+        if(!subject) throw new APIError("Subject not found", 404)
         
         await subject.delete()
         
@@ -14,7 +14,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
             message: "Subject deleted"  
         })
     }catch(err){
-        res.locals.error = err;
+        res.locals.error = err
         next()
     }
 }

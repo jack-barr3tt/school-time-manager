@@ -3,19 +3,20 @@ import AxiosBase from "./AxiosBase";
 import Homework from "./Homework";
 
 type HomeworkCreate = {
-    task: string;
-    subject_id: number;
-    due?: number;
-    duration?: number;
+    task: string
+    subject_id: number
+    due?: number
+    duration?: number
 }
 
 export default class HomeworkManager {
-    private userId: number;
+    private userId: number
 
     constructor(userId: number) {
         this.userId = userId
     }
 
+    // Get method will fetch all the homework for the user if no id is provided, otherwise it will fetch the homework with the provided id
     async get() : Promise<Homework[]>
     async get(id: number) : Promise<Homework>
     async get(id?: number) {

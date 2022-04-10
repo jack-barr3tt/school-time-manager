@@ -16,20 +16,20 @@ export default function EditWorkingTime(props: { back: () => void, id?: number }
     const { userId } = useUser()
 
     const fetchBlock = useCallback(async () => {
-        if(id)
-            setBlock(
-                await User.forge(userId)?.lessonBlocks?.get(id)
-            )
+        if(id) {
+            const tempBlock = await User.forge(userId)?.lessonBlocks?.get(id)
+            if(tempBlock) {
+                // If the block is successfully fetched, set the block state
+                setBlock(tempBlock)
+                // And set the states of the values used by the form
+                setNewName(tempBlock.name)
+                setNewStartTime(tempBlock.start_time)
+                setNewEndTime(tempBlock.end_time)
+            }
+        }
     }, [id, userId])
 
-    useEffect(() => {
-        if(block) {
-            setNewName(block.name)
-            setNewStartTime(block.start_time)
-            setNewEndTime(block.end_time)
-        }
-    }, [block])
-
+    // Fetch the block on mount
     useEffect(() => {   
         fetchBlock()
     }, [fetchBlock])

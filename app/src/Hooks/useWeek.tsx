@@ -21,15 +21,16 @@ export const useWeek = () => {
 export function WeekProvider (props: { children: ReactNode }) {
     const { children } = props
 
-    const [APIUser, setAPIUser] = useState<User>();
-    const [week, setWeek] = useState<Repeat[]>();
-    const [weekNo, setWeekNo] = useState<number>();
-    const [repeats, setRepeats] = useState<Repeat[]>();
-    const [weeks, setWeeks] = useState<Repeat[][]>([]);
+    const [APIUser, setAPIUser] = useState<User>()
+    const [week, setWeek] = useState<Repeat[]>()
+    const [weekNo, setWeekNo] = useState<number>()
+    const [repeats, setRepeats] = useState<Repeat[]>()
+    const [weeks, setWeeks] = useState<Repeat[][]>([])
 
     const { userId } = useUser()
 
     const fetchData = useCallback(async () => {
+        // Fetch the user and their repeats in parallel
         const [tempUser, tempRepeats] = await Promise.all([
             User.get(userId),
             User.forge(userId).repeats?.get()
@@ -38,17 +39,19 @@ export function WeekProvider (props: { children: ReactNode }) {
         setRepeats(tempRepeats)
     }, [userId])
 
+    // Fetch data on mount
     useEffect(() => {
         fetchData()
     }, [fetchData])
 
+    // Update the weeks array when the repeats change
     useEffect(() => {
         if(repeats) setWeeks(RepeatsToWeeks(repeats))
     }, [repeats])
 
     const changeWeek = async (index?: number) => {
         if(weeks && APIUser && index != null) {
-            let pickedWeek = weeks[index]
+            const pickedWeek = weeks[index]
             await APIUser.setRepeat(pickedWeek[0]._id)
             setWeek(pickedWeek)
             fetchData()
@@ -57,7 +60,7 @@ export function WeekProvider (props: { children: ReactNode }) {
 
     const getCurrentWeek = useCallback(() => {
         if(APIUser) {
-            let repeatId = APIUser.repeat?._id
+            const repeatId = APIUser.repeat?._id
             if(APIUser.repeat_ref && repeatId && weeks) {
                 const weeksSinceRef = differenceInWeeks(new Date(), APIUser.repeat_ref)
                 if(weeksSinceRef === 0) {
@@ -75,6 +78,7 @@ export function WeekProvider (props: { children: ReactNode }) {
         }
     }, [APIUser, weeks])
 
+    // Get the current week on mount
     useEffect(() => {
         getCurrentWeek()
     }, [getCurrentWeek])
@@ -86,6 +90,7 @@ export function WeekProvider (props: { children: ReactNode }) {
         changeWeek
     }
 
+    // All components that use this context will have access to its value
     return <WeekContext.Provider value={value}>
         {children}
     </WeekContext.Provider>

@@ -1,15 +1,15 @@
 import Database from "../connections";
 
 export class Location {
-    private _id?: number;
+    private _id?: number
     public get id() {
         return this._id
     }
     private set id(newId: number|undefined) {
         this._id = newId
     }
-    readonly user_id: number;
-    public name: string;
+    readonly user_id: number
+    public name: string
 
     constructor(data: Location) {
         this.id = data.id
@@ -19,6 +19,7 @@ export class Location {
 
     async save() {
         if(this.id) {
+            // If the location has an id, it already exists in the database, so we update it
             await Database.query(
                 `UPDATE locations
                 SET name = $2
@@ -29,6 +30,7 @@ export class Location {
                 ]
             )
         }else{
+            // When the location is created, we want to get it's id
             const { rows } = await Database.query(
                 `INSERT INTO locations (user_id, name)
                 VALUES ($1, $2)

@@ -25,21 +25,29 @@ export default function ViewBlocks() {
         )
     }, [userId])
 
+    // Fetch the blocks on mount or when edit mode is toggled
     useEffect(() => {
         fetchBlocks()
     }, [fetchBlocks, editing])
 
     const deleteBlock = async (id: number) => {
         if(blocks) {
-            let block = blocks.find(t => t._id === id)
+            // Find the block to delete
+            const block = blocks.find(t => t._id === id)
             if(block) {
                 await block.delete()
+                // Remove the block from the list
                 setBlocks(
                     blocks.filter(t => t._id !== id)
                 )
             }
         }
     }
+
+    const sortedBlocks = blocks ? MergeSort(
+        blocks, 
+        (a, b) => compareAsc(a.start_time, b.start_time)
+    ) : undefined
 
     return <>
         
@@ -48,10 +56,7 @@ export default function ViewBlocks() {
                 <>
                     <NavBar name="Set Lesson Times"/>
                     {
-                        blocks ? MergeSort(
-                                blocks, 
-                                (a, b) => compareAsc(a.start_time, b.start_time)
-                            ).map(b => 
+                        sortedBlocks ? sortedBlocks.map(b => 
                                 <SetupCard
                                     key={b._id}
                                     id={b._id}
@@ -63,6 +68,7 @@ export default function ViewBlocks() {
                                 /> 
                             )
                         :
+                            // Show 5 loading skeletons while blocks have not loaded
                             (new Array(5)).fill(0).map((_a, i) =>
                                 <Skeleton key={""+i} variant="rectangular" height={92} animation="wave" sx={{ borderRadius: 1 }}/>
                             )

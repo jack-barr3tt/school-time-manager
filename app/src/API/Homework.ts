@@ -2,13 +2,13 @@ import AxiosBase from "./AxiosBase";
 import Subject from "./Subjects";
 
 export default class Homework {
-    readonly _id: number;
-    private user_id: number;
-    readonly task: string;
-    readonly subject: Subject;
-    readonly due?: Date;
-    readonly duration: number;
-    readonly complete: boolean;
+    readonly _id: number
+    private user_id: number
+    readonly task: string
+    readonly subject: Subject
+    readonly due?: Date
+    readonly duration: number
+    readonly complete: boolean
 
     constructor(data: Homework) {
         this._id = data._id

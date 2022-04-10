@@ -3,19 +3,19 @@ import { Location } from "../../database/location";
 import { APIError } from "../../errors/types";
 
 export default async (req: Request, res: Response, next: NextFunction) => {
-    const { userId, id } = req.params;
+    const { userId, id } = req.params
     try{
-        const location = await Location.findById(id, userId);
-        if(!location) throw new APIError("Location not found", 404);
+        const location = await Location.findById(id, userId)
+        if(!location) throw new APIError("Location not found", 404)
 
-        let { name } = req.body;
+        const { name } = req.body
 
-        if(name) location.name = name;
+        if(name) location.name = name
 
-        await location.save();
-        res.json(location);
+        await location.save()
+        res.json(location)
     }catch(err){
-        res.locals.error = err;
-        next();
+        res.locals.error = err
+        next()
     }
-};
+}

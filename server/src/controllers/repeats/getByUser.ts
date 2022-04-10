@@ -3,13 +3,13 @@ import { Repeat } from "../../database/repeats";
 
 export default async (req: Request, res: Response, next: NextFunction) => {
     try{
-        const { userId } = req.params;
+        const { userId } = req.params
 
-        const repeats = await Repeat.findByUser(userId);
+        const repeats = await Repeat.findByUser(userId)
 
-        res.json(repeats);
+        res.json(repeats)
     }catch(err){
-        res.locals.error = err;
-        next(err);
+        res.locals.error = err
+        next(err)
     }
-};
+}

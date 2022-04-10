@@ -41,5 +41,5 @@ export default function NewWorkingTime() {
                 />
             </Stack>
         </form>
-    </>;
+    </>
 }

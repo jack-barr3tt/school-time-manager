@@ -1,10 +1,10 @@
 import AxiosBase from "./AxiosBase";
 
 export default class WorkingTime {
-    readonly _id: number;
-    private user_id: number;
-    readonly start_time: Date;
-    readonly end_time: Date;
+    readonly _id: number
+    private user_id: number
+    readonly start_time: Date
+    readonly end_time: Date
 
     constructor(data: WorkingTime) {
         this._id = data._id

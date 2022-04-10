@@ -6,14 +6,14 @@ import Subject from "./Subjects";
 import Teacher from "./Teacher";
 
 export default class Lesson {
-    readonly _id: number;
-    private user_id: number;
-    readonly subject: Subject;
-    readonly block: LessonBlock;
-    readonly location: Location;
-    readonly teacher: Teacher;
-    readonly repeat: Repeat;
-    readonly day: number;
+    readonly _id: number
+    private user_id: number
+    readonly subject: Subject
+    readonly block: LessonBlock
+    readonly location: Location
+    readonly teacher: Teacher
+    readonly repeat: Repeat
+    readonly day: number
 
     constructor(data: Lesson) {
         this._id = data._id

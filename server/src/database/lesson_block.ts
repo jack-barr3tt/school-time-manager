@@ -1,17 +1,17 @@
 import Database from "../connections";
 
 export class LessonBlock {
-    private _id?: number;
+    private _id?: number
     public get id() {
         return this._id
     }
     private set id(newId: number|undefined) {
         this._id = newId
     }
-    readonly user_id: number;
-    public name: string;
-    public start_time: number;
-    public end_time: number;
+    readonly user_id: number
+    public name: string
+    public start_time: number
+    public end_time: number
 
     constructor(data: LessonBlock) {
         this.id = data.id
@@ -23,11 +23,11 @@ export class LessonBlock {
 
     async save() {
         if(this.id) {
-            const { rows } = await Database.query(
+            // If the lesson block has an id, it already exists in the database, so we update it
+            await Database.query(
                 `UPDATE lesson_blocks
                 SET name = $2, start_time = $3, end_time = $4
-                WHERE id = $1
-                RETURNING start_time, end_time`, 
+                WHERE id = $1`, 
                 [
                     this.id, 
                     this.name,
@@ -35,10 +35,9 @@ export class LessonBlock {
                     this.end_time
                 ]
             )
-            this.start_time = rows[0].start_time
-            this.end_time = rows[0].end_time
             return this
         } else {
+            // When the homework is created, we want to get it's id
             const { rows } = await Database.query(
                 `INSERT INTO lesson_blocks (user_id, name, start_time, end_time)
                 VALUES ($1, $2, $3, $4)
@@ -83,7 +82,7 @@ export class LessonBlock {
 
     async delete() {
         if(!this.id) return
-        Database.query(
+        await Database.query(
             `DELETE FROM lesson_blocks WHERE id = $1`,
             [this.id]
         )

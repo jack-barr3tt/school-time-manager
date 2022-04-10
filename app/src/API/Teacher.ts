@@ -1,15 +1,15 @@
 import AxiosBase from "./AxiosBase";
 
 export type TeacherInput = {
-    _id?: number;
-    name: string;
-    inputValue?: string;
+    _id?: number
+    name: string
+    inputValue?: string
 }
 
 export default class Teacher {
-    readonly _id: number;
-    private user_id: number;
-    public name: string;
+    readonly _id: number
+    private user_id: number
+    public name: string
 
     constructor(data: Teacher) {
         this._id = data._id

@@ -6,8 +6,8 @@ import auth from './auth';
 
 const server = express()
 server.use(cors())  
-server.use(urlencoded({ extended: false }));
-server.use(json());
+server.use(urlencoded({ extended: false }))
+server.use(json())
 
 server.use((req: Request, _res, next: NextFunction) => {
     console.log(req.method + " " + req.url)

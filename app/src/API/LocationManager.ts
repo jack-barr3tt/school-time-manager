@@ -2,12 +2,13 @@ import AxiosBase from "./AxiosBase";
 import Location from "./Location";
 
 export default class LocationManager {
-    private userId: number;
+    private userId: number
 
     constructor(userId: number) {
         this.userId = userId
     }
 
+    // Get method will fetch all the locations for the user if no id is provided, otherwise it will fetch the location with the provided id
     async get() : Promise<Location[]>
     async get(id: number) : Promise<Location>
     async get(id?: number)

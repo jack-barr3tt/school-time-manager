@@ -3,19 +3,19 @@ import { Teacher } from "../../database/teacher";
 import { APIError } from "../../errors/types";
 
 export default async (req: Request, res: Response, next: NextFunction) => {
-    const { userId, id } = req.params;
+    const { userId, id } = req.params
     try{
-        const teacher = await Teacher.findById(id, userId);
-        if(!teacher) throw new APIError("Teacher not found", 404);
+        const teacher = await Teacher.findById(id, userId)
+        if(!teacher) throw new APIError("Teacher not found", 404)
 
-        let { name } = req.body;
+        const { name } = req.body
 
-        if(name) teacher.name = name;
+        if(name) teacher.name = name
 
-        await teacher.save();   
-        res.json(teacher);
+        await teacher.save()   
+        res.json(teacher)
     }catch(err){
-        res.locals.error = err;
-        next();
+        res.locals.error = err
+        next()
     }
 }

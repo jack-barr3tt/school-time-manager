@@ -6,13 +6,13 @@ export default async (req: Request, res: Response, next: NextFunction) => {
         const subject = new Subject({
             ...req.body,
             user_id: req.params.userId
-        });
+        })
 
-        await subject.save();
+        await subject.save()
         
-        res.status(201).json(subject);
+        res.status(201).json(subject)
     }catch(err) {
-        res.locals.error = err;
-        next();
+        res.locals.error = err
+        next()
     }
 }

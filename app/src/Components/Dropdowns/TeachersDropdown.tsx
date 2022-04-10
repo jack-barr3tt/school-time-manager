@@ -6,11 +6,12 @@ import CreateableAutocomplete from "../CreatableAutocomplete";
 import EasyDialog from "../EasyDialog";
 
 type TeachersDropdownProps = {
-    autoFocus?: boolean;
-    teacher: TeacherInput|undefined;
-    setTeacher: Dispatch<SetStateAction<TeacherInput|undefined>>;
+    autoFocus?: boolean
+    teacher: TeacherInput|undefined
+    setTeacher: Dispatch<SetStateAction<TeacherInput|undefined>>
 }
 
+// Create a dropdown for teachers with the ability to create, edit and delete teachers
 export default function TeachersDropdown(props: TeachersDropdownProps) {
     const { autoFocus, teacher, setTeacher } = props
 
@@ -25,6 +26,7 @@ export default function TeachersDropdown(props: TeachersDropdownProps) {
         )
     }, [userId])
 
+    // Fetch teachers on mount
     useEffect(() => {
         fetchTeachers()
     }, [fetchTeachers])

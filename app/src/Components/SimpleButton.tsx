@@ -2,14 +2,15 @@ import { ButtonBase, ButtonBaseProps, Paper, Stack, Typography } from "@mui/mate
 import { ReactNode } from "react";
 
 type SimpleButtonProps = ButtonBaseProps & {
-    onClick: () => void;
-    icon: ReactNode;
-    text: string;
+    onClick: () => void
+    icon: ReactNode
+    text: string
 }
 
 export default function SimpleButton(props: SimpleButtonProps) {
     const { onClick, icon, text, ...rest } = props
 
+    // Simple button in the sampe visual style as cards
     return <ButtonBase 
         sx={{
             borderRadius: 3 

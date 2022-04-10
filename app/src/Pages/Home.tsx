@@ -13,7 +13,7 @@ import { useTimetable } from '../Hooks/useTimetable';
 import { useUser } from '../Hooks/useUser';
 
 export default function Home() {
-    const [user, setUser] = useState<User>();
+    const [user, setUser] = useState<User>()
 
     const navigate = useNavigate()
     const theme = useTheme()
@@ -29,12 +29,23 @@ export default function Home() {
         )
     }, [userId, user])
 
+    // Fetch user on mount
     useEffect(() => {
         fetchUser()
     }, [fetchUser])
 
     return <>
-        <Paper sx={{ backgroundImage: `linear-gradient(${theme.palette.secondary.main}, ${theme.palette.background.default})`, p: 3, width: 1, position: "absolute", left: 0, top: 0 }} elevation={0}/>
+        <Paper 
+            sx={{ 
+                backgroundImage: `linear-gradient(${theme.palette.secondary.main}, ${theme.palette.background.default})`, 
+                p: 3, 
+                width: 1, 
+                position: "absolute", 
+                left: 0, 
+                top: 0 
+            }} 
+            elevation={0}
+        />
         
         <Typography variant="h5" textAlign="center" sx={{ zIndex: 1, py: 1 }}>{ user && user.username ? `Welcome, ${user.username}` : "Welcome"}</Typography>
         

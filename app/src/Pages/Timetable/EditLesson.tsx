@@ -14,29 +14,32 @@ import TeachersDropdown from "../../Components/Dropdowns/TeachersDropdown";
 import { useUser } from "../../Hooks/useUser";
 
 export default function EditLesson() {
-    const [lesson, setLesson] = useState<Lesson>();
+    const [lesson, setLesson] = useState<Lesson>()
 
-    const [subject, setSubject] = useState<SubjectInput>();
-    const [location, setLocation] = useState<LocationInput>();
-    const [teacher, setTeacher] = useState<TeacherInput>();
+    const [subject, setSubject] = useState<SubjectInput>()
+    const [location, setLocation] = useState<LocationInput>()
+    const [teacher, setTeacher] = useState<TeacherInput>()
 
-    const { id } = useParams();
+    const { id } = useParams()
     const navigate = useNavigate()
     const { userId } = useUser()
     
     const fetchLesson = useCallback(async () => {
         const tempLesson = await User.forge(userId).lessons?.get(parseInt(id || "0"))
         if(tempLesson) {
+            // If the lesson was successfully fetched, set the lesson state
             setLesson(tempLesson)
+            // And set the states of the values used by the form
             setSubject(tempLesson.subject)
             setLocation(tempLesson.location)
             setTeacher(tempLesson.teacher)
         }
-    }, [userId, id]);
+    }, [userId, id])
 
+    // Fetch lessons on mount
     useEffect(() => {
         fetchLesson()
-    }, [fetchLesson]);
+    }, [fetchLesson])
 
     const saveLesson = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()

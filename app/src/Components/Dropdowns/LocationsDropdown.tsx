@@ -6,11 +6,12 @@ import CreateableAutocomplete from "../CreatableAutocomplete";
 import EasyDialog from "../EasyDialog";
 
 type LocationsDropdownProps = {
-    autoFocus?: boolean;
-    location: LocationInput|undefined;
-    setLocation: Dispatch<SetStateAction<LocationInput|undefined>>;
+    autoFocus?: boolean
+    location: LocationInput|undefined
+    setLocation: Dispatch<SetStateAction<LocationInput|undefined>>
 }
 
+// Create a dropdown for locations with the ability to create, edit and delete locations
 export default function LocationsDropdown(props: LocationsDropdownProps) {
     const { autoFocus, location, setLocation } = props
 
@@ -25,13 +26,14 @@ export default function LocationsDropdown(props: LocationsDropdownProps) {
         )
     }, [userId])
 
+    // Fetch locations on mount
     useEffect(() => {
         fetchLocations()
     }, [fetchLocations])
     
     const createLocation = async (name?: string) => {
         if(name) {
-            const location = await User.forge(userId).locations?.create(name as string)
+            const location = await User.forge(userId).locations?.create(name)
             if(location) {
                 if(locations) setLocations(
                     [...locations, location]

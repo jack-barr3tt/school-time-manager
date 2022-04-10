@@ -1,11 +1,11 @@
 import AxiosBase from "./AxiosBase";
 
 export default class LessonBlock {
-    readonly _id: number;
-    private user_id: number;
-    readonly name: string;
-    readonly start_time: Date;
-    readonly end_time: Date;
+    readonly _id: number
+    private user_id: number
+    readonly name: string
+    readonly start_time: Date
+    readonly end_time: Date
 
     constructor(data: LessonBlock) {
         this._id = data._id

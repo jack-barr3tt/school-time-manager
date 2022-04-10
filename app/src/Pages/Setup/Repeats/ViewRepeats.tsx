@@ -27,11 +27,13 @@ export default function ViewRepeats() {
     const deleteRepeat = async (repeat: Repeat) => {
         await repeat.delete()
         if(repeats)
+            // Remove the deleted repeat from the list
             setRepeats(
                 repeats.filter(r => r._id !== repeat._id)
             )
     }
 
+    // Fetch repeats on mount or when edit mode is toggled
     useEffect(() => {
         fetchRepeats()
     }, [fetchRepeats, editing])
@@ -51,6 +53,7 @@ export default function ViewRepeats() {
                         deleteItem={() => deleteRepeat(r)}
                     />)
                 :
+                    // Show 5 loading skeletons while blocks have not loaded
                     (new Array(5)).fill(0).map((_a, i) => 
                         <Skeleton key={""+i} variant="rectangular" height={92} animation="wave" sx={{ borderRadius: 1 }}/>
                     )
@@ -58,6 +61,6 @@ export default function ViewRepeats() {
             <Fab sx={{ position: "absolute", right: "24px", bottom: "24px" }} onClick={() => navigate("new")}>
                 <Add/>                      
             </Fab>
-        </> : <EditRepeat back={() =>  setEditing(false)} id={editingId}/> }
+        </> : <EditRepeat back={() => setEditing(false)} id={editingId}/> }
     </>
 }

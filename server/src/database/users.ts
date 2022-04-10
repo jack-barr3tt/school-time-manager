@@ -5,13 +5,13 @@ import { APIError } from "../errors/types";
 import { Repeat } from "./repeats";
 
 type UserArgs = User & {
-    repeat_name: string;
-    repeat_start_day: number;
-    repeat_end_day: number;
+    repeat_name: string
+    repeat_start_day: number
+    repeat_end_day: number
 }
 
 export class User {
-    private _id? : number;
+    private _id? : number
     public get id() {
         return this._id
     }
@@ -25,22 +25,27 @@ export class User {
     public set repeat_id(newId: number|undefined) {
         this.repeat = { id: newId } as Repeat
     }
-    readonly email : string;
-    readonly username : string;
-    public prewarning? : number;
-    public repeat?: Repeat;
-    public repeat_ref?: number;
-    private hash? : string;
+    readonly email : string
+    readonly username : string
+    public prewarning? : number
+    public repeat?: Repeat
+    public repeat_ref?: number
+    private hash? : string
 
     constructor(data: UserArgs) {
+        /* 
+        Basic email validation to check the the address contains some text,
+        then an @ symbol, then some text, then a period, then some text 
+        */
         let emailValidationRegex = /.+@.+\..+/g
         if(emailValidationRegex.test(data.email))
-            this.email = data.email;
+            this.email = data.email
         else
             throw new APIError("Invalid email", 400)
-        this.username = data.username;
-        this.hash = data.hash;
-        this.prewarning = data.prewarning;
+
+        this.username = data.username
+        this.hash = data.hash
+        this.prewarning = data.prewarning
         if(data.repeat_name) 
             this.repeat = new Repeat({
                 id: data.repeat_id,
@@ -54,6 +59,7 @@ export class User {
 
     async save() {
         if(this.id) {
+            // If the user has an id, it already exists in the database, so we update it
             await Database.query(
                 'UPDATE users SET username = $2, email = $3, prewarning = $4, repeat_ref = $5, repeat_id = $6 WHERE id = $1',
                 [
@@ -67,6 +73,7 @@ export class User {
             )
             return this
         } else {
+            // When the user is created, we want to get it's id
             const { rows } = await Database.query(
                 'INSERT INTO users (email, username, hash, prewarning) VALUES ($1, $2, $3, $4) RETURNING id',
                 [
@@ -94,10 +101,15 @@ export class User {
         const isValid = await compare(password, this.hash)
         if(!isValid) throw new APIError("Incorrect password", 401)
 
+        // Created a json web token container the user's id that expires in 1 hour and is signed with a secret
         return sign({ userId: this.id }, process.env.JWT_SECRET || "", { expiresIn: '1h' })
     }
 
     static async findById(id: string) {
+        /* 
+        Cross table join to get the user and their repeat
+        LEFT is used because the user may not have a repeat
+        */
         const { rows } = await Database.query(
             `SELECT u.id, u.username, u.email, u.prewarning, u.repeat_id, u.repeat_ref, r.name repeat_name, r.start_day repeat_start_day, r.end_day repeat_end_day
             FROM users u

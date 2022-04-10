@@ -21,6 +21,7 @@ export default function EditWorkingTime(props: { back: () => void, id?: number }
             )
     }, [id, userId])
 
+    // Fetch working times on mount
     useEffect(() => {   
         fetchTime()
     }, [fetchTime])

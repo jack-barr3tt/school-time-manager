@@ -5,6 +5,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     try{
         const user = new User(req.body)
 
+        // Hashing the password is done asynchronously, so has to be done after the constructor
         await user.addPassword(req.body.password)
 
         await user.save()

@@ -1,16 +1,16 @@
 import Database from "../connections";
 
 export class WorkingTime {
-    private _id?: number;
+    private _id?: number
     public get id() {
         return this._id
     }
     private set id(newId: number|undefined) {
         this._id = newId
     }
-    readonly user_id: number;
-    public start_time: number;
-    public end_time: number;
+    readonly user_id: number
+    public start_time: number
+    public end_time: number
 
     constructor(data: WorkingTime) {
         this.id = data.id

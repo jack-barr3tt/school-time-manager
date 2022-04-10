@@ -6,9 +6,9 @@ import { MergeSort } from "../functions";
 import { useUser } from "./useUser";
 
 type HomeworkContextValue = {
-    all: Homework[];
-    next: Homework;
-    refresh: () => void;
+    all: Homework[]
+    next: Homework
+    refresh: () => void
 }
 
 const HomeworkContext = createContext<Partial<HomeworkContextValue>>({})
@@ -24,8 +24,14 @@ export function HomeworkProvider (props: { children: ReactNode }) {
     const { userId } = useUser()
 
     const fetchHomeworks = useCallback(async () => {
+        // Fetch all homeworks
         const tempHomeworks = await User.forge(userId).homework?.get()
         setHomeworks(tempHomeworks)
+
+        /*
+        If we get homeworks, sort them by date and then pick the next incomplete one,
+        as this will be the next homework to be completed.
+        */
         if(tempHomeworks)
             setNextHomework(
                 MergeSort(
@@ -35,6 +41,7 @@ export function HomeworkProvider (props: { children: ReactNode }) {
             )
     }, [userId])
 
+    // Fetch all homeworks on mount
     useEffect(() => {
         fetchHomeworks()
     }, [fetchHomeworks])
@@ -45,6 +52,7 @@ export function HomeworkProvider (props: { children: ReactNode }) {
         refresh: () => fetchHomeworks()
     }
 
+    // All components that use this context will have access to its value
     return <HomeworkContext.Provider value={value}>
         {children}
     </HomeworkContext.Provider>

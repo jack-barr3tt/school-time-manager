@@ -49,8 +49,10 @@ export default function NewRepeat() {
                         valueLabelDisplay="auto"
                         valueLabelFormat={value => DayIndexToString(value, "long")}
                         onChange={(_e: Event, value: number|number[], active: number) => {
+                            // value should always be an array but we confirm this for type-safety
                             if (!Array.isArray(value)) return
                         
+                            // If left thumb is being moved, keep a minimum spacing of 1 day to the right thumb
                             if (value[1] - value[0] < 1 && active === 0) {
                                 const clamped = Math.min(value[0], 6 - 1)
                                 setDays([clamped, clamped + 1])

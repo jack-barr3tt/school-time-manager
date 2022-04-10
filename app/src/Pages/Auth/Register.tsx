@@ -25,8 +25,9 @@ export default function Register() {
     const RegisterUser = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
 
-        let tempErrors = []
+        const tempErrors = []
 
+        // If any fields are empty, highlight them
         if(!email) tempErrors.push(0)
         if(!username) tempErrors.push(1)
         if(!password) tempErrors.push(2)
@@ -36,26 +37,31 @@ export default function Register() {
 
         if(email && username && password && passwordConfirm) {
             if(password !== passwordConfirm) {
-                console.log("passwords don't match")
                 setError("Passwords do not match.")
                 setErrorElements([2,3])
                 return
             }
             try{
+                // Attempt to register the user
                 await User.register(email, username, password)
+                // If successful, attempt to login the user, and navigate to the home page if successful
                 if(login && await login(email, password)) navigate("/")
             }catch(err){
                 const { response } = err as AxiosError
                 if(!response) return
                 const { message } = response.data as { message: string }
+
                 setError(message)
+                // If email is not valid, highlight the email field
                 if(message === "Invalid email") setErrorElements([0])
+                // If a user already exists with this email, highlight the email field, and show an error message
                 if(message.startsWith("Key (email)=(")) {
                     setError("Email already in use.")
                     setErrorElements([0])
                 }
             }
         }else{
+            // If any fields are empty, display an error
             setError("Please fill out all fields.")
         }
     }
@@ -75,7 +81,6 @@ export default function Register() {
                 <TextField 
                     label="Username"
                     fullWidth
-                    autoFocus 
                     onChange={(e) => setUsername(e.target.value)}
                     error={errorElements.includes(1)}
                 />
@@ -97,7 +102,7 @@ export default function Register() {
                 />
 
                 <Button color="secondary" variant="contained" type="submit" fullWidth>Register</Button>
-                { error && <Typography color="error.main" variant="body1">{error}</Typography> }
+                { error && <Typography color="error.main">{error}</Typography> }
             </Stack>
         </form>
     </>
