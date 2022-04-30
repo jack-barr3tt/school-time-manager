@@ -4,12 +4,12 @@ import { red } from '@mui/material/colors';
 import { format } from 'date-fns';
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Lesson from '../API/Lesson';
 import { User } from '../API/Users';
 import { Card } from '../Components/Card';
 import SimpleButton from '../Components/SimpleButton';
 import { DateToMonth } from '../functions';
 import { useHomework } from '../Hooks/useHomework';
-import { useTimetable } from '../Hooks/useTimetable';
 import { useUser } from '../Hooks/useUser';
 
 export default function Home() {
@@ -19,20 +19,25 @@ export default function Home() {
     const theme = useTheme()
 
     const { next: nextHomework } = useHomework()
-    const { next: nextLesson } = useTimetable()
+    const [nextLesson, setNextLesson] = useState<Lesson>()
 
     const { userId, logout } = useUser()
 
-    const fetchUser = useCallback(async () => {
-        if(userId && !user) setUser(
-            await User.get(userId)
-        )
+    const fetchData = useCallback(async () => {
+        if(userId) {
+            if(!user) setUser(
+                await User.get(userId)
+            )
+            setNextLesson(
+                await User.forge(userId).lessons?.getNext()
+            )
+        }
     }, [userId, user])
 
     // Fetch user on mount
     useEffect(() => {
-        fetchUser()
-    }, [fetchUser])
+        fetchData()
+    }, [fetchData])
 
     return <>
         <Paper 

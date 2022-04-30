@@ -30,6 +30,13 @@ export default class LessonManager {
         }
     }
 
+    async getNext(subjectId?: number) {
+        const { data } = await AxiosBase.get<Lesson>(`/users/${this.userId}/lessons/next${subjectId ? `?subject_id=${subjectId}` : ''}`)
+        if(data)
+            return new Lesson(data)
+        else return undefined
+    }
+
     async create(lesson: LessonCreate) {
         const { data } = await AxiosBase.post<Lesson>(`/users/${this.userId}/lessons`, lesson)
         return new Lesson(data)
