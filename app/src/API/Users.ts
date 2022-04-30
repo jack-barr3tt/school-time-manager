@@ -1,4 +1,3 @@
-import { AxiosResponse } from "axios";
 import AxiosBase from "./AxiosBase";
 import HomeworkManager from "./HomeworkManager";
 import LessonBlockManager from "./LessonBlockManager";
@@ -59,7 +58,7 @@ export class User {
     }
 
     static async get(id: number) {
-        const { data } = await AxiosBase.get(`/users/${id}`) as AxiosResponse<User>
+        const { data } = await AxiosBase.get<User>(`/users/${id}`)
         return new User(data)
     }
 
@@ -75,10 +74,12 @@ export class User {
     }
 
     static async register(email: string, username: string, password: string) {
-        await AxiosBase.post('/users', {
+        const { data } = await AxiosBase.post<User>('/users', {
             email,
             username,
             password
         })
+
+        return new User(data)
     }
 }

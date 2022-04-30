@@ -50,7 +50,7 @@ export default function EditWorkingTime(props: { back: () => void, id?: number }
     }
 
     return <>
-        <NavBar name="Edit Working Time" onBack={back}/>
+        <NavBar name="Edit Lesson Block" onBack={back}/>
         <form onSubmit={saveBlock}>
             <Stack direction="column" spacing={2}>
                 <TextField
