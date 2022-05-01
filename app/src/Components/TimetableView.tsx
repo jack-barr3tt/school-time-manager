@@ -8,7 +8,6 @@ import LessonBlock from "../API/LessonBlock"
 import { User } from "../API/Users"
 import { DayIndexToString, MergeSort } from "../functions"
 import { useUser } from "../Hooks/useUser"
-import { useWeek } from "../Hooks/useWeek"
 import ContrastTypography from "./ConstrastTypography"
 import { SizedCell } from "./SizedCell"
 import SizedPaper from "./SizedPaper"
@@ -23,8 +22,9 @@ type DateRowProps = {
 }
 
 type TimetableViewProps = {
-    creating: boolean,
-    editView: boolean,
+    creating: boolean
+    editView: boolean
+    weekNo: number
     edit: (block: LessonBlock, day: number) => void
 }
 
@@ -243,9 +243,7 @@ function LessonGrid(props: LessonGridProps) {
 }
 
 export default function TimetableView(props: TimetableViewProps) {
-    const { creating, editView, edit } = props
-
-    const { week } = useWeek()
+    const { creating, editView, weekNo, edit } = props
 
     const [lessons, setLessons] = useState<Lesson[]>()
     const [lessonBlocks, setLessonBlocks] = useState<LessonBlock[]>()
@@ -254,14 +252,9 @@ export default function TimetableView(props: TimetableViewProps) {
     const { userId } = useUser()
 
     const fetchLessons = useCallback(async () => {
-        if(week) {
-            const tempLessons = await User.forge(userId).lessons?.get()
-            setLessons(
-                // We only want to store lessons for the current week
-                tempLessons?.filter(l => week.some(r => r._id === l.repeat._id))
-            )
-        }
-    }, [userId, week])
+        const tempWeek = await User.forge(userId).lessons?.getWeek()
+        if(tempWeek) setLessons(tempWeek.lessons)
+    }, [userId, ])
 
     const fetchBlocks = useCallback(async () => {
         setLessonBlocks(await User.forge(userId).lessonBlocks?.get())
@@ -275,23 +268,23 @@ export default function TimetableView(props: TimetableViewProps) {
     // When the user starts or stops creating a lesson, we need to re-fetch the lessons
     useEffect(() => {
         fetchLessons()
-    }, [fetchLessons, creating])
+    }, [fetchLessons, creating, weekNo])
 
     // Set the day range to the number of days in the current week
     useEffect(() => {
-        if(week) setRange({
-            start_day: week[0].start_day,
-            end_day: week[week.length - 1].end_day
+        if(lessons) setRange({
+            start_day: lessons.reduce((a, b) => a < b.day ? a : b.day, 0),
+            end_day: lessons.reduce((a, b) => a > b.day ? a : b.day, 0)
         })
-    }, [week])
-    
+    }, [lessons])
+
     const LessonTable = styled('table')({
         width: '100%',
         height: '100%'
     })
 
     return <>
-        { (lessons && lessonBlocks && range && week) ?
+        { (lessons && lessonBlocks && range) ?
             // Display the lesson table if we have all the data
             <LessonTable>
                 <DateRow dayCount={range.end_day + 1}/>

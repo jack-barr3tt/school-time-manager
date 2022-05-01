@@ -16,6 +16,7 @@ type LessonArgs = Lesson & {
     repeat_name: string
     repeat_start_day: number
     repeat_end_day: number
+    repeat_index: number
 }
 
 export class Lesson {
@@ -104,7 +105,8 @@ export class Lesson {
             user_id: data.user_id,
             name: data.repeat_name,
             start_day: data.repeat_start_day,
-            end_day: data.repeat_end_day
+            end_day: data.repeat_end_day,
+            index: data.repeat_index
         } as Repeat)
 
         this.day = data.day
@@ -176,7 +178,7 @@ export class Lesson {
         // Cross table query to get all the user's lessons, and their subjects, blocks, locations, teachers, and repeats
         const { rows } = await Database.query(
             `SELECT l.*, s.name subject_name, s.color subject_color, b.name block_name, b.start_time block_start_time, b.end_time block_end_time, 
-            lo.name location_name, t.name teacher_name, r.name repeat_name, r.start_day repeat_start_day, r.end_day repeat_end_day
+            lo.name location_name, t.name teacher_name, r.name repeat_name, r.start_day repeat_start_day, r.end_day repeat_end_day, r.index repeat_index
             FROM lessons l
             INNER JOIN subjects s ON l.subject_id = s.id
             INNER JOIN lesson_blocks b ON l.block_id = b.id

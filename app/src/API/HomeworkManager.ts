@@ -28,6 +28,13 @@ export default class HomeworkManager {
             return data.map(s => new Homework(s))
         }
     }
+
+    async getNext(homeworkId?: number) {
+        const { data } = await AxiosBase.get<Homework>(`/users/${this.userId}/homework/next${homeworkId ? `?subject_id=${homeworkId}` : ""}`)
+        if(data)
+            return new Homework(data)
+        else return undefined
+    }
     
     async create(homework: HomeworkCreate) {
         const { data } = await AxiosBase.post<Homework>(`/users/${this.userId}/homework`, homework)

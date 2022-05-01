@@ -1,17 +1,18 @@
 import { Edit } from "@mui/icons-material";
 import { Select, MenuItem, IconButton } from "@mui/material";
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import LessonBlock from "../../API/LessonBlock";
 import Repeat from "../../API/Repeat";
+import { User } from "../../API/Users";
 import NavBar from "../../Components/NavBar";
 import TimetableView from "../../Components/TimetableView";
-import { useWeek } from "../../Hooks/useWeek";
+import { useUser } from "../../Hooks/useUser";
 import NewLesson from "./NewLesson";
 
 type WeekSelectDropdownProps = { 
     weekNo: number, 
     weeks: Repeat[][], 
-    changeWeek: (index?: number | undefined) => void 
+    changeWeek: (index?: number) => void 
 }
 
 function WeekSelectDropdown(props: WeekSelectDropdownProps) {
@@ -36,37 +37,73 @@ function WeekSelectDropdown(props: WeekSelectDropdownProps) {
 }
 
 export default function Timetable() {
-    const { week, weeks, weekNo, changeWeek } = useWeek()
-
     const [editView, setEditView] = useState(false)
     const [creating, setCreating] = useState(false)
     const [createBlock, setCreateBlock] = useState<LessonBlock>()
-    const [createDay, setCreateDay] = useState<number>()   
+    const [createDay, setCreateDay] = useState<number>()
+    const [weekNo, setWeekNo] = useState<number>()
+    const [weeks, setWeeks] = useState<Repeat[][]>()
+    const [week, setWeek] = useState<Repeat[]>()
+
+    const { userId } = useUser()
+
+    const fetchData = useCallback(async () => {
+        const [tempWeeks, tempWeek] = await Promise.all([
+            User.forge(userId).lessons?.getWeeks(),
+            User.forge(userId).lessons?.getWeek()
+        ])
+        if(tempWeeks) setWeeks(tempWeeks.repeats)
+        if(tempWeek) {
+            setWeekNo(tempWeek.no)
+            setWeek(tempWeek.repeats)
+        }
+    }, [])
     
+    useEffect(() => {
+        fetchData()
+    }, [fetchData])
+
+    const changeWeek = async (index?: number) => {
+        if(!weeks || index == null) return
+
+        const newWeek = weeks[index]
+
+        const user = await User.get(userId)
+        if(user) {
+            await user.setRepeat(newWeek[0]._id)
+            fetchData()
+        }
+    }
+
     return <>
         { !creating ?
             <>
-                <NavBar name="Timetable" controls={[
-                    <WeekSelectDropdown 
-                        weekNo={weekNo} 
-                        weeks={weeks} 
-                        changeWeek={changeWeek}
-                    />,
-                    <IconButton key="edit-mode" onClick={() => setEditView(!editView)}>
-                        <Edit/>
-                    </IconButton>
-                ]}/>
-                <TimetableView
-                    creating={creating}
-                    editView={editView}
-                    edit={ (block, day) => {
-                        setCreating(true)
-                        setCreateBlock(block)
-                        setCreateDay(day)
-                    }}
-                />
+                { weekNo != null && <>
+                    {   
+                        weeks && <NavBar name="Timetable" controls={[
+                            <WeekSelectDropdown 
+                                weekNo={weekNo} 
+                                weeks={weeks} 
+                                changeWeek={changeWeek}
+                            />,
+                            <IconButton key="edit-mode" onClick={() => setEditView(!editView)}>
+                                <Edit/>
+                            </IconButton>
+                        ]}/> 
+                    }
+                    <TimetableView
+                        creating={creating}
+                        editView={editView}
+                        weekNo={weekNo}
+                        edit={ (block, day) => {
+                            setCreating(true)
+                            setCreateBlock(block)
+                            setCreateDay(day)
+                        }}
+                    />
+                </> }
             </>
-        :  (createDay != null) && createBlock && week && 
+        :   (createDay != null) && createBlock && week &&
                 <NewLesson 
                     block={createBlock} 
                     repeat={week.find(r => r.end_day >= createDay && r.start_day <= createDay)} 

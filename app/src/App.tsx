@@ -2,7 +2,7 @@ import { Stack, useMediaQuery, Container, Paper, createTheme } from '@mui/materi
 import { green, red } from '@mui/material/colors';
 import { ReactNode } from 'react';
 import './App.css';
-import { DataProviders, GeneralProviders } from './Providers';
+import { Providers } from './Providers';
 import RouteProtector from './RouteProtector';
 import Router from './Router';
 
@@ -65,30 +65,26 @@ export default function App() {
     // Mobile screens are those with a width less than the value of the "sm" breakpoint
     const isMobile = useMediaQuery(`(max-width: ${theme.breakpoints.values.sm}px)`)
     
-    return <GeneralProviders>
+    return <Providers>
         {
             isMobile ? 
             // If mobile, render the layout without a container
             <RouteProtector>
-                <DataProviders>
-                    <MainGrid>
-                        <Router/>
-                    </MainGrid>
-                </DataProviders>
+                <MainGrid>
+                    <Router/>
+                </MainGrid>
             </RouteProtector>
             :
             // If not mobile, render the layout with a container
             <Container maxWidth="sm" disableGutters sx={{ height: 1, py: 2 }}>
                 <Paper sx={{ position: "relative", height: 1 }}>
                 <RouteProtector>
-                    <DataProviders>
-                        <MainGrid>
-                            <Router/>
-                        </MainGrid>
-                    </DataProviders>
+                    <MainGrid>
+                        <Router/>
+                    </MainGrid>
                 </RouteProtector>
             </Paper>
             </Container>
         }
-    </GeneralProviders>
+    </Providers>
 }

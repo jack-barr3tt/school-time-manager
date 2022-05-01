@@ -1,31 +1,16 @@
 import { LocalizationProvider } from "@mui/lab";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import { ScopedCssBaseline, ThemeProvider } from "@mui/material";
+import { enGB } from "date-fns/locale";
 import { ReactNode } from "react";
 import { theme } from "./App";
-import { HomeworkProvider } from "./Hooks/useHomework";
-import { TimetableProvider } from "./Hooks/useTimetable";
 import { UserProvider } from "./Hooks/useUser";
-import { WeekProvider } from "./Hooks/useWeek";
 
-export function DataProviders(props: { children: ReactNode }) {
-    const { children } = props
-    
-    // Providers that return user-specifc data
-    return <HomeworkProvider>
-        <WeekProvider>
-            <TimetableProvider>
-                {children}
-            </TimetableProvider>
-        </WeekProvider>
-    </HomeworkProvider>
-}
-
-export function GeneralProviders(props: { children: ReactNode }) {
+export function Providers(props: { children: ReactNode }) {
     const { children } = props
 
     // Providers that are needed for all parts of the app
-    return <LocalizationProvider dateAdapter={AdapterDateFns}>
+    return <LocalizationProvider dateAdapter={AdapterDateFns} locale={enGB}>
         <ScopedCssBaseline>
             <ThemeProvider theme={theme}>
                 <UserProvider>

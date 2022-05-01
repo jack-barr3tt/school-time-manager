@@ -2,6 +2,7 @@ import { Skeleton, Typography } from '@mui/material';
 import { differenceInHours } from 'date-fns';
 import { useCallback, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Lesson from '../../API/Lesson';
 import LessonBlock from '../../API/LessonBlock';
 import Repeat from '../../API/Repeat';
 import { User } from '../../API/Users';
@@ -9,9 +10,9 @@ import WorkingTime from '../../API/WorkingTimes';
 import NavBar from '../../Components/NavBar';
 import SettingsButton from '../../Components/SettingsButton';
 import { useUser } from '../../Hooks/useUser';
-import { useWeek } from '../../Hooks/useWeek';
 
 export default function Setup() {
+    const [weeks, setWeeks] = useState<Lesson[][][]>();
     const [repeats, setRepeats] = useState<Repeat[]>()
     const [lessonBlocks, setLessonBlocks] = useState<LessonBlock[]>()
     const [workingTimes, setWorkingTimes] = useState<WorkingTime[]>()
@@ -22,15 +23,17 @@ export default function Setup() {
 
     const fetchData = useCallback(async () => {
         // Fetch the user, their repeats, their working times and their lesson blocks in parallel
-        const [tempRepeats, tempTimes, tempBlocks, fetchedUser] = await Promise.all([
+        const [tempRepeats, tempTimes, tempBlocks, tempWeeks, fetchedUser] = await Promise.all([
             User.forge(userId).repeats?.get(),
             User.forge(userId).workingTimes?.get(),
             User.forge(userId).lessonBlocks?.get(),
+            User.forge(userId).lessons?.getWeeks(),
             User.get(userId)
         ])
         setRepeats(tempRepeats)
         setWorkingTimes(tempTimes)
         setLessonBlocks(tempBlocks)
+        setWeeks(tempWeeks?.lessons)
         setNotification(fetchedUser.prewarning || -1)
     }, [userId])
 
@@ -39,8 +42,6 @@ export default function Setup() {
         fetchData()
     }, [fetchData])
 
-    const { weeks } = useWeek()
-
     const skeletonFiller = <SettingsButton mainText="Loading" lowerText="Loading"/>
 
     return <>
@@ -48,7 +49,7 @@ export default function Setup() {
         
         <Typography variant="h6">Timetable</Typography>
 
-        { repeats ? 
+        { repeats && weeks ? 
             <SettingsButton 
                 mainText="Repeats" 
                 lowerText={`${weeks.reduce((a, b) => a + b.length, 0)} timetables, repeats every ${weeks.length} weeks`} 
