@@ -1,6 +1,6 @@
 import { Save } from '@mui/icons-material';
 import { DatePicker } from '@mui/lab';
-import { Fab, Slider, Stack, TextField, Typography } from '@mui/material';
+import { Button, Fab, Slider, Stack, TextField, Typography } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import { startOfDay } from 'date-fns';
 import { FormEvent, useState } from 'react';
@@ -36,6 +36,14 @@ export default function NewHomework() {
         }
     }
 
+    const setNextLesson = async () => {
+        if(!subject) return
+
+        const nextLesson = await User.forge(userId).lessons?.getNext(subject._id)
+
+        if(nextLesson) setDue(nextLesson.block.start_time)
+    }
+
     return <>
         <NavBar name="New Homework Task"/>
         <form onSubmit={saveHomework}>
@@ -45,12 +53,15 @@ export default function NewHomework() {
                     subject={subject}
                     setSubject={setSubject}
                 />
+                <Typography variant="h6" id="due-label">Time to Complete</Typography>
                 <DatePicker 
+                    aria-labelledby="due-label"
                     label="Due" 
                     value={due} 
                     onChange={(newValue) => setDue(newValue)}
                     renderInput={(props) => <TextField {...props} label="Due" fullWidth/>}
                 />
+                <Button variant="contained" color="secondary" disabled={!subject} onClick={setNextLesson}>Next Lesson</Button>
                 <Typography variant="h6" id="duration-label">Time to Complete</Typography>
                 <Stack direction="row" sx={{ px: 3 }}>
                     <Slider

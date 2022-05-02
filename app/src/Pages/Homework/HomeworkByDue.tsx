@@ -34,9 +34,13 @@ export default function HomeworkByDue(props: HomeworkByDueProps) {
         )
 
         // All homework due in the past is saved to overdueHomework
-        setOverdueHomework(sortedHomework.filter(h => isPast(h.due || 0) ))
+        setOverdueHomework(sortedHomework.filter(h => h.due && isPast(h.due) ))
         // All homework due in the future is saved to todoHomework
-        setTodoHomework(sortedHomework.filter(h => !isPast(h.due || 0) ))
+        // Any homework without a due date is also included in todoHomework
+        setTodoHomework([
+            ...sortedHomework.filter(h => !isPast(h.due || 0) ),
+            ...sortedHomework.filter(h => !h.due)
+        ])
     }, [homework])
 
     return <Stack direction="column" spacing={3} alignItems="center" sx={{ pt: 2 }}>

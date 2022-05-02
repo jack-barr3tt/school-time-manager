@@ -29,8 +29,8 @@ export default class HomeworkManager {
         }
     }
 
-    async getNext(homeworkId?: number) {
-        const { data } = await AxiosBase.get<Homework>(`/users/${this.userId}/homework/next${homeworkId ? `?subject_id=${homeworkId}` : ""}`)
+    async getNext() {
+        const { data } = await AxiosBase.get<Homework>(`/users/${this.userId}/homework/next`)
         if(data)
             return new Homework(data)
         else return undefined

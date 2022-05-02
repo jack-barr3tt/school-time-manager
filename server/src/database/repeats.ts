@@ -1,4 +1,5 @@
 import Database from "../connections";
+import { MergeSort } from "../functions";
 
 export class Repeat {
     private _id?: number
@@ -45,7 +46,7 @@ export class Repeat {
                 [this.user_id]
             )
 
-            const sortedRepeats = getRows.sort((a, b) => a.index - b.index)
+            const sortedRepeats = MergeSort(getRows, (a, b) => a.index - b.index)
             // Give this new repeat an index greater than the largest one currently in the table
             this.index = sortedRepeats.length > 0 ? sortedRepeats[sortedRepeats.length - 1].index + 1 : 0
 

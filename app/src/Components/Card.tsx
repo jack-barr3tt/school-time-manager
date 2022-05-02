@@ -30,7 +30,7 @@ export function Card(props: CardProps) {
                 { calendarProps && <Calendar {...calendarProps}/> }
             </Stack>
             <Stack direction="row" alignItems="center">
-                { circleColor && <Circle sx={{ color: ColorIntToString(circleColor), mr: 1 }} /> }
+                { circleColor ? <Circle sx={{ color: ColorIntToString(circleColor), mr: 1 }} /> : null }
                 <Typography>{subText}</Typography>
                 { footerComponents }
             </Stack>

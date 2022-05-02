@@ -31,6 +31,7 @@ export default class LessonManager {
         }
     }
 
+    // If a subject ID is provided it will query for that subject, otherwise it will just query for the next lesson
     async getNext(subjectId?: number) {
         const { data } = await AxiosBase.get<Lesson>(`/users/${this.userId}/lessons/next${subjectId ? `?subjectId=${subjectId}` : ""}`)
         if(data)

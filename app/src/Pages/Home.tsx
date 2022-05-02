@@ -4,12 +4,12 @@ import { red } from '@mui/material/colors';
 import { format } from 'date-fns';
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Homework from '../API/Homework';
 import Lesson from '../API/Lesson';
 import { User } from '../API/Users';
 import { Card } from '../Components/Card';
 import SimpleButton from '../Components/SimpleButton';
 import { DateToMonth } from '../functions';
-import { useHomework } from '../Hooks/useHomework';
 import { useUser } from '../Hooks/useUser';
 
 export default function Home() {
@@ -18,19 +18,21 @@ export default function Home() {
     const navigate = useNavigate()
     const theme = useTheme()
 
-    const { next: nextHomework } = useHomework()
     const [nextLesson, setNextLesson] = useState<Lesson>()
+    const [nextHomework, setNextHomework] = useState<Homework>()
 
     const { userId, logout } = useUser()
 
     const fetchData = useCallback(async () => {
         if(userId) {
-            if(!user) setUser(
-                await User.get(userId)
-            )
-            setNextLesson(
-                await User.forge(userId).lessons?.getNext()
-            )
+            const [tempUser, tempLesson, tempHomework] = await Promise.all([
+                User.get(userId),
+                User.forge(userId).lessons?.getNext(),
+                User.forge(userId).homework?.getNext()
+            ])
+            if(!tempUser) setUser(tempUser)
+            setNextLesson(tempLesson)
+            setNextHomework(tempHomework)
         }
     }, [userId, user])
 

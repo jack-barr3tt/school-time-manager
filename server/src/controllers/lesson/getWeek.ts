@@ -15,13 +15,15 @@ export default async (req: Request, res: Response, next: NextFunction) => {
         ])
         if(!user) throw new APIError("User not found", 404)
 
+        const repeatRef = user.repeat_ref ? new Date(user.repeat_ref) : undefined
+        if(!repeatRef || !user.repeat_id) throw new APIError("User has no repeat reference", 400)
+
+        // Splits repeats across the required number of weeks for them all to take place
         const weeks = RepeatsToWeeks(repeats)
+        // Maps all the lessons onto the repeats we have just split up
         const lessonsInWeek = LessonsInWeeks(lessons, weeks)
 
-        const repeatRef = user.repeat_ref ? new Date(user.repeat_ref) : undefined
-
-        if(!repeatRef || !user.repeat_id) throw new APIError("User has no repeat reference", 400)
-        
+        // Gets all lessons in the current week
         const weekData = GetWeek(lessonsInWeek, repeatRef, user.repeat_id)
         res.json({
             ...weekData,

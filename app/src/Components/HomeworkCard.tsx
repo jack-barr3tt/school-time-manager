@@ -89,8 +89,6 @@ export default function HomeworkCard (props: Props) {
                 indexOfComplete = children.length
                 children.push(completeDisplay)
             }
-
-            console.log(indexOfDelete, indexOfCard, indexOfComplete)
             
             return <StyledSwiper
                 enableMouseEvents

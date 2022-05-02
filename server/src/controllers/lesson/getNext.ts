@@ -1,61 +1,93 @@
 import { add, compareAsc, isFuture } from "date-fns";
 import { NextFunction, Request, Response } from "express";
 import { Lesson } from "../../database/lesson";
-import { LessonBlock } from "../../database/lesson_block";
 import { Repeat } from "../../database/repeats";
 import { User } from "../../database/users";
 import { APIError } from "../../errors/types";
-import { GetWeek, LessonsInWeeks, RepeatsToWeeks, TransposeLessonBlock } from "../../functions";
+import { GetWeek, LessonsInWeeks, MergeSort, RepeatsToWeeks, TransposeLessonBlock } from "../../functions";
 
 export default async (req: Request, res: Response, next: NextFunction) => {
     try{
         const { userId } = req.params
         const subjectId = req.query.subjectId ? +req.query.subjectId : undefined
 
-        const [lessons, lessonBlocks, user, repeats] = await Promise.all([
+        const [lessons, user, repeats] = await Promise.all([
             Lesson.findByUser(userId),
-            LessonBlock.findByUser(userId),
             User.findById(userId),
             Repeat.findByUser(userId)
         ])
         if(!user) throw new APIError("User not found", 404)
 
         const repeatRef = user.repeat_ref ? new Date(user.repeat_ref) : undefined
+        if(!repeatRef || !user.repeat_id) return
 
+        // Splits repeats across the required number of weeks for them all to take place
         const weeks = RepeatsToWeeks(repeats)
+        // Maps all the lessons onto the repeats we have just split up
         const lessonsInWeek = LessonsInWeeks(lessons, weeks)
 
         if(subjectId) {
-            if(!repeatRef || !user.repeat_id) return
+            // If a subject ID is provided we want the next lesson with this subject ID
+
+            // Loop over each week to check for the lesson
             for(let i = 0; i < weeks.length; i++) {
-                const date = add(repeatRef || new Date(), { weeks: i })
+                // Each week will take place 1 extra week in the future so we add this number of weeks
+                const date = add(repeatRef, { weeks: i })
+                // Gets all lessons in the week we are currently considering
                 const thisWeek = GetWeek(
                         lessonsInWeek, 
                         date, 
                         user.repeat_id
-                    ).lessons.map(l => ({
+                    )
+                    /* 
+                    We want to modify lessons so that their block start and end times align with the
+                    day that they are going to occur on
+                    */
+                    .lessons.map(l => ({
                         ...l,
                         block: TransposeLessonBlock(
                                 l.block,
                                 add(date, { days: l.day - date.getDay() + 1 })
                             )
                     }))
-                    .sort((a, b) => compareAsc(a.block.start_time, b.block.start_time))
+                // Finally we sort lessons by the time they will occur
+                const sortedWeek = MergeSort(thisWeek, (a, b) => compareAsc(a.block.start_time, b.block.start_time))
 
-                const nextLesson = thisWeek.find(l => l.subject.id === subjectId && isFuture(l.block.start_time))
-                if(nextLesson) return res.json(nextLesson || {})
+                /*
+                The next lesson, if it exists, will be the first with a matching subject ID
+                that occurs in the future
+                */
+                const nextLesson = sortedWeek.find(l => l.subject.id === subjectId && isFuture(l.block.start_time))
+                if(nextLesson) return res.json(nextLesson)
             }
         } else {
-            // Get all lessons happening today
-            const lessonsToday = lessons?.filter(l => l.day === new Date().getDay() - 1)
-            // Get all lesson blocks occuring today
-            const lessonBlocksToday = lessonBlocks.map(b => TransposeLessonBlock(b))
-            // Get all remaining lesson blocks and sort them from soonest to latest
-            const lessonBlocksLeft = lessonBlocksToday.filter(b => isFuture(b.start_time)).sort(
-                (a,b) => compareAsc(a.start_time, b.start_time)
+            // If no subject ID is provided we want the next lesson happening today
+            
+            const date = repeatRef || new Date()
+
+            // Get all lessons in the week we are currently considering
+            const { lessons: lessonsThisWeek } = GetWeek(
+                lessonsInWeek,
+                date,
+                user.repeat_id
             )
-            // The next lesson will be the one whose block id matches the id of the first item in lessonBlocksLeft
-            const nextLesson = lessonsToday?.find(l => lessonBlocksLeft.some(b => b.id === l.block.id))
+
+            // Get all lessons happening today in order
+            const lessonsToday = MergeSort(
+                lessonsThisWeek?.filter(l => l.day === new Date().getDay() - 1),
+                (a, b) => compareAsc(a.block.start_time, b.block.start_time)
+            )
+            // Then modify so that block start and end times align with the day that they are going to occur on
+            .map(l => ({
+                ...l,
+                block: TransposeLessonBlock(
+                        l.block,
+                        add(date, { days: l.day - date.getDay() + 1 })
+                    )
+            }))
+
+            // The next lesson will be the first lesson whose lesson block starts in the future
+            const nextLesson = lessonsToday?.find(l => isFuture(l.block.start_time))
 
             res.json(nextLesson)
         }

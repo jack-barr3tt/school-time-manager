@@ -1,7 +1,4 @@
 import { grey } from "@mui/material/colors";
-import { add, startOfDay, intervalToDuration } from "date-fns";
-import LessonBlock from "./API/LessonBlock";
-import Repeat from "./API/Repeat";
 
 export const DayIndexToString = (index: number, size: ("short"|"long") = "short") => 
     size === "short" ? 
@@ -38,41 +35,6 @@ export const ColorIntToString = (color?: number) => {
     return "#" + base 
 }
 
-export const RepeatsToWeeks = (repeats: Repeat[]) => {
-    const weeks : Repeat[][] = []
-    let currentWeek = 0
-
-    // Gets the last day index of a repeat
-    const getRepeatEnd = (repeats: Repeat[]) => {
-        const lastRepeat =  repeats[repeats.length - 1]
-        return lastRepeat.end_day
-    }
-
-    const sortedRepeats = MergeSort(
-        repeats,
-        (a, b) => a.index - b.index
-    )
-
-    for(let r of sortedRepeats) {
-        if(weeks.length === 0) {
-            // Weeks should be a 2D array, so if it's empty, add a new week in an array
-            weeks.push([r])
-        }else if(getRepeatEnd(weeks[currentWeek]) < r.start_day) {
-            /*
-            If the end of the current week is before the start of the next repeat we are considering,
-            there must be space to add this repeat to the current week.
-            */
-            weeks[currentWeek].push(r)
-        }else{
-            // If we have got this far, the current week is full, so we need to add a new week
-            weeks.push([r])
-            currentWeek++
-        }
-    }
-
-    return weeks
-}
-
 export const MinutesToHrsMins = (minutes: number) => {
     const mins = minutes % 60
     const hrs = Math.floor(minutes / 60)
@@ -84,23 +46,6 @@ export const MinutesToHrsMins = (minutes: number) => {
     if(mins > 1) text += "s"
 
     return text
-}
-
-export const TransposeLessonBlock = (time: LessonBlock, source?: Date) => {
-    const addTime = (time: number) => add(startOfDay(source || Date.now()), intervalToDuration({ start: 0, end: time }))
-
-    return {
-        ...time,
-        // Replace the start and end times with times relative to the source date
-        start_time: addTime(
-            // The difference between the repeat start time and the start of the day
-            time.start_time.getTime() - startOfDay(time.start_time).getTime()
-            ),
-        end_time: addTime(
-            // The difference between the repeat end time and the start of the day
-            time.end_time.getTime() - startOfDay(time.end_time).getTime()
-            )
-    }
 }
 
 function Merge<T>(left: T[], right: T[], compare: (a: T, b: T) => number) {

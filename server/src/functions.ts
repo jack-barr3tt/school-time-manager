@@ -21,17 +21,15 @@ export const TransposeLessonBlock = (time: LessonBlock, source?: Date) => {
     }
 }
 
-export const RepeatsToWeeks = (repeats: Repeat[]) => {
+export function RepeatsToWeeks (repeats: Repeat[]) {
     const weeks : Repeat[][] = []
     let currentWeek = 0
 
     // Gets the last day index of a repeat
-    const getRepeatEnd = (repeats: Repeat[]) => {
-        const lastRepeat =  repeats[repeats.length - 1]
-        return lastRepeat.end_day
-    }
-
-    const sortedRepeats = repeats.sort((a, b) => a.index - b.index)
+    const getRepeatEnd = (repeats: Repeat[]) => 
+        repeats.reduce((a, b) => a > b.end_day ? a : b.end_day, 0)
+    
+    const sortedRepeats = MergeSort(repeats, (a, b) => a.index - b.index)
 
     for(let r of sortedRepeats) {
         if(weeks.length === 0) {
@@ -53,7 +51,7 @@ export const RepeatsToWeeks = (repeats: Repeat[]) => {
     return weeks
 }
 
-export const LessonsInWeeks = (allLessons: Lesson[], weeks: Repeat[][]) => {
+export function LessonsInWeeks (allLessons: Lesson[], weeks: Repeat[][]) {
     return weeks.map(w => 
         w.map(r => 
             allLessons.filter(l => l.repeat_id === r.id)
@@ -61,22 +59,74 @@ export const LessonsInWeeks = (allLessons: Lesson[], weeks: Repeat[][]) => {
     )
 }
 
-export const GetWeek = (weeks: Lesson[][][], repeatRef: Date, repeatId: number) => {
+export function GetWeek (weeks: Lesson[][][], repeatRef: Date, repeatId: number) {
+    // How many weeks have elapsed since the reference date
     const weeksSinceRef = differenceInWeeks(
         startOfWeek(repeatRef),
         startOfWeek(new Date())
     )
+    // Which week was the reference date recorded in
     const weekNo = weeks.findIndex(w => w.some(r => r[0].repeat_id == repeatId))
+
     if(weeksSinceRef === 0) {
+        // The reference was made this week so we return this weeks lessons
         return {
             lessons: weeks[weekNo].flat(1),
             no: weekNo
         }
     }else{
+        /* 
+        The week we want is going to be some number of weeks after the reference date,
+        but because there is a limited number of weeks, we take a modulus of the number of weeks
+        to represent the fact that weeks are circular.
+        */
         const index = (weeksSinceRef + weekNo) % weeks.length
         return {
             lessons: weeks[index].flat(1),
             no: index
         }
     }
+}
+
+function Merge<T>(left: T[], right: T[], compare: (a: T, b: T) => number) {
+    const result: T[] = []
+    let l = 0
+    let r = 0
+
+    // Repeat while left and right pointers are not at the end of the arrays
+    while(l < left.length && r < right.length) {
+        if(compare(left[l], right[r]) <= 0) {
+            // If left element should come first, add it to the result
+            result.push(left[l])
+            // Increment left pointer
+            l++
+        }else{
+            // If right element should come first, add it to the result
+            result.push(right[r])
+            // Increment right pointer
+            r++
+        }
+    }
+    
+    // Return the result plus an elements from left and right array that are left over
+    return [...result, ...left.slice(l), ...right.slice(r)]
+}
+
+export function MergeSort<T>(array: T[], compare: (a: T, b: T) => number) : T[] {
+    // If array is empty or has only one element, there's no point in sorting it
+    if(array.length <= 1) return array
+    
+    // Pivot will be the middle element of the array
+    const pivot = Math.floor(array.length / 2)
+    // Left array contains elements up to but not including the pivot
+    const left = array.slice(0, pivot)
+    // Right array contains elements from the pivot and onwards
+    const right = array.slice(pivot)
+    
+    // Recursively sort and merge the left and right arrays
+    return Merge(
+        MergeSort(left, compare), 
+        MergeSort(right, compare), 
+        compare
+    )
 }

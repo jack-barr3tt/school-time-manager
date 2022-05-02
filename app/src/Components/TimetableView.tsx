@@ -254,7 +254,7 @@ export default function TimetableView(props: TimetableViewProps) {
     const fetchLessons = useCallback(async () => {
         const tempWeek = await User.forge(userId).lessons?.getWeek()
         if(tempWeek) setLessons(tempWeek.lessons)
-    }, [userId, ])
+    }, [userId])
 
     const fetchBlocks = useCallback(async () => {
         setLessonBlocks(await User.forge(userId).lessonBlocks?.get())

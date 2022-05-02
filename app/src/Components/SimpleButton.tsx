@@ -25,5 +25,4 @@ export default function SimpleButton(props: SimpleButtonProps) {
             </Stack>
         </Paper>
     </ButtonBase>
-
 }

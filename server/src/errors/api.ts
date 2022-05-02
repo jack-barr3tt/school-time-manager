@@ -7,6 +7,6 @@ export default (req: Request, res: Response, next: NextFunction) => {
                 return res.status(res.locals.error.code).json({
                     message: res.locals.error.message || "An error occurred",
                 })
-        next()
-    }
+            }
+    next()
 }
